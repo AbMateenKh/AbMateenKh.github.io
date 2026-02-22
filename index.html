@@ -73,7 +73,7 @@
     #hero {
       min-height: 100vh;
       display: flex; align-items: center;
-      padding: 0 64px;
+      padding: 100px 64px 80px;
       max-width: 1200px;
       margin: 0 auto;
       position: relative;
@@ -173,6 +173,7 @@
       display: grid; grid-template-columns: repeat(4, 1fr);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      background: var(--bg);
     }
     .stat-item {
       padding: 48px 56px;
@@ -225,6 +226,7 @@
     #about {
       background: var(--bg2);
       border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
     }
 
     .about-layout {
@@ -261,6 +263,7 @@
     #projects {
       background: var(--bg);
       border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
     }
 
     .projects-list { display: flex; flex-direction: column; }
@@ -382,6 +385,7 @@
     #contact {
       background: var(--bg2);
       border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
     }
 
     .contact-layout {
@@ -476,8 +480,8 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity .7s, transform .7s;
+      opacity: 1;
+      transform: none;
     }
     .reveal.visible { opacity: 1; transform: none; }
 
@@ -531,21 +535,21 @@
 
   <!-- STATS -->
   <div class="stats-row">
-    <div class="stat-item reveal">
+    <div class="stat-item">
       <div class="stat-num">7<span>+</span></div>
       <div class="stat-label">Years Experience</div>
     </div>
-    <div class="stat-item reveal">
+    <div class="stat-item">
       <div class="stat-num">15<span>+</span></div>
       <div class="stat-label">Projects Shipped</div>
     </div>
-    <div class="stat-item reveal">
-      <div class="stat-num">3</div>
+    <div class="stat-item">
+      <div class="stat-num">7<span>+</span></div>
       <div class="stat-label">Platforms</div>
     </div>
-    <div class="stat-item reveal">
-      <div class="stat-num">XR</div>
-      <div class="stat-label">Specialization</div>
+    <div class="stat-item">
+      <div class="stat-num">Multi</div>
+      <div class="stat-label">Platform</div>
     </div>
   </div>
 
@@ -559,32 +563,27 @@
       <div class="about-layout">
         <div class="about-text reveal">
           <p>
-            I'm a <strong>Unity Engineer</strong> with 7 years of experience crafting immersive,
-            real-time interactive applications. My work spans VR/AR experiences, native plugin
-            integration across Windows, Android, and iOS, and shipping console titles.
+            Senior Unity Engineer with <strong>7 years of experience</strong> shipping commercial titles across Android/iOS, PC/Steam, Nintendo Switch, PS4/PS5, Xbox, WebGL, and Meta Quest VR.
           </p>
           <p>
-            Currently deepening expertise in <strong>server-authoritative multiplayer</strong> using
-            Unity Netcode for GameObjects and Photon Fusion — building competitive FPS systems with
-            lag compensation and client-side prediction.
+            Specialised in <strong>gameplay systems architecture, combat and AI systems, cross-platform performance optimisation,</strong> and multiplayer/backend integration (Photon, Unity Netcode, Azure PlayFab).
           </p>
           <p>
-            Open to <strong>remote opportunities</strong> where I can push the limits of real-time
-            3D and XR development with a team that cares about craft.
+            Proven track record of owning <strong>technical delivery from prototyping through platform certification</strong>, mentoring engineers, and building scalable, maintainable codebases using SOLID principles, event-based architecture, and component-based design patterns.
           </p>
           <div style="margin-top: 40px;">
             <a href="resume.pdf" class="btn-primary" download>Download Resume</a>
           </div>
         </div>
         <div class="skills-list reveal">
-          <div class="skill-row"><span class="skill-name">Unity Engine</span><span class="skill-years">7 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">C#</span><span class="skill-years">7 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">VR / AR / XR</span><span class="skill-years">5 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Native Plugins (Android/iOS)</span><span class="skill-years">4 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Multiplayer / Netcode</span><span class="skill-years">2 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Console Porting</span><span class="skill-years">3 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Shader Graph / HLSL</span><span class="skill-years">4 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Photon Fusion</span><span class="skill-years">1 yr</span></div>
+          <div class="skill-row"><span class="skill-name">Gameplay & Systems Architecture</span><span class="skill-years">7 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Unity3D / C#</span><span class="skill-years">7 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Console Porting (Switch, PS4/5, Xbox)</span><span class="skill-years">4 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">VR / AR / XR (Meta Quest)</span><span class="skill-years">3 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Multiplayer (Photon Fusion, Netcode)</span><span class="skill-years">3 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Backend (Azure PlayFab)</span><span class="skill-years">2 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">AI / NPC Behaviour Systems</span><span class="skill-years">5 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Performance Optimisation</span><span class="skill-years">5 yrs</span></div>
         </div>
       </div>
     </div>
@@ -609,97 +608,202 @@
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <!-- Replace this div with <img src="your-image.jpg" alt="Project Name"/> -->
-            <div class="project-thumb-placeholder">
-              <span>🥽</span>
-              project-1.jpg
-            </div>
+            <div class="project-thumb-placeholder"><span>🥽</span>project-1.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
               <span class="project-tag">VR</span>
-              <span class="project-tag">Unity</span>
+              <span class="project-tag">Meta Quest 3</span>
+              <span class="project-tag">Medical</span>
             </div>
-            <div class="project-name">Project Name Here</div>
+            <div class="project-name">VR MG Simulation</div>
             <p class="project-desc">
-              Short description — what the project is, what your specific role was,
-              and the most impressive technical challenge you solved.
+              Led end-to-end architecture of a standalone VR medical simulation on Meta Quest 3 using Unity, OpenXR, and XR Interaction Toolkit — implementing hand tracking, gesture-based interaction, and spatial UI. Maintained 72fps+ on standalone Quest hardware through shader and draw call optimisation.
             </p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">GitHub ↗</a>
-            <a href="#" class="project-link">Demo ↗</a>
+            <a href="#" class="project-link">Case Study ↗</a>
           </div>
         </div>
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder">
-              <span>🌐</span>
-              project-2.jpg
-            </div>
+            <div class="project-thumb-placeholder"><span>⚔️</span>project-2.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
+              <span class="project-tag">PC</span>
+              <span class="project-tag">iOS</span>
+              <span class="project-tag">Android</span>
+              <span class="project-tag">RPG</span>
+            </div>
+            <div class="project-name">Sacred Tails</div>
+            <p class="project-desc">
+              Stabilised and restructured an inherited Unity codebase for a Pokémon-inspired RPG, delivering tactical combat, NFT-based creature mechanics, and modular progression with Azure PlayFab. Improved FPS by ~30% on low-end devices through Photon networking and platform optimisation.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">View ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder"><span>🌐</span>project-3.jpg</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">WebGL</span>
+              <span class="project-tag">Meta Quest 3</span>
               <span class="project-tag">Multiplayer</span>
-              <span class="project-tag">FPS</span>
             </div>
-            <div class="project-name">Multiplayer FPS</div>
+            <div class="project-name">GOSI Verse</div>
             <p class="project-desc">
-              Converted Unity's FPS Microgame into a competitive multiplayer experience
-              using Unity Netcode for GameObjects with server-authoritative mechanics,
-              lobby systems, and client-side prediction.
+              Led development of Saudi Arabia's first government-backed multiplayer financial literacy app using Photon Fusion across WebGL, PC, and Meta Quest 3. Architected cross-platform multiplayer systems optimised for VR comfort and web accessibility.
             </p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">GitHub ↗</a>
+            <a href="#" class="project-link">View ↗</a>
           </div>
         </div>
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder">
-              <span>📱</span>
-              project-3.jpg
-            </div>
+            <div class="project-thumb-placeholder"><span>🎮</span>project-4.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
-              <span class="project-tag">AR</span>
-              <span class="project-tag">Mobile</span>
+              <span class="project-tag">PS4/5</span>
+              <span class="project-tag">Xbox</span>
+              <span class="project-tag">Switch</span>
+              <span class="project-tag">Multiplayer</span>
             </div>
-            <div class="project-name">Project Name Here</div>
+            <div class="project-name">Goons: Legends & Mayhem</div>
             <p class="project-desc">
-              Brief description of the project — platform, challenge, your contribution,
-              and the result.
+              Implemented EOS lobby and session flow with Photon Quantum across PS4/5, Xbox, Steam, and Nintendo Switch. Led cross-platform porting reducing load times by ~15% and improving runtime stability by ~30%.
             </p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">GitHub ↗</a>
-            <a href="#" class="project-link">Demo ↗</a>
+            <a href="#" class="project-link">View ↗</a>
           </div>
         </div>
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder">
-              <span>🎮</span>
-              project-4.jpg
-            </div>
+            <div class="project-thumb-placeholder"><span>🤼</span>project-5.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
-              <span class="project-tag">Console</span>
-              <span class="project-tag">Native Plugin</span>
+              <span class="project-tag">Nintendo Switch</span>
+              <span class="project-tag">PS4/5</span>
+              <span class="project-tag">AA Title</span>
             </div>
-            <div class="project-name">Project Name Here</div>
+            <div class="project-name">WrestleQuest</div>
             <p class="project-desc">
-              Brief description of your console project. Focus on what was technically hard
-              and how you solved it.
+              Led Nintendo Switch port for a shipped AA wrestling RPG, improving runtime stability and platform compliance by 15%. Mentored two junior engineers through the porting process and established platform optimisation workflows for console delivery.
             </p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">GitHub ↗</a>
+            <a href="#" class="project-link">Steam ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder"><span>🌾</span>project-6.jpg</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">Switch</span>
+              <span class="project-tag">PS4/5</span>
+              <span class="project-tag">Steam</span>
+            </div>
+            <div class="project-name">Life in Willowdale</div>
+            <p class="project-desc">
+              Architected core gameplay systems including inventory, combat, farming mechanics, and boss fights with scalable save/load and cross-platform state management. Led Nintendo Switch port improving FPS by 25% through shader optimisation and memory profiling.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">Steam ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder"><span>⚔️</span>project-7.jpg</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">Android</span>
+              <span class="project-tag">PC</span>
+              <span class="project-tag">RTS</span>
+            </div>
+            <div class="project-name">Mythya</div>
+            <p class="project-desc">
+              Took over and stabilised a Zenject-based dependency injection architecture in Unity, delivering core RTS systems including AI, economy management, and army control. Directed cross-platform optimisation and mentored the team through modular refactoring for long-term maintainability.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">View ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder"><span>🔥</span>project-8.jpg</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">PC</span>
+              <span class="project-tag">Steam</span>
+            </div>
+            <div class="project-name">Inferni: Hope & Fear</div>
+            <p class="project-desc">
+              Optimised asset pipelines, shaders, and memory management, boosting overall performance by 50% and reducing load times by 30% on a shipped Steam title. Enhanced combat responsiveness through VFX tuning, animation polish, and custom shader and post-processing optimisation.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">Steam ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder"><span>🍕</span>project-9.jpg</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">Nintendo Switch</span>
+              <span class="project-tag">AA Title</span>
+              <span class="project-tag">Multiplayer</span>
+            </div>
+            <div class="project-name">FoodFight: Culinary Combat</div>
+            <p class="project-desc">
+              Completed and stabilised Photon Bolt networking for Nintendo Switch, delivering real-time combat synchronisation and cert-compliant online session management. Passed Nintendo Lotcheck certification through platform-specific porting and performance tuning.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">View ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder"><span>🌍</span>project-10.jpg</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">Web3</span>
+              <span class="project-tag">NFT</span>
+              <span class="project-tag">Metaverse</span>
+            </div>
+            <div class="project-name">Decentraland</div>
+            <p class="project-desc">
+              Built an NFT-integrated gameplay experience leveraging OpenSea APIs and smart contract workflows, combining blockchain asset ownership with interactive gameplay mechanics. Delivered technical art and environment scripting within the Decentraland ecosystem.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">View ↗</a>
           </div>
         </div>
 
@@ -718,21 +822,21 @@
         <div class="reveal">
           <p class="contact-blurb">
             Open to remote<br/>
-            <span>Unity & VR</span><br/>
-            opportunities.
+            <span>Unity</span> opportunities<br/>
+            worldwide.
           </p>
           <div class="contact-items">
             <div class="contact-item">
               <span class="contact-item-label">Email</span>
-              <a href="/cdn-cgi/l/email-protection#a2dbcdd7d0e2c7cfc3cbce8cc1cdcf"><span class="__cf_email__" data-cfemail="720b1d070032171f131b1e5c111d1f">[email&#160;protected]</span></a>
+              <a href="mailto:mateen_kh@hotmail.com">mateen_kh@hotmail.com</a>
             </div>
             <div class="contact-item">
               <span class="contact-item-label">LinkedIn</span>
-              <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a>
+              <a href="https://www.linkedin.com/in/amateen-khan/" target="_blank">linkedin.com/in/amateen-khan</a>
             </div>
             <div class="contact-item">
-              <span class="contact-item-label">GitHub</span>
-              <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+              <span class="contact-item-label">Location</span>
+              <a href="#">Lahore, Pakistan — Open to Remote</a>
             </div>
           </div>
         </div>
@@ -758,10 +862,9 @@
 
   <!-- FOOTER -->
   <footer>
-    <span class="footer-text">© 2025 Abdul Mateen</span>
+    <span class="footer-text">© 2025 Abdul Mateen Khan</span>
     <div class="footer-links">
-      <a href="https://github.com/yourusername" target="_blank">GitHub</a>
-      <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/amateen-khan/" target="_blank">LinkedIn</a>
       <a href="resume.pdf" download>Resume</a>
     </div>
   </footer>
@@ -777,7 +880,7 @@
     const reveals = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05 });
     reveals.forEach(r => revealObserver.observe(r));
 
     /* ── PARTICLES ── */
@@ -787,7 +890,21 @@
     let W, H, particles;
 
     const PARTICLE_COUNT  = 80;
-    const ACCENT_COLOR    = '232, 213, 176'; // matches --accent #e8d5b0
+    const STAR_COUNT      = 60;
+    const ACCENT_COLOR    = '232, 213, 176';
+
+    let stars = [];
+
+    function createStars() {
+      stars = Array.from({ length: STAR_COUNT }, () => ({
+        x:     Math.random() * W,
+        y:     Math.random() * H,
+        r:     Math.random() * 1.2 + 0.2,
+        alpha: Math.random() * 0.5 + 0.1,
+        twinkleSpeed: Math.random() * 0.02 + 0.005,
+        twinkleDir: Math.random() > 0.5 ? 1 : -1,
+      }));
+    }
 
     function resize() {
       W = canvas.width  = window.innerWidth;
@@ -807,6 +924,16 @@
 
     function drawParticles() {
       ctx.clearRect(0, 0, W, H);
+
+      // Draw twinkling stars first (background layer)
+      stars.forEach(s => {
+        s.alpha += s.twinkleSpeed * s.twinkleDir;
+        if (s.alpha > 0.6 || s.alpha < 0.05) s.twinkleDir *= -1;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+        ctx.fill();
+      });
 
       // Draw connection lines between close particles
       for (let i = 0; i < particles.length; i++) {
@@ -846,4 +973,17 @@
     }
 
     function loop() {
-      updatePa
+      updateParticles();
+      drawParticles();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', () => { resize(); createParticles(); createStars(); });
+    resize();
+    createParticles();
+    createStars();
+    loop();
+  </script>
+
+</body>
+</html>
