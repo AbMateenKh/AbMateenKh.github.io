@@ -95,10 +95,11 @@
 
     .hero-name {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-size: clamp(2.8rem, 6.5vw, 6.5rem);
       font-weight: 800;
       line-height: 1.05;
       color: var(--text);
+      white-space: nowrap;
       opacity: 0;
       animation: fadeUp .7s .25s forwards;
     }
@@ -109,7 +110,8 @@
       color: var(--muted);
       font-weight: 300;
       margin-top: 28px;
-      max-width: 500px;
+      max-width: 100%;
+      width: fit-content;
       opacity: 0;
       animation: fadeUp .7s .4s forwards;
     }
@@ -662,7 +664,7 @@
   <!-- STATS -->
   <div class="stats-row">
     <div class="stat-item">
-      <div class="stat-num">7<span>+</span></div>
+      <div class="stat-num">7</div>
       <div class="stat-label">Years Experience</div>
     </div>
     <div class="stat-item">
@@ -674,8 +676,8 @@
       <div class="stat-label">Platforms</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num">Multi</div>
-      <div class="stat-label">Platform</div>
+      <div class="stat-num">Tech</div>
+      <div class="stat-label">Generalist</div>
     </div>
   </div>
 
@@ -1168,4 +1170,16 @@
 
     function loop() {
       updateParticles();
-      dr
+      drawParticles();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', () => { resize(); createParticles(); createStars(); });
+    resize();
+    createParticles();
+    createStars();
+    loop();
+  </script>
+
+</body>
+</html>
