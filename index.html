@@ -266,7 +266,133 @@
       position: relative; z-index: 1;
     }
 
-    .projects-list { display: flex; flex-direction: column; }
+    /* ── CATEGORY OVERVIEW CARDS ── */
+    .category-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 64px;
+    }
+
+    .category-card {
+      background: var(--panel);
+      padding: 32px 28px;
+      cursor: pointer;
+      transition: background .3s;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .category-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--accent);
+      transition: width .4s;
+    }
+    .category-card:hover { background: #1e1e1e; }
+    .category-card:hover::after { width: 100%; }
+
+    .category-card-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+    .category-card-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .category-card-count {
+      font-family: 'Fira Code', monospace;
+      font-size: .7rem;
+      color: var(--accent2);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .category-card-platforms {
+      font-size: .82rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    /* ── STICKY FILTER TABS ── */
+    .filter-tabs-wrap {
+      position: sticky;
+      top: 72px;
+      z-index: 50;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      margin: 0 -64px 48px;
+      padding: 0 64px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+
+    .filter-tab {
+      font-family: 'Fira Code', monospace;
+      font-size: .75rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 18px 28px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid transparent;
+      transition: color .3s, border-color .3s;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .filter-tab:hover { color: var(--text); }
+    .filter-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── EXISTING CATEGORY HEADERS (keep but adjust spacing) ── */
+    .project-category {
+      display: flex; align-items: center; gap: 16px;
+      padding: 52px 0 20px;
+      scroll-margin-top: 140px;
+    }
+    .project-category:first-child { padding-top: 12px; }
+    .project-category-label {
+      font-family: 'Fira Code', monospace;
+      font-size: .72rem;
+      color: var(--accent2);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .project-category-line {
+      flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    @media (max-width: 960px) {
+      .category-cards { grid-template-columns: 1fr 1fr; }
+      .filter-tabs-wrap { margin: 0 -28px 36px; padding: 0 28px; }
+      .filter-tab { padding: 16px 16px; font-size: .68rem; }
+    }
+    @media (max-width: 540px) {
+      .category-cards { grid-template-columns: 1fr; }
+    }
 
     .project-row {
       display: grid;
@@ -596,70 +722,85 @@
         <span class="section-num">02</span>
         <h2 class="section-title">Selected Work</h2>
       </div>
+
+      <!-- CATEGORY OVERVIEW CARDS -->
+      <div class="category-cards">
+        <a class="category-card" href="#cat-aa">
+          <div class="category-card-icon">🎮</div>
+          <div class="category-card-title">AA Titles</div>
+          <div class="category-card-count">4 Projects</div>
+          <div class="category-card-platforms">Switch · PS4/5 · Xbox · Steam</div>
+        </a>
+        <a class="category-card" href="#cat-indie">
+          <div class="category-card-icon">⚔️</div>
+          <div class="category-card-title">Indie Titles</div>
+          <div class="category-card-count">3 Projects</div>
+          <div class="category-card-platforms">PC · iOS · Android · Steam</div>
+        </a>
+        <a class="category-card" href="#cat-vr">
+          <div class="category-card-icon">🥽</div>
+          <div class="category-card-title">VR / AR / WebGL</div>
+          <div class="category-card-count">2 Projects</div>
+          <div class="category-card-platforms">Meta Quest 3 · WebGL · PC</div>
+        </a>
+        <a class="category-card" href="#cat-other">
+          <div class="category-card-icon">🌍</div>
+          <div class="category-card-title">Other Platforms</div>
+          <div class="category-card-count">1 Project</div>
+          <div class="category-card-platforms">Web3 · NFT · Metaverse</div>
+        </a>
+      </div>
+
+      <!-- STICKY FILTER TABS -->
+      <div class="filter-tabs-wrap">
+        <div class="filter-tabs">
+          <a href="#cat-aa"     class="filter-tab active" data-cat="cat-aa">AA Titles</a>
+          <a href="#cat-indie"  class="filter-tab"        data-cat="cat-indie">Indie Titles</a>
+          <a href="#cat-vr"     class="filter-tab"        data-cat="cat-vr">VR / AR / WebGL</a>
+          <a href="#cat-other"  class="filter-tab"        data-cat="cat-other">Other Platforms</a>
+        </div>
+      </div>
+
       <div class="projects-list">
 
-        <!--
-          HOW TO ADD YOUR IMAGE:
-          1. Put your image file (e.g. project1.jpg) in the same folder as index.html
-          2. Replace the placeholder div with:
-             <img src="project1.jpg" alt="Project Name"/>
-          3. Recommended image size: 520x320px or similar 16:9 / 3:2 ratio
-        -->
+        <!-- ── AA TITLES ── -->
+        <div class="project-category" id="cat-aa">
+          <span class="project-category-label">AA Titles</span>
+          <div class="project-category-line"></div>
+        </div>
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder"><span>🥽</span>project-1.jpg</div>
+            <div class="project-thumb-placeholder"><span>🌾</span>project-1.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
-              <span class="project-tag">VR</span>
-              <span class="project-tag">Meta Quest 3</span>
-              <span class="project-tag">Medical</span>
+              <span class="project-tag">Switch</span>
+              <span class="project-tag">PS4/5</span>
+              <span class="project-tag">Steam</span>
             </div>
-            <div class="project-name">VR MG Simulation</div>
+            <div class="project-name">Life in Willowdale</div>
             <p class="project-desc">
-              Led end-to-end architecture of a standalone VR medical simulation on Meta Quest 3 using Unity, OpenXR, and XR Interaction Toolkit — implementing hand tracking, gesture-based interaction, and spatial UI. Maintained 72fps+ on standalone Quest hardware through shader and draw call optimisation.
+              Architected core gameplay systems including inventory, combat, farming mechanics, and boss fights with scalable save/load and cross-platform state management. Led Nintendo Switch port improving FPS by 25% through shader optimisation and memory profiling.
             </p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">Case Study ↗</a>
+            <a href="#" class="project-link">Steam ↗</a>
           </div>
         </div>
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder"><span>⚔️</span>project-2.jpg</div>
+            <div class="project-thumb-placeholder"><span>🍕</span>project-2.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
-              <span class="project-tag">PC</span>
-              <span class="project-tag">iOS</span>
-              <span class="project-tag">Android</span>
-              <span class="project-tag">RPG</span>
-            </div>
-            <div class="project-name">Sacred Tails</div>
-            <p class="project-desc">
-              Stabilised and restructured an inherited Unity codebase for a Pokémon-inspired RPG, delivering tactical combat, NFT-based creature mechanics, and modular progression with Azure PlayFab. Improved FPS by ~30% on low-end devices through Photon networking and platform optimisation.
-            </p>
-          </div>
-          <div class="project-links">
-            <a href="#" class="project-link">View ↗</a>
-          </div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <div class="project-thumb-placeholder"><span>🌐</span>project-3.jpg</div>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">WebGL</span>
-              <span class="project-tag">Meta Quest 3</span>
+              <span class="project-tag">Nintendo Switch</span>
               <span class="project-tag">Multiplayer</span>
             </div>
-            <div class="project-name">GOSI Verse</div>
+            <div class="project-name">FoodFight: Culinary Combat</div>
             <p class="project-desc">
-              Led development of Saudi Arabia's first government-backed multiplayer financial literacy app using Photon Fusion across WebGL, PC, and Meta Quest 3. Architected cross-platform multiplayer systems optimised for VR comfort and web accessibility.
+              Completed and stabilised Photon Bolt networking for Nintendo Switch, delivering real-time combat synchronisation and cert-compliant online session management. Passed Nintendo Lotcheck certification through platform-specific porting and performance tuning.
             </p>
           </div>
           <div class="project-links">
@@ -669,7 +810,7 @@
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder"><span>🎮</span>project-4.jpg</div>
+            <div class="project-thumb-placeholder"><span>🎮</span>project-3.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
@@ -690,13 +831,12 @@
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder"><span>🤼</span>project-5.jpg</div>
+            <div class="project-thumb-placeholder"><span>🤼</span>project-4.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
               <span class="project-tag">Nintendo Switch</span>
               <span class="project-tag">PS4/5</span>
-              <span class="project-tag">AA Title</span>
             </div>
             <div class="project-name">WrestleQuest</div>
             <p class="project-desc">
@@ -708,29 +848,15 @@
           </div>
         </div>
 
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <div class="project-thumb-placeholder"><span>🌾</span>project-6.jpg</div>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">Switch</span>
-              <span class="project-tag">PS4/5</span>
-              <span class="project-tag">Steam</span>
-            </div>
-            <div class="project-name">Life in Willowdale</div>
-            <p class="project-desc">
-              Architected core gameplay systems including inventory, combat, farming mechanics, and boss fights with scalable save/load and cross-platform state management. Led Nintendo Switch port improving FPS by 25% through shader optimisation and memory profiling.
-            </p>
-          </div>
-          <div class="project-links">
-            <a href="#" class="project-link">Steam ↗</a>
-          </div>
+        <!-- ── INDIE TITLES ── -->
+        <div class="project-category" id="cat-indie">
+          <span class="project-category-label">Indie Titles</span>
+          <div class="project-category-line"></div>
         </div>
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder"><span>⚔️</span>project-7.jpg</div>
+            <div class="project-thumb-placeholder"><span>⚔️</span>project-5.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
@@ -750,7 +876,28 @@
 
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder"><span>🔥</span>project-8.jpg</div>
+            <div class="project-thumb-placeholder"><span>⚔️</span>project-6.jpg</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">PC</span>
+              <span class="project-tag">iOS</span>
+              <span class="project-tag">Android</span>
+              <span class="project-tag">RPG</span>
+            </div>
+            <div class="project-name">Sacred Tails</div>
+            <p class="project-desc">
+              Stabilised and restructured an inherited Unity codebase for a Pokémon-inspired RPG, delivering tactical combat, NFT-based creature mechanics, and modular progression with Azure PlayFab. Improved FPS by ~30% on low-end devices through Photon networking and platform optimisation.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">View ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder"><span>🔥</span>project-7.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
@@ -767,24 +914,56 @@
           </div>
         </div>
 
+        <!-- ── VR / AR / WEBGL ── -->
+        <div class="project-category" id="cat-vr">
+          <span class="project-category-label">VR / AR / WebGL</span>
+          <div class="project-category-line"></div>
+        </div>
+
         <div class="project-row reveal">
           <div class="project-thumb">
-            <div class="project-thumb-placeholder"><span>🍕</span>project-9.jpg</div>
+            <div class="project-thumb-placeholder"><span>🌐</span>project-8.jpg</div>
           </div>
           <div class="project-content">
             <div class="project-tags">
-              <span class="project-tag">Nintendo Switch</span>
-              <span class="project-tag">AA Title</span>
+              <span class="project-tag">WebGL</span>
+              <span class="project-tag">Meta Quest 3</span>
               <span class="project-tag">Multiplayer</span>
             </div>
-            <div class="project-name">FoodFight: Culinary Combat</div>
+            <div class="project-name">GOSI Verse</div>
             <p class="project-desc">
-              Completed and stabilised Photon Bolt networking for Nintendo Switch, delivering real-time combat synchronisation and cert-compliant online session management. Passed Nintendo Lotcheck certification through platform-specific porting and performance tuning.
+              Led development of Saudi Arabia's first government-backed multiplayer financial literacy app using Photon Fusion across WebGL, PC, and Meta Quest 3. Architected cross-platform multiplayer systems optimised for VR comfort and web accessibility.
             </p>
           </div>
           <div class="project-links">
             <a href="#" class="project-link">View ↗</a>
           </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder"><span>🥽</span>project-9.jpg</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">VR</span>
+              <span class="project-tag">Meta Quest 3</span>
+              <span class="project-tag">Medical</span>
+            </div>
+            <div class="project-name">VR MG Simulation</div>
+            <p class="project-desc">
+              Led end-to-end architecture of a standalone VR medical simulation on Meta Quest 3 using Unity, OpenXR, and XR Interaction Toolkit — implementing hand tracking, gesture-based interaction, and spatial UI. Maintained 72fps+ on standalone Quest hardware through shader and draw call optimisation.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">Case Study ↗</a>
+          </div>
+        </div>
+
+        <!-- ── OTHER ENGINES / PLATFORMS ── -->
+        <div class="project-category" id="cat-other">
+          <span class="project-category-label">Other Engines & Platforms</span>
+          <div class="project-category-line"></div>
         </div>
 
         <div class="project-row reveal">
@@ -828,7 +1007,7 @@
           <div class="contact-items">
             <div class="contact-item">
               <span class="contact-item-label">Email</span>
-              <a href="mailto:mateen_kh@hotmail.com">mateen_kh@hotmail.com</a>
+              <a href="/cdn-cgi/l/email-protection#6a070b1e0f0f043501022a02051e070b030644090507"><span class="__cf_email__" data-cfemail="f29f938697979cad999ab29a9d869f939b9edc919d9f">[email&#160;protected]</span></a>
             </div>
             <div class="contact-item">
               <span class="contact-item-label">LinkedIn</span>
@@ -869,14 +1048,29 @@
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     /* ── NAV SCROLL ── */
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 40);
     });
 
-    /* ── SCROLL REVEAL ── */
+    /* ── ACTIVE FILTER TAB ON SCROLL ── */
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const categories = ['cat-aa', 'cat-indie', 'cat-vr', 'cat-other'];
+
+    function updateActiveTab() {
+      let current = 'cat-aa';
+      categories.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 160) current = id;
+      });
+      filterTabs.forEach(t => {
+        t.classList.toggle('active', t.dataset.cat === current);
+      });
+    }
+    window.addEventListener('scroll', updateActiveTab);
+    updateActiveTab();
     const reveals = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -974,16 +1168,4 @@
 
     function loop() {
       updateParticles();
-      drawParticles();
-      requestAnimationFrame(loop);
-    }
-
-    window.addEventListener('resize', () => { resize(); createParticles(); createStars(); });
-    resize();
-    createParticles();
-    createStars();
-    loop();
-  </script>
-
-</body>
-</html>
+      dr
