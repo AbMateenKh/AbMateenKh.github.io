@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Abdul Mateen — Unity & VR Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Nunito:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:      #0e0e0e;
+      --bg2:     #141414;
+      --panel:   #181818;
+      --border:  #2a2a2a;
+      --accent:  #e8d5b0;
+      --accent2: #c4a882;
+      --text:    #e0e0e0;
+      --muted:   #666;
+      --muted2:  #444;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── PARTICLE CANVAS ── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 64px;
+      background: #0e0e0ecc;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .4s;
+    }
+    nav.scrolled { border-bottom-color: var(--border); }
+
+    .nav-logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--text);
+    }
+    .nav-logo span { color: var(--accent); font-style: italic; }
+
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-family: 'Fira Code', monospace;
+      font-size: .78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color .3s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 0 64px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-inner { max-width: 760px; }
+
+    .hero-eyebrow {
+      font-family: 'Fira Code', monospace;
+      font-size: .78rem;
+      color: var(--accent2);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp .7s .1s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp .7s .25s forwards;
+    }
+    .hero-name em { font-style: italic; color: var(--accent); }
+
+    .hero-role {
+      font-size: 1.1rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 28px;
+      max-width: 500px;
+      opacity: 0;
+      animation: fadeUp .7s .4s forwards;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 32px;
+      margin-top: 52px;
+      opacity: 0;
+      animation: fadeUp .7s .55s forwards;
+    }
+
+    .btn-primary {
+      font-family: 'Fira Code', monospace;
+      font-size: .82rem;
+      letter-spacing: 1px;
+      padding: 14px 32px;
+      background: var(--accent);
+      color: #0e0e0e;
+      border: none;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .3s, transform .2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+
+    .btn-ghost {
+      font-family: 'Fira Code', monospace;
+      font-size: .82rem;
+      letter-spacing: 1px;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--muted2);
+      padding-bottom: 2px;
+      transition: color .3s, border-color .3s;
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--text); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 48px; left: 64px;
+      font-family: 'Fira Code', monospace;
+      font-size: .72rem;
+      color: var(--muted2);
+      letter-spacing: 2px;
+      display: flex; align-items: center; gap: 12px;
+      opacity: 0;
+      animation: fadeUp .7s .9s forwards;
+    }
+    .hero-scroll::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--muted2);
+    }
+
+    /* ── STATS ── */
+    .stats-row {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-item {
+      padding: 48px 56px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-num span { color: var(--accent); }
+    .stat-label {
+      font-family: 'Fira Code', monospace;
+      font-size: .7rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    /* ── SECTION COMMON ── */
+    .section-inner {
+      position: relative; z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 64px;
+    }
+
+    .section-header {
+      display: flex; align-items: baseline; gap: 20px;
+      margin-bottom: 72px;
+    }
+    .section-num {
+      font-family: 'Fira Code', monospace;
+      font-size: .75rem;
+      color: var(--accent2);
+      letter-spacing: 2px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: #999;
+      font-size: 1.05rem;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+    .about-text p strong { color: var(--text); font-weight: 600; }
+
+    .skills-list { display: flex; flex-direction: column; }
+    .skill-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .skill-row:first-child { border-top: 1px solid var(--border); }
+    .skill-name { font-size: .95rem; color: var(--text); }
+    .skill-years {
+      font-family: 'Fira Code', monospace;
+      font-size: .75rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    /* ── PROJECTS ── */
+    #projects {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+
+    .projects-list { display: flex; flex-direction: column; }
+
+    .project-row {
+      display: grid;
+      grid-template-columns: 260px 1fr auto;
+      gap: 48px;
+      align-items: center;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+      transition: background .3s, padding .3s, margin .3s;
+    }
+    .project-row:first-child { border-top: 1px solid var(--border); }
+    .project-row:hover {
+      background: var(--panel);
+      margin: 0 -32px;
+      padding: 40px 32px;
+    }
+
+    /* ── PROJECT THUMBNAIL ── */
+    .project-thumb {
+      width: 260px;
+      height: 160px;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--border);
+    }
+
+    .project-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s, filter .5s;
+      filter: brightness(.85) saturate(.8);
+    }
+    .project-row:hover .project-thumb img {
+      transform: scale(1.06);
+      filter: brightness(1) saturate(1);
+    }
+
+    /* Placeholder shown when no image is provided */
+    .project-thumb-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #181818, #111);
+      font-family: 'Fira Code', monospace;
+      font-size: .7rem;
+      color: var(--muted2);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .project-thumb-placeholder span {
+      font-size: 2rem;
+      opacity: .3;
+    }
+
+    /* Accent bar on left edge of thumb */
+    .project-thumb::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .project-row:hover .project-thumb::after { opacity: 1; }
+
+    .project-tags { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .project-tag {
+      font-family: 'Fira Code', monospace;
+      font-size: .65rem;
+      color: var(--accent2);
+      border: 1px solid var(--muted2);
+      padding: 3px 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .project-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .project-desc {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 300;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    .project-links {
+      display: flex; flex-direction: column; gap: 10px;
+      align-items: flex-end;
+      min-width: 80px;
+    }
+    .project-link {
+      font-family: 'Fira Code', monospace;
+      font-size: .75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      transition: color .3s;
+    }
+    .project-link:hover { color: var(--accent); }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+
+    .contact-blurb {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+      margin-bottom: 40px;
+    }
+    .contact-blurb span { color: var(--accent); font-style: italic; }
+
+    .contact-items { display: flex; flex-direction: column; gap: 24px; }
+    .contact-item { display: flex; flex-direction: column; gap: 4px; }
+    .contact-item-label {
+      font-family: 'Fira Code', monospace;
+      font-size: .7rem;
+      color: var(--muted2);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .contact-item a {
+      font-size: 1rem;
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      display: inline-block;
+      transition: color .3s, border-color .3s;
+    }
+    .contact-item a:hover { color: var(--accent); border-color: var(--accent); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label {
+      font-family: 'Fira Code', monospace;
+      font-size: .72rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group textarea {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      font-size: .95rem;
+      padding: 14px 16px;
+      outline: none;
+      resize: vertical;
+      transition: border-color .3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent2); }
+    .form-group textarea { min-height: 130px; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 40px 64px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border);
+    }
+    .footer-text {
+      font-family: 'Fira Code', monospace;
+      font-size: .72rem;
+      color: var(--muted2);
+      letter-spacing: 1px;
+    }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a {
+      font-family: 'Fira Code', monospace;
+      font-size: .72rem;
+      color: var(--muted2);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color .3s;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s, transform .7s;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 20px 28px; }
+      #hero { padding: 120px 28px 60px; min-height: auto; }
+      .hero-scroll { display: none; }
+      .section-inner { padding: 80px 28px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .stat-item { padding: 32px 28px; }
+      .about-layout, .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+      .project-row { grid-template-columns: 1fr; gap: 20px; }
+      .project-row:hover { margin: 0; padding: 40px 0; }
+      .project-thumb { width: 100%; height: 200px; }
+      .project-links { flex-direction: row; align-items: flex-start; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PARTICLE CANVAS -->
+  <canvas id="particles"></canvas>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">Abdul <span>Mateen</span></div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Unity &amp; VR Engineer · 7 Years</div>
+      <h1 class="hero-name">Abdul<br/><em>Mateen.</em></h1>
+      <p class="hero-role">
+        Building immersive real-time experiences — VR/AR, native plugins,
+        multiplayer systems, and cross-platform delivery.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="resume.pdf" class="btn-ghost" download>Download CV →</a>
+      </div>
+    </div>
+    <div class="hero-scroll">Scroll to explore</div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-item reveal">
+      <div class="stat-num">7<span>+</span></div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">15<span>+</span></div>
+      <div class="stat-label">Projects Shipped</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Platforms</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num">XR</div>
+      <div class="stat-label">Specialization</div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-num">01</span>
+        <h2 class="section-title">About Me</h2>
+      </div>
+      <div class="about-layout">
+        <div class="about-text reveal">
+          <p>
+            I'm a <strong>Unity Engineer</strong> with 7 years of experience crafting immersive,
+            real-time interactive applications. My work spans VR/AR experiences, native plugin
+            integration across Windows, Android, and iOS, and shipping console titles.
+          </p>
+          <p>
+            Currently deepening expertise in <strong>server-authoritative multiplayer</strong> using
+            Unity Netcode for GameObjects and Photon Fusion — building competitive FPS systems with
+            lag compensation and client-side prediction.
+          </p>
+          <p>
+            Open to <strong>remote opportunities</strong> where I can push the limits of real-time
+            3D and XR development with a team that cares about craft.
+          </p>
+          <div style="margin-top: 40px;">
+            <a href="resume.pdf" class="btn-primary" download>Download Resume</a>
+          </div>
+        </div>
+        <div class="skills-list reveal">
+          <div class="skill-row"><span class="skill-name">Unity Engine</span><span class="skill-years">7 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">C#</span><span class="skill-years">7 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">VR / AR / XR</span><span class="skill-years">5 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Native Plugins (Android/iOS)</span><span class="skill-years">4 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Multiplayer / Netcode</span><span class="skill-years">2 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Console Porting</span><span class="skill-years">3 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Shader Graph / HLSL</span><span class="skill-years">4 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Photon Fusion</span><span class="skill-years">1 yr</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Selected Work</h2>
+      </div>
+      <div class="projects-list">
+
+        <!--
+          HOW TO ADD YOUR IMAGE:
+          1. Put your image file (e.g. project1.jpg) in the same folder as index.html
+          2. Replace the placeholder div with:
+             <img src="project1.jpg" alt="Project Name"/>
+          3. Recommended image size: 520x320px or similar 16:9 / 3:2 ratio
+        -->
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <!-- Replace this div with <img src="your-image.jpg" alt="Project Name"/> -->
+            <div class="project-thumb-placeholder">
+              <span>🥽</span>
+              project-1.jpg
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">VR</span>
+              <span class="project-tag">Unity</span>
+            </div>
+            <div class="project-name">Project Name Here</div>
+            <p class="project-desc">
+              Short description — what the project is, what your specific role was,
+              and the most impressive technical challenge you solved.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">GitHub ↗</a>
+            <a href="#" class="project-link">Demo ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder">
+              <span>🌐</span>
+              project-2.jpg
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">Multiplayer</span>
+              <span class="project-tag">FPS</span>
+            </div>
+            <div class="project-name">Multiplayer FPS</div>
+            <p class="project-desc">
+              Converted Unity's FPS Microgame into a competitive multiplayer experience
+              using Unity Netcode for GameObjects with server-authoritative mechanics,
+              lobby systems, and client-side prediction.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">GitHub ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder">
+              <span>📱</span>
+              project-3.jpg
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">AR</span>
+              <span class="project-tag">Mobile</span>
+            </div>
+            <div class="project-name">Project Name Here</div>
+            <p class="project-desc">
+              Brief description of the project — platform, challenge, your contribution,
+              and the result.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">GitHub ↗</a>
+            <a href="#" class="project-link">Demo ↗</a>
+          </div>
+        </div>
+
+        <div class="project-row reveal">
+          <div class="project-thumb">
+            <div class="project-thumb-placeholder">
+              <span>🎮</span>
+              project-4.jpg
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">Console</span>
+              <span class="project-tag">Native Plugin</span>
+            </div>
+            <div class="project-name">Project Name Here</div>
+            <p class="project-desc">
+              Brief description of your console project. Focus on what was technically hard
+              and how you solved it.
+            </p>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">GitHub ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-num">03</span>
+        <h2 class="section-title">Get In Touch</h2>
+      </div>
+      <div class="contact-layout">
+        <div class="reveal">
+          <p class="contact-blurb">
+            Open to remote<br/>
+            <span>Unity & VR</span><br/>
+            opportunities.
+          </p>
+          <div class="contact-items">
+            <div class="contact-item">
+              <span class="contact-item-label">Email</span>
+              <a href="mailto:your@email.com">your@email.com</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-item-label">LinkedIn</span>
+              <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-item-label">GitHub</span>
+              <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form reveal" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <div class="form-group">
+            <label for="fname">Name</label>
+            <input type="text" id="fname" name="name" placeholder="Your name" required/>
+          </div>
+          <div class="form-group">
+            <label for="femail">Email</label>
+            <input type="email" id="femail" name="email" placeholder="your@email.com" required/>
+          </div>
+          <div class="form-group">
+            <label for="fmessage">Message</label>
+            <textarea id="fmessage" name="message" placeholder="Tell me about the opportunity..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="cursor:pointer; border:none;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-text">© 2025 Abdul Mateen</span>
+    <div class="footer-links">
+      <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+      <a href="resume.pdf" download>Resume</a>
+    </div>
+  </footer>
+
+  <script>
+    /* ── NAV SCROLL ── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    /* ── SCROLL REVEAL ── */
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => revealObserver.observe(r));
+
+    /* ── PARTICLES ── */
+    const canvas = document.getElementById('particles');
+    const ctx    = canvas.getContext('2d');
+
+    let W, H, particles;
+
+    const PARTICLE_COUNT  = 80;
+    const ACCENT_COLOR    = '232, 213, 176'; // matches --accent #e8d5b0
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function createParticles() {
+      particles = Array.from({ length: PARTICLE_COUNT }, () => ({
+        x:    Math.random() * W,
+        y:    Math.random() * H,
+        r:    Math.random() * 1.5 + 0.3,
+        vx:   (Math.random() - 0.5) * 0.25,
+        vy:   (Math.random() - 0.5) * 0.25,
+        alpha: Math.random() * 0.35 + 0.05,
+      }));
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Draw connection lines between close particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx   = particles[i].x - particles[j].x;
+          const dy   = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(${ACCENT_COLOR}, ${0.06 * (1 - dist / 120)})`;
+            ctx.lineWidth   = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw dots
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${ACCENT_COLOR}, ${p.alpha})`;
+        ctx.fill();
+      });
+    }
+
+    function updateParticles() {
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0)  p.x = W;
+        if (p.x > W)  p.x = 0;
+        if (p.y < 0)  p.y = H;
+        if (p.y > H)  p.y = 0;
+      });
+    }
+
+    function loop() {
+      updateParticles();
+      drawParticles();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', () => { resize(); createParticles(); });
+    resize();
+    createParticles();
+    loop();
+  </script>
+
+</body>
+</html>
