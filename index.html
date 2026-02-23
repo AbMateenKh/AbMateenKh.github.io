@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Abdul Mateen — Unity & VR Developer</title>
+  <title>Abdul Mateen Khan — Senior Unity Developer</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230e0e0e'/><text y='72' x='50' text-anchor='middle' font-size='62' font-family='serif' fill='%23e8d5b0' font-weight='bold'>A</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Nunito:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -335,6 +336,52 @@
     @media (max-width: 768px) {
       .testimonials-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── AVAILABLE BADGE ── */
+    .available-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 8px 16px;
+      border: 1px solid rgba(100, 200, 100, 0.3);
+      background: rgba(100, 200, 100, 0.06);
+      font-family: 'Fira Code', monospace;
+      font-size: .75rem;
+      color: #7dcea0;
+      letter-spacing: 1px;
+    }
+    .available-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #7dcea0;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .4; transform: scale(.8); }
+    }
+
+    /* ── SKILL LEVEL ── */
+    .skill-level {
+      font-family: 'Fira Code', monospace;
+      font-size: .68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+    .skill-level.expert {
+      color: var(--accent);
+      background: rgba(232, 213, 176, 0.08);
+      border: 1px solid rgba(232, 213, 176, 0.2);
+    }
+    .skill-level.proficient {
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+    }
+
     .category-cards {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -724,6 +771,10 @@
         <a href="resume.pdf" class="btn-ghost" download>Download CV →</a>
       </div>
     </div>
+    <div class="available-badge">
+      <span class="available-dot"></span>
+      Currently available for remote work
+    </div>
     <div class="hero-scroll">Scroll to explore</div>
   </section>
 
@@ -770,14 +821,13 @@
           </div>
         </div>
         <div class="skills-list reveal">
-          <div class="skill-row"><span class="skill-name">Gameplay & Systems Architecture</span><span class="skill-years">7 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Unity3D / C#</span><span class="skill-years">7 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Console Porting (Switch, PS4/5, Xbox)</span><span class="skill-years">4 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">VR / AR / XR (Meta Quest)</span><span class="skill-years">3 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Multiplayer (Photon Fusion, Netcode)</span><span class="skill-years">3 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Backend (Azure PlayFab)</span><span class="skill-years">2 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">AI / NPC Behaviour Systems</span><span class="skill-years">5 yrs</span></div>
-          <div class="skill-row"><span class="skill-name">Performance Optimisation</span><span class="skill-years">5 yrs</span></div>
+          <div class="skill-row"><span class="skill-name">Gameplay & Systems Architecture</span><span class="skill-level expert">Expert</span></div>
+          <div class="skill-row"><span class="skill-name">Unity3D / C#</span><span class="skill-level expert">Expert</span></div>
+          <div class="skill-row"><span class="skill-name">Console Porting (Switch, PS4/5, Xbox)</span><span class="skill-level expert">Expert</span></div>
+          <div class="skill-row"><span class="skill-name">VR / AR / XR (Meta Quest)</span><span class="skill-level expert">Expert</span></div>
+          <div class="skill-row"><span class="skill-name">Multiplayer (Photon Fusion, Netcode)</span><span class="skill-level proficient">Proficient</span></div>
+          <div class="skill-row"><span class="skill-name">Backend (Azure PlayFab)</span><span class="skill-level proficient">Proficient</span></div>
+          <div class="skill-row"><span class="skill-name">Performance Optimisation</span><span class="skill-level expert">Expert</span></div>
         </div>
       </div>
     </div>
@@ -851,7 +901,7 @@
             <p class="project-desc">AA farm adventure RPG shipped across Nintendo Switch, PS4/5, and Steam. Architected core gameplay systems from scratch — inventory, combat, farming mechanics, and boss fights — then led the Nintendo Switch port, improving FPS by 25% through shader optimisation and memory profiling. One of my longest engagements at 3 years, owning the full gameplay stack from prototype to platform cert.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">Steam ↗</a>
+            <a href="https://www.lifeinwillowdale.com/" class="project-link" target="_blank">View ↗</a>
           </div>
         </div>
 
@@ -868,7 +918,7 @@
             <p class="project-desc">AA multiplayer brawler shipped on Nintendo Switch. Took over an unstable Photon Bolt networking implementation and stabilised real-time combat synchronisation for online play. Led platform-specific performance tuning and successfully navigated Nintendo Lotcheck certification — one of the most rigorous cert processes in console publishing.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">View ↗</a>
+            <a href="https://store.steampowered.com/app/2243580/Food_Fight_Culinary_Combat/" class="project-link" target="_blank">Steam ↗</a>
           </div>
         </div>
 
@@ -887,7 +937,7 @@
             <p class="project-desc">AA multiplayer brawler shipped across PS4/5, Xbox, and Steam. Specifically implemented EOS lobby and session management for cross-platform matchmaking, and built PS4/PS5 friend request integration for console multiplayer — a platform-certification requirement that needed precise Sony TRC compliance. Led performance optimisation across all platforms, cutting load times by ~15% and improving runtime stability by ~30%.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">View ↗</a>
+            <a href="https://store.steampowered.com/app/1484180/Goons_Legends__Mayhem/" class="project-link" target="_blank">Steam ↗</a>
           </div>
         </div>
 
@@ -904,7 +954,7 @@
             <p class="project-desc">AA wrestling RPG shipped on Nintendo Switch and PS4/5. Owned the full Switch port — platform-specific optimisation, memory management, and Sony TRC plus Nintendo Lotcheck certification. Improved runtime stability by 15% and mentored two junior engineers through the porting process, establishing reusable console delivery workflows for the team.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">Steam ↗</a>
+            <a href="https://store.steampowered.com/app/1867510/WrestleQuest/" class="project-link" target="_blank">Steam ↗</a>
           </div>
         </div>
 
@@ -928,7 +978,7 @@
             <p class="project-desc">RTS game shipped on Android and PC. Inherited a complex Zenject-based dependency injection codebase mid-development and stabilised it without breaking existing systems — delivering core RTS mechanics including AI behaviour, economy management, and army control. Led the team through modular refactoring that meaningfully improved long-term maintainability and runtime performance.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">View ↗</a>
+            <a href="https://playmythya.com/" class="project-link" target="_blank">View ↗</a>
           </div>
         </div>
 
@@ -947,7 +997,7 @@
             <p class="project-desc">Pokémon-inspired RPG shipped on PC, iOS, and Android. Inherited an unstable codebase and restructured it to deliver tactical combat, NFT-based creature mechanics, and modular progression integrated with Azure PlayFab. Improved FPS by ~30% on low-end mobile devices through memory optimisation and rendering optimisation — making the game accessible to a significantly wider audience.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">View ↗</a>
+            <a href="https://www.sacredtails.com/" class="project-link" target="_blank">View ↗</a>
           </div>
         </div>
 
@@ -964,7 +1014,7 @@
             <p class="project-desc">Dark fantasy card-combat game shipped on Steam. Joined mid-production to fix a struggling title — optimised asset pipelines, shaders, and memory management to boost overall performance by 50% and cut load times by 30%. Refined combat feel through VFX tuning, animation polish, and custom post-processing, transforming a sluggish build into a responsive, visually polished shipped product.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">Steam ↗</a>
+            <a href="https://store.steampowered.com/app/2731170/Inferni_Hope__Fear/" class="project-link" target="_blank">Steam ↗</a>
           </div>
         </div>
 
@@ -988,7 +1038,7 @@
             <p class="project-desc">Saudi Arabia's first government-backed multiplayer financial literacy platform, built as a public awareness campaign deployed across WebGL, PC, and Meta Quest 3. Led end-to-end development using Photon Fusion, architecting cross-platform multiplayer systems that let users explore financial concepts interactively across browser, desktop, and standalone VR. A rare project combining government scale, public reach, and multi-platform XR delivery in a single build.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">View ↗</a>
+            <a href="https://plandigital.me/case-studies/gosi-gosiverse-at-leap/" class="project-link" target="_blank">Case Study ↗</a>
           </div>
         </div>
 
@@ -1006,7 +1056,7 @@
             <p class="project-desc">Standalone VR medical training simulation built for Meta Quest 3, designed to educate medical professionals about Myasthenia Gravis through immersive first-person scenarios. Led full architecture and delivery using Unity and the Meta SDK — implementing hand tracking, gesture-based interaction, and spatial UI. Maintained 72fps+ on standalone Quest hardware throughout and successfully delivered to the medical client from concept through to deployment.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">Case Study ↗</a>
+            <a href="/cdn-cgi/l/email-protection#cfa2aebbaaaaa190a4a78fa7a0bba2aea6a3e1aca0a2" class="project-link">Request Info ↗</a>
           </div>
         </div>
 
@@ -1030,7 +1080,7 @@
             <p class="project-desc">Interactive metaverse experience built within the Decentraland engine, integrating NFT asset ownership via OpenSea APIs and smart contract workflows. Combined blockchain infrastructure with genuine gameplay mechanics — players could own, use, and trade in-game assets tied to real digital ownership. Delivered both technical implementation and environment scripting within Decentraland's custom ecosystem.</p>
           </div>
           <div class="project-links">
-            <a href="#" class="project-link">View ↗</a>
+            <a href="https://decentraland.org/" class="project-link" target="_blank">View ↗</a>
           </div>
         </div>
 
@@ -1110,7 +1160,7 @@
           <div class="contact-items">
             <div class="contact-item">
               <span class="contact-item-label">Email</span>
-              <a href="/cdn-cgi/l/email-protection#6a070b1e0f0f043501022a02051e070b030644090507"><span class="__cf_email__" data-cfemail="f29f938697979cad999ab29a9d869f939b9edc919d9f">[email&#160;protected]</span></a>
+              <a href="mailto:ab.mateen.kh@gmail.com">ab.mateen.kh@gmail.com</a>
             </div>
             <div class="contact-item">
               <span class="contact-item-label">LinkedIn</span>
@@ -1123,7 +1173,7 @@
           </div>
         </div>
 
-        <form class="contact-form reveal" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <form class="contact-form reveal" id="contact-form" onsubmit="handleSubmit(event)">
           <div class="form-group">
             <label for="fname">Name</label>
             <input type="text" id="fname" name="name" placeholder="Your name" required/>
@@ -1151,12 +1201,42 @@
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     /* ── NAV SCROLL ── */
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 40);
     });
+
+    /* ── CONTACT FORM ── */
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = form.querySelector('button');
+      const name = form.name.value;
+      const email = form.email.value;
+      const message = form.message.value;
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+      try {
+        const res = await fetch('https://formspree.io/f/xpwzgvqk', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name, email, message, _replyto: email })
+        });
+        if (res.ok) {
+          btn.textContent = 'Message Sent ✓';
+          form.reset();
+        } else {
+          throw new Error();
+        }
+      } catch {
+        // Fallback to mailto
+        window.location.href = `mailto:ab.mateen.kh@gmail.com?subject=Portfolio Enquiry from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0A%0AReply to: ${encodeURIComponent(email)}`;
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+      }
+    }
 
     /* ── ACTIVE FILTER TAB ON SCROLL ── */
     const filterTabs = document.querySelectorAll('.filter-tab');
