@@ -268,7 +268,73 @@
       position: relative; z-index: 1;
     }
 
-    /* ── CATEGORY OVERVIEW CARDS ── */
+    /* ── TESTIMONIALS ── */
+    #testimonials {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .testimonial-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 40px;
+      position: relative;
+      transition: border-color .3s;
+    }
+    .testimonial-card:hover { border-color: var(--accent); }
+    .testimonial-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      color: var(--accent);
+      opacity: .25;
+      line-height: .8;
+      margin-bottom: 16px;
+    }
+    .testimonial-text {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.8;
+      font-style: italic;
+      margin-bottom: 32px;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .testimonial-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .testimonial-role {
+      font-family: 'Fira Code', monospace;
+      font-size: .7rem;
+      color: var(--accent2);
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+    .testimonial-linkedin {
+      font-family: 'Fira Code', monospace;
+      font-size: .72rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    .testimonial-linkedin:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
     .category-cards {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -651,7 +717,7 @@
       <div class="hero-eyebrow">Senior Unity Developer</div>
       <h1 class="hero-name">Abdul <em>Mateen Khan</em></h1>
       <p class="hero-role">
-        7 years shipping commercial titles across console, mobile, PC, and VR — specialising in gameplay architecture, systems design, cross-platform optimisation, and multiplayer integration.
+        Senior Unity Developer with 7 years of experience in gameplay architecture, systems design, cross-platform optimisation, and multiplayer integration — shipped across console, mobile, PC, and VR.
       </p>
       <div class="hero-actions">
         <a href="#projects" class="btn-primary">View My Work</a>
@@ -676,8 +742,8 @@
       <div class="stat-label">Platforms</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num">Tech</div>
-      <div class="stat-label">Generalist</div>
+      <div class="stat-num">Console</div>
+      <div class="stat-label">Certified</div>
     </div>
   </div>
 
@@ -691,13 +757,13 @@
       <div class="about-layout">
         <div class="about-text reveal">
           <p>
-            Senior Unity Engineer with <strong>7 years of experience</strong> shipping commercial titles across Android/iOS, PC/Steam, Nintendo Switch, PS4/PS5, Xbox, WebGL, and Meta Quest VR.
+            I'm a Senior Unity Developer who has spent 7 years doing one thing consistently — <strong>shipping</strong>. Across console, mobile, PC, VR, WebGL, and metaverse platforms, I've taken projects from prototype to players on nearly every major platform in the industry.
           </p>
           <p>
-            Specialised in <strong>gameplay systems architecture, combat and AI systems, cross-platform performance optimisation,</strong> and multiplayer/backend integration (Photon, Unity Netcode, Azure PlayFab).
+            Console certification — Nintendo Lotcheck, Sony TRC, Microsoft XR — is where most projects hit a wall. The requirements are exacting, the feedback cycles are slow, and there's no shortcut through it. Having navigated all three taught me a discipline that carries into everything I build: understand the constraints completely, design for them early, and never leave compliance as an afterthought.
           </p>
           <p>
-            Proven track record of owning <strong>technical delivery from prototyping through platform certification</strong>, mentoring engineers, and building scalable, maintainable codebases using SOLID principles, event-based architecture, and component-based design patterns.
+            I've joined projects mid-crisis and stabilised them. I've built core systems from scratch. I've optimised titles that were missing frame budgets on low-end mobile and brought them back. Every platform I've shipped on has added a new layer to how I think — and that diversity is exactly what makes me effective when something genuinely new comes up.
           </p>
           <div style="margin-top: 40px;">
             <a href="resume.pdf" class="btn-primary" download>Download Resume</a>
@@ -990,11 +1056,48 @@
     </div>
   </section>
 
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-num">03</span>
+        <h2 class="section-title">What People Say</h2>
+      </div>
+      <div class="testimonials-grid">
+
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">Mateen impressed me with his Unity and C# skills during his contract work. As his technical lead, I saw his exceptional problem-solving, debugging abilities, and strong grasp of technical concepts. His adaptability and effective collaboration make him a valuable asset. I highly recommend Mateen for any Senior Unity Developer position.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-info">
+              <div class="testimonial-name">Cyril Barrow</div>
+              <div class="testimonial-role">Head of Games · Client</div>
+            </div>
+            <a href="https://www.linkedin.com/in/amateen-khan/" target="_blank" class="testimonial-linkedin">LinkedIn ↗</a>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">I had managed Mateen for quite some projects. Works hard, is a team player and has good knowledge about Unity and porting projects. I would love to work with him again.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-info">
+              <div class="testimonial-name">Abdul Qadir</div>
+              <div class="testimonial-role">Lead Unity Engineer · Manager</div>
+            </div>
+            <a href="https://www.linkedin.com/in/amateen-khan/" target="_blank" class="testimonial-linkedin">LinkedIn ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT -->
   <section id="contact">
     <div class="section-inner">
       <div class="section-header reveal">
-        <span class="section-num">03</span>
+        <span class="section-num">04</span>
         <h2 class="section-title">Get In Touch</h2>
       </div>
       <div class="contact-layout">
