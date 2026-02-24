@@ -551,7 +551,7 @@
     .project-category {
       display: flex; align-items: center; gap: 16px;
       padding: 52px 0 20px;
-      scroll-margin-top: 140px;
+      scroll-margin-top: 160px;
     }
     .project-category:first-child { padding-top: 12px; }
     .project-category-label {
@@ -1341,16 +1341,23 @@
     const categories = ['cat-aa', 'cat-indie', 'cat-vr', 'cat-other'];
 
     function updateActiveTab() {
-      let current = 'cat-aa';
+      const scrollY = window.scrollY;
+      const offset = 200; // account for sticky nav + tab bar height
+
+      let current = categories[0];
       categories.forEach(id => {
         const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - 160) current = id;
+        if (el && scrollY >= el.getBoundingClientRect().top + scrollY - offset) {
+          current = id;
+        }
       });
+
       filterTabs.forEach(t => {
         t.classList.toggle('active', t.dataset.cat === current);
       });
     }
-    window.addEventListener('scroll', updateActiveTab);
+
+    window.addEventListener('scroll', updateActiveTab, { passive: true });
     updateActiveTab();
     const reveals = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries) => {
