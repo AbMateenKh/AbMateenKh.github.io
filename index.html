@@ -1,1471 +1,1935 @@
 <!DOCTYPE html>
-<html lang="en" style="scroll-behavior: smooth;">
+<html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Abdul Mateen Khan — Lead Unity Developer</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230e0e0e'/><text y='72' x='50' text-anchor='middle' font-size='62' font-family='serif' fill='%23e8d5b0' font-weight='bold'>A</text></svg>">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Nunito:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abdul Mateen Khan | Lead Unity Developer</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='10' fill='%23120b07'/%3E%3Ctext x='50' y='62' text-anchor='middle' font-size='34' font-family='monospace' fill='%23ffc65f' font-weight='700'%3EAMK%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Pixelify+Sans:wght@500;600;700&family=VT323&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:      #0e0e0e;
-      --bg2:     #141414;
-      --panel:   #181818;
-      --border:  #2a2a2a;
-      --accent:  #e8d5b0;
-      --accent2: #c4a882;
-      --text:    #e0e0e0;
-      --muted:   #666;
-      --muted2:  #444;
+      --page: #090705;
+      --ink: #f8e8c2;
+      --cream: #fff2cf;
+      --muted: #c49d64;
+      --dim: #85613b;
+      --panel: #160d08;
+      --panel-2: #20130b;
+      --line: #4a2c17;
+      --gold: #ffc65f;
+      --gold-2: #f49a2e;
+      --green: #8cc86a;
+      --shadow: rgba(0, 0, 0, .44);
+      --radius: 8px;
+      --max: 1200px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Nunito', sans-serif;
-      font-size: 16px;
-      line-height: 1.7;
+      margin: 0;
+      color: var(--ink);
+      font-family: "Sora", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      background: linear-gradient(180deg, #120a06 0%, #070504 78%);
       overflow-x: hidden;
     }
 
-    /* ── PARTICLE CANVAS ── */
-    #particles {
+    .pixel { font-family: "Pixelify Sans", "Sora", sans-serif; letter-spacing: .01em; }
+
+    /* Single, large grid only — removed the 4px hero scanlines */
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: .14;
       z-index: 0;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      width: calc(var(--scroll, 0) * 1%);
+      height: 2px;
+      background: var(--gold);
+      z-index: 200;
       pointer-events: none;
     }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; width: 100%; z-index: 100;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 28px 64px;
-      background: #0e0e0ecc;
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid transparent;
-      transition: border-color .4s;
-    }
-    nav.scrolled { border-bottom-color: var(--border); }
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+    h1, h2, h3, p { margin-top: 0; }
 
-    .nav-logo {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 800;
-      font-size: 1.15rem;
-      color: var(--text);
-    }
-    .nav-logo span { color: #ffffff; font-style: italic; }
-
-    .nav-links { display: flex; gap: 40px; list-style: none; }
-    .nav-links a {
-      font-family: 'Fira Code', monospace;
-      font-size: .78rem;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 1px;
-      transition: color .3s;
-    }
-    .nav-links a:hover { color: var(--text); }
-
-    /* ── HERO ── */
-    #hero {
+    .wrap { width: 100%; position: relative; z-index: 1; }
+    .site-frame {
       min-height: 100vh;
-      display: flex; align-items: center;
-      padding: 100px 64px 80px;
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
+      background: var(--panel);
     }
 
-    .hero-inner { max-width: 760px; }
-
-    .hero-eyebrow {
-      font-family: 'Fira Code', monospace;
-      font-size: .78rem;
-      color: var(--accent2);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-      opacity: 0;
-      animation: fadeUp .7s .1s forwards;
-    }
-
-    .hero-name {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2.8rem, 6.5vw, 6.5rem);
-      font-weight: 800;
-      line-height: 1.05;
-      color: var(--text);
-      white-space: nowrap;
-      opacity: 0;
-      animation: fadeUp .7s .25s forwards;
-    }
-    .hero-name em { font-style: italic; color: #ffffff; }
-
-    .hero-role {
-      font-size: 1.1rem;
-      color: var(--muted);
-      font-weight: 300;
-      margin-top: 28px;
-      max-width: 100%;
-      width: fit-content;
-      opacity: 0;
-      animation: fadeUp .7s .4s forwards;
-    }
-
-    .hero-actions {
-      display: flex; align-items: center; gap: 32px;
-      margin-top: 52px;
-      opacity: 0;
-      animation: fadeUp .7s .55s forwards;
-    }
-
-    .btn-primary {
-      font-family: 'Fira Code', monospace;
-      font-size: .82rem;
-      letter-spacing: 1px;
-      padding: 14px 32px;
-      background: var(--accent);
-      color: #0e0e0e;
-      border: none;
-      text-decoration: none;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background .3s, transform .2s;
-      display: inline-block;
-    }
-    .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
-
-    .btn-ghost {
-      font-family: 'Fira Code', monospace;
-      font-size: .82rem;
-      letter-spacing: 1px;
-      color: var(--muted);
-      text-decoration: none;
-      border-bottom: 1px solid var(--muted2);
-      padding-bottom: 2px;
-      transition: color .3s, border-color .3s;
-    }
-    .btn-ghost:hover { color: var(--text); border-color: var(--text); }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: 48px; left: 64px;
-      font-family: 'Fira Code', monospace;
-      font-size: .72rem;
-      color: var(--muted2);
-      letter-spacing: 2px;
-      display: flex; align-items: center; gap: 12px;
-      opacity: 0;
-      animation: fadeUp .7s .9s forwards;
-    }
-    .hero-scroll::before {
-      content: '';
-      width: 40px; height: 1px;
-      background: var(--muted2);
-    }
-
-    /* ── STATS ── */
-    .stats-row {
-      position: relative; z-index: 1;
-      max-width: 1200px; margin: 0 auto;
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--bg);
-    }
-    .stat-item {
-      padding: 48px 56px;
-      border-right: 1px solid var(--border);
-    }
-    .stat-item:last-child { border-right: none; }
-    .stat-num {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: var(--text);
-      line-height: 1;
-    }
-    .stat-num span { color: var(--accent); }
-    .stat-label {
-      font-family: 'Fira Code', monospace;
-      font-size: .7rem;
-      color: var(--muted);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-top: 8px;
-    }
-
-    /* ── SECTION COMMON ── */
-    .section-inner {
-      position: relative; z-index: 1;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 120px 64px;
-    }
-
-    .section-header {
-      display: flex; align-items: baseline; gap: 20px;
-      margin-bottom: 72px;
-    }
-    .section-num {
-      font-family: 'Fira Code', monospace;
-      font-size: .75rem;
-      color: var(--accent2);
-      letter-spacing: 2px;
-    }
-    .section-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.8rem, 3vw, 2.8rem);
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      position: relative; z-index: 1;
-    }
-
-    .about-layout {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 80px;
-      align-items: start;
-    }
-
-    .about-text p {
-      color: #999;
-      font-size: 1.05rem;
-      font-weight: 300;
-      margin-bottom: 20px;
-    }
-    .about-text p strong { color: var(--text); font-weight: 600; }
-
-    .skills-list { display: flex; flex-direction: column; }
-    .skill-row {
+    /* ── Topbar ──────────────────────────────────────────── */
+    .topbar {
+      position: sticky;
+      top: 0; z-index: 80;
+      min-height: 66px;
+      padding: 14px clamp(22px, 6vw, 96px);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
+      gap: 20px;
+      background: rgba(12, 7, 4, .82);
+      border-bottom: 1px solid rgba(255, 198, 95, .14);
+      backdrop-filter: blur(16px);
+      transition: background .25s, border-color .25s, box-shadow .25s;
     }
-    .skill-row:first-child { border-top: 1px solid var(--border); }
-    .skill-name { font-size: .95rem; color: var(--text); }
-    .skill-years {
-      font-family: 'Fira Code', monospace;
-      font-size: .75rem;
-      color: var(--muted);
-      letter-spacing: 1px;
+    body.is-scrolled .topbar {
+      background: rgba(12, 7, 4, .94);
+      border-bottom-color: rgba(255, 198, 95, .24);
+      box-shadow: 0 18px 48px rgba(0,0,0,.24);
     }
-
-    /* ── PROJECTS ── */
-    #projects {
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      position: relative; z-index: 1;
+    .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--cream); text-decoration: none; font-weight: 800; }
+    .brand-mark {
+      width: 48px; height: 40px;
+      display: grid; place-items: center;
+      color: var(--gold);
+      background: linear-gradient(180deg, rgba(255, 198, 95, .08), rgba(0,0,0,.22)), #211309;
+      border: 2px solid #5a3518;
+      border-radius: 4px;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.28);
+      font-size: 1.16rem;
     }
-
-    /* ── TESTIMONIALS ── */
-    #testimonials {
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      position: relative; z-index: 1;
-    }
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 48px;
-    }
-    .testimonial-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 40px;
-      position: relative;
-      transition: border-color .3s;
-    }
-    .testimonial-card:hover { border-color: var(--accent); }
-    .testimonial-quote {
-      font-family: 'Playfair Display', serif;
-      font-size: 5rem;
-      color: var(--accent);
-      opacity: .25;
-      line-height: .8;
-      margin-bottom: 16px;
-    }
-    .testimonial-text {
-      font-size: .95rem;
-      color: var(--muted);
-      line-height: 1.8;
-      font-style: italic;
-      margin-bottom: 32px;
-    }
-    .testimonial-author {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--border);
-      padding-top: 20px;
-    }
-    .testimonial-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      color: var(--text);
-      font-weight: 700;
-    }
-    .testimonial-role {
-      font-family: 'Fira Code', monospace;
-      font-size: .7rem;
-      color: var(--accent2);
-      letter-spacing: 1px;
-      margin-top: 4px;
-    }
-    .testimonial-linkedin {
-      font-family: 'Fira Code', monospace;
-      font-size: .72rem;
-      color: var(--accent);
+    .nav { display: flex; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
+    .nav a {
+      display: inline-flex; min-height: 34px; align-items: center;
+      padding: 0 13px;
+      border-radius: 4px;
+      color: #d7b77d;
       text-decoration: none;
-      letter-spacing: 1px;
+      font-size: .85rem; font-weight: 600;
+      transition: color .2s, background .2s;
     }
-    .testimonial-linkedin:hover { text-decoration: underline; }
-
-    @media (max-width: 768px) {
-      .testimonials-grid { grid-template-columns: 1fr; }
-    }
-
-    /* ── ACHIEVEMENT BANNER ── */
-    .achievement-banner {
-      position: relative; z-index: 1;
-      background: linear-gradient(90deg, rgba(232,213,176,0.06) 0%, rgba(232,213,176,0.1) 50%, rgba(232,213,176,0.06) 100%);
-      border-top: 1px solid rgba(232,213,176,0.15);
-      border-bottom: 1px solid rgba(232,213,176,0.15);
-      padding: 18px 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      text-align: center;
-    }
-    .achievement-icon { font-size: 1.1rem; }
-    .achievement-text {
-      font-family: 'Fira Code', monospace;
-      font-size: .78rem;
-      color: var(--accent);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    /* ── BACK TO TOP ── */
-    .back-to-top {
-      position: fixed;
-      bottom: 36px; right: 36px;
-      width: 44px; height: 44px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      color: var(--accent);
-      font-size: 1.1rem;
-      cursor: pointer;
-      z-index: 100;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity .3s, transform .3s, border-color .3s;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .back-to-top.visible { opacity: 1; transform: translateY(0); }
-    .back-to-top:hover { border-color: var(--accent); }
-
-    /* ── CONTACT META ── */
-    .contact-meta {
-      margin-top: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .contact-meta-item {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    .contact-meta-item:last-child { border-bottom: none; }
-    .contact-meta-label {
-      font-family: 'Fira Code', monospace;
-      font-size: .65rem;
-      color: var(--muted);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    .contact-meta-value {
-      font-size: .9rem;
-      color: var(--text);
-      font-weight: 400;
-    }
-    .available-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 24px;
-      padding: 8px 16px;
-      border: 1px solid rgba(100, 200, 100, 0.3);
-      background: rgba(100, 200, 100, 0.06);
-      font-family: 'Fira Code', monospace;
-      font-size: .75rem;
-      color: #7dcea0;
-      letter-spacing: 1px;
-    }
-    .available-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #7dcea0;
-      animation: pulse-dot 2s infinite;
-    }
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .4; transform: scale(.8); }
-    }
-
-    /* ── SKILL LEVEL ── */
-    .skill-level {
-      font-family: 'Fira Code', monospace;
-      font-size: .68rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 2px;
-    }
-    .skill-level.expert {
-      color: var(--accent);
-      background: rgba(232, 213, 176, 0.08);
-      border: 1px solid rgba(232, 213, 176, 0.2);
-    }
-    .skill-level.proficient {
-      color: var(--muted);
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-    }
-
-    .category-cards {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-bottom: 64px;
-    }
-
-    .category-card {
-      background: var(--panel);
-      padding: 32px 28px;
-      cursor: pointer;
-      transition: background .3s;
+    .nav a:hover, .nav a.active { color: var(--gold); background: rgba(255, 198, 95, .08); }
+    .nav a.active { box-shadow: inset 0 -2px 0 var(--gold); }
+    .nav-cta {
+      display: inline-flex; min-height: 40px; align-items: center; gap: 10px;
+      padding: 0 18px;
+      color: var(--gold);
       text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      font-size: .85rem; font-weight: 700;
+      border: 1px solid rgba(255, 198, 95, .42);
+      border-radius: 5px;
+      background: rgba(255, 198, 95, .055);
+      transition: transform .18s, background .18s, border-color .18s;
+    }
+    .nav-cta:hover { transform: translateY(-2px); background: rgba(255, 198, 95, .10); border-color: var(--gold); }
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .hero {
       position: relative;
+      min-height: calc(100vh - 66px);
+      display: grid;
+      grid-template-columns: 1.1fr .85fr;
+      align-items: center;
+      isolation: isolate;
+      background:
+        /* Stronger left mask so headline contrast holds */
+        linear-gradient(90deg, rgba(6,4,3,.96) 0%, rgba(8,5,3,.92) 30%, rgba(8,5,3,.62) 58%, rgba(8,5,3,.30) 100%),
+        linear-gradient(180deg, rgba(8,5,3,.30), rgba(8,5,3,.62)),
+        url("cozy-cabin-hero-bg.png") center center / cover no-repeat,
+        #0d0805;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 64% 28%, rgba(255, 190, 83, .26), transparent 18rem),
+        linear-gradient(180deg, transparent 0 65%, rgba(0,0,0,.46) 100%);
+      z-index: -1;
+      animation: lampFlicker 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* ── Ambient cozy layer ────────────────────────────── */
+    .ambient {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      z-index: 1;
       overflow: hidden;
     }
-    .category-card::after {
-      content: '';
+    .firefly {
       position: absolute;
-      bottom: 0; left: 0;
-      width: 0; height: 2px;
-      background: var(--accent);
-      transition: width .4s;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #ffd77c;
+      box-shadow: 0 0 8px #ffd77c, 0 0 16px rgba(255,184,80,.6);
+      opacity: 0;
+      animation: fireflyFloat 12s ease-in-out infinite, fireflyGlow 2.6s ease-in-out infinite;
     }
-    .category-card:hover { background: #1e1e1e; }
-    .category-card:hover::after { width: 100%; }
+    .firefly.f1 { left: 38%; top: 70%; animation-delay: 0s, 0s; }
+    .firefly.f2 { left: 52%; top: 55%; animation-delay: -3s, -.4s; background: #b8e07a; box-shadow: 0 0 8px #b8e07a, 0 0 16px rgba(140,200,106,.6); }
+    .firefly.f3 { left: 68%; top: 80%; animation-delay: -6s, -1s; }
+    .firefly.f4 { left: 75%; top: 35%; animation-delay: -2s, -1.6s; }
+    .firefly.f5 { left: 45%; top: 40%; animation-delay: -8s, -.8s; background: #b8e07a; box-shadow: 0 0 8px #b8e07a, 0 0 16px rgba(140,200,106,.6); }
+    .firefly.f6 { left: 60%; top: 65%; animation-delay: -10s, -2s; }
 
-    .category-card-icon {
-      font-size: 1.6rem;
-      line-height: 1;
+    .steam {
+      position: absolute;
+      right: 8%;
+      bottom: 4%;
+      width: 6px; height: 60px;
+      background: linear-gradient(180deg, transparent, rgba(255,241,207,.32) 50%, transparent);
+      border-radius: 50%;
+      filter: blur(4px);
+      opacity: 0;
+      animation: steamRise 3.8s ease-in-out infinite;
     }
-    .category-card-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.05rem;
+    .steam.s2 { right: 9.4%; animation-delay: -1.2s; height: 50px; }
+    .steam.s3 { right: 7%; animation-delay: -2.4s; height: 70px; }
+
+    .star {
+      position: absolute;
+      width: 3px; height: 3px;
+      background: #fff2cf;
+      border-radius: 50%;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    .star.t1 { right: 8%; top: 10%; animation-delay: 0s; }
+    .star.t2 { right: 14%; top: 6%; animation-delay: -1s; }
+    .star.t3 { right: 6%; top: 16%; animation-delay: -2s; width: 2px; height: 2px; }
+    .star.t4 { right: 18%; top: 12%; animation-delay: -.5s; width: 2px; height: 2px; }
+
+    @keyframes fireflyFloat {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(20px, -30px); }
+      50% { transform: translate(-15px, -50px); }
+      75% { transform: translate(25px, -20px); }
+    }
+    @keyframes fireflyGlow {
+      0%, 100% { opacity: 0; }
+      50% { opacity: .9; }
+    }
+    @keyframes steamRise {
+      0% { opacity: 0; transform: translateY(0) scaleX(1); }
+      30% { opacity: .8; }
+      100% { opacity: 0; transform: translateY(-80px) scaleX(2.5); }
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: .3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.4); }
+    }
+    @keyframes lampFlicker {
+      0%, 100% { opacity: .82; }
+      40% { opacity: 1; }
+      45% { opacity: .7; }
+      50% { opacity: .95; }
+      55% { opacity: .8; }
+      60% { opacity: 1; }
+    }
+
+    .hero-copy {
+      width: min(887px, 100%);
+      padding: clamp(48px, 6vw, 96px) clamp(24px, 4vw, 70px);
+      max-width: min(887px, 100%);
+      position: relative; z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-bottom: 28px;
+      padding: 6px 12px;
+      color: var(--gold);
+      background: rgba(255, 198, 95, .08);
+      border: 1px solid rgba(255, 198, 95, .26);
+      border-radius: 999px;
+      font-size: .72rem;
       font-weight: 700;
-      color: var(--text);
-    }
-    .category-card-count {
-      font-family: 'Fira Code', monospace;
-      font-size: .7rem;
-      color: var(--accent2);
-      letter-spacing: 2px;
+      letter-spacing: .14em;
       text-transform: uppercase;
     }
-    .category-card-platforms {
+    .eyebrow::before {
+      content: "";
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px rgba(140, 200, 106, .8);
+      animation: pulse 1.8s infinite;
+    }
+
+    h1 {
+      margin-bottom: 22px;
+      color: var(--cream);
+      font-family: "Sora", system-ui, sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5.6rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
+    }
+    h1 .accent { color: var(--gold); display: block; }
+    h1 .greet { display: block; color: var(--cream); font-weight: 700; font-size: .82em; margin-bottom: 4px; }
+
+    .hero-tagline {
+      margin: 0 0 14px;
+      max-width: 580px;
+      color: #d8bb89;
+      font-size: clamp(1rem, 1.18vw, 1.14rem);
+      line-height: 1.55;
+    }
+
+    .hero-supporting {
+      margin: 0 0 30px;
+      max-width: 680px;
+      color: rgba(255, 232, 185, .74);
+      font-size: clamp(.95rem, 1.05vw, 1.05rem);
+      line-height: 1.72;
+      font-weight: 500;
+    }
+
+    /* Two CTAs only */
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 38px; }
+    .btn {
+      display: inline-flex; min-height: 44px; align-items: center; justify-content: center;
+      padding: 0 22px;
+      border: 1px solid rgba(255, 198, 95, .38);
+      border-radius: 5px;
+      color: var(--cream);
+      background: rgba(28, 17, 9, .72);
+      text-decoration: none;
+      font-size: .9rem; font-weight: 700;
+      transition: transform .18s, border-color .18s, background .18s;
+    }
+    .btn.primary {
+      color: #1d1107;
+      background: linear-gradient(180deg, #ffd77c, #f7a43d);
+      border-color: #ffd77c;
+    }
+    .btn:hover { transform: translateY(-2px); border-color: var(--gold); }
+    .btn.primary:hover { background: linear-gradient(180deg, #ffe293, #f9b556); }
+
+    /* Trust strip with fake-logo chips */
+    .trust-strip { margin-top: 12px; }
+    .trust-label {
+      color: #806342;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .trust-logos {
+      display: flex; flex-wrap: wrap;
+      gap: 10px;
+    }
+    .trust-logo {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      color: rgba(255, 242, 207, .62);
+      background: rgba(18, 10, 5, .58);
+      border: 1px solid rgba(255, 198, 95, .14);
+      border-radius: 6px;
       font-size: .82rem;
-      color: var(--muted);
-      font-weight: 300;
-      line-height: 1.5;
-      margin-top: 4px;
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+    .trust-logo::before {
+      content: "";
+      width: 16px; height: 16px;
+      background: linear-gradient(135deg, var(--gold), #b06a22);
+      border-radius: 3px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
     }
 
-    /* ── STICKY FILTER TABS ── */
-    .filter-tabs-wrap {
-      position: sticky;
-      top: 72px;
-      z-index: 50;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      margin: 0 -64px 48px;
-      padding: 0 64px;
+    /* Hero panel — quieter, single card, real-looking notes */
+    .hero-panel {
+      padding: clamp(32px, 4vw, 64px) clamp(24px, 5vw, 70px);
+      display: flex; flex-direction: column; gap: 14px; align-items: stretch; justify-content: center;
+      position: relative; z-index: 2;
+    }
+    .quiet-card {
+      padding: 22px;
+      background: rgba(14, 8, 5, .76);
+      border: 1px solid rgba(255, 198, 95, .16);
+      border-radius: var(--radius);
+      box-shadow: 0 18px 44px rgba(0,0,0,.28);
+      backdrop-filter: blur(4px);
+    }
+    .qc-label {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+      color: #c49d64;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+    .qc-label::before {
+      content: "";
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .mini-stat {
+      padding: 14px;
+      background: rgba(255, 241, 207, .035);
+      border: 1px solid rgba(255, 198, 95, .12);
+      border-radius: 6px;
+    }
+    .mini-stat strong {
+      display: block;
+      color: var(--gold);
+      font-family: "Sora", system-ui, sans-serif;
+      font-size: clamp(1.65rem, 2.5vw, 2.3rem);
+      font-weight: 800;
+      letter-spacing: .01em;
+      line-height: 1;
+    }
+    .mini-stat span {
+      display: block;
+      margin-top: 6px;
+      color: #c7a373;
+      font-size: .72rem;
+      font-weight: 600;
+      line-height: 1.4;
     }
 
-    .filter-tabs {
-      display: flex;
-      gap: 0;
+    .recent-card {
+      padding: 16px 18px;
+      background: rgba(11, 7, 4, .68);
+      border: 1px solid rgba(255, 198, 95, .14);
+      border-radius: var(--radius);
+    }
+    .recent-list {
+      display: grid; gap: 10px;
+      margin: 0; padding: 0;
+      list-style: none;
+      font-size: .82rem;
+    }
+    .recent-list li {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: baseline;
+      color: #e4c88f;
+      font-weight: 500;
+    }
+    .recent-list time {
+      color: #8f7148;
+      font-size: .72rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .recent-list b {
+      color: var(--gold);
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    /* ── Sections ────────────────────────────────────────── */
+    .section {
+      padding: clamp(40px, 6vw, 80px) clamp(22px, 6vw, 96px);
+      border-top: 1px solid rgba(255,198,95,.14);
+    }
+
+    .section-head {
+      display: flex; justify-content: space-between; align-items: end;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255,198,95,.10);
+    }
+    .section-head h2 {
+      margin: 0;
+      color: var(--cream);
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1;
+    }
+    .section-head .kicker {
+      display: block;
+      color: var(--gold);
+      font-family: "Pixelify Sans", sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-head a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: .86rem;
+      font-weight: 700;
+    }
+    .section-head a:hover { text-decoration: underline; }
+
+    /* ── Featured project + grid ─────────────────────────── */
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+    .feature-card {
+      position: relative;
+      display: flex; flex-direction: column;
+      padding: 24px;
+      color: var(--ink);
+      text-decoration: none;
+      background: linear-gradient(180deg, rgba(255,198,95,.05), rgba(0,0,0,.18)), #1b1009;
+      border: 1px solid rgba(255,198,95,.22);
+      border-radius: 10px;
+      box-shadow: 0 24px 58px rgba(0,0,0,.34);
+      overflow: hidden;
+      transition: transform .25s, border-color .25s;
+    }
+    .feature-card:hover { transform: translateY(-4px); border-color: rgba(255,198,95,.5); }
+    .feature-cover {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 6px;
+      border: 1px solid rgba(255,198,95,.18);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+    .feature-cover img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: saturate(.95) brightness(.92);
+    }
+    .feature-tag {
+      position: absolute; top: 12px; left: 12px;
+      padding: 5px 10px;
+      color: #1d1107;
+      background: var(--gold);
+      border-radius: 4px;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .feature-card h3 {
+      margin: 0 0 8px;
+      color: var(--cream);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .feature-card .meta {
+      color: var(--green);
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .feature-card p {
+      margin: 0 0 16px;
+      color: #d8ba86;
+      font-size: .94rem;
+    }
+    .feature-platforms {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: auto;
+    }
+    .pf {
+      padding: 4px 10px;
+      color: #f8dfaa;
+      background: rgba(255,198,95,.08);
+      border: 1px solid rgba(255,198,95,.22);
+      border-radius: 999px;
+      font-size: .68rem;
+      font-weight: 700;
+    }
+
+    .feature-side {
+      display: grid;
+      gap: 14px;
+    }
+    .side-card {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      color: var(--ink);
+      text-decoration: none;
+      background: #170d07;
+      border: 1px solid rgba(255,198,95,.16);
+      border-radius: 8px;
+      transition: transform .2s, border-color .2s;
+    }
+    .side-card:hover { transform: translateX(4px); border-color: rgba(255,198,95,.46); }
+    .side-card img {
+      width: 100px; height: 70px;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 1px solid rgba(255,198,95,.14);
+    }
+    .side-card h4 {
+      margin: 0 0 4px;
+      color: var(--cream);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .side-card .meta {
+      color: var(--green);
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    /* Tabs (kept, simplified) */
+    .project-tabs {
+      display: flex; gap: clamp(20px, 4vw, 48px);
+      align-items: center;
       overflow-x: auto;
+      padding: 0 0 2px;
+      margin: 0 0 20px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
       scrollbar-width: none;
     }
-    .filter-tabs::-webkit-scrollbar { display: none; }
-
-    .filter-tab {
-      font-family: 'Fira Code', monospace;
-      font-size: .75rem;
-      color: var(--muted);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 18px 28px;
-      cursor: pointer;
-      border: none;
-      background: transparent;
+    .project-tabs::-webkit-scrollbar { display: none; }
+    .project-tab {
+      appearance: none; border: 0; background: transparent;
       border-bottom: 2px solid transparent;
-      transition: color .3s, border-color .3s;
+      color: #786550;
+      padding: 0 0 14px;
+      font-family: "Pixelify Sans", sans-serif;
+      font-size: .92rem;
+      font-weight: 600;
+      letter-spacing: .04em;
       white-space: nowrap;
-      text-decoration: none;
-      display: inline-block;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
     }
-    .filter-tab:hover { color: var(--text); }
-    .filter-tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
+    .project-tab span {
+      color: var(--gold);
+      margin-left: 6px;
+      font-size: .78rem;
     }
-
-    /* ── EXISTING CATEGORY HEADERS (keep but adjust spacing) ── */
-    .project-category {
-      display: flex; align-items: center; gap: 16px;
-      padding: 52px 0 20px;
-      scroll-margin-top: 160px;
-    }
-    .project-category:first-child { padding-top: 12px; }
-    .project-category-label {
-      font-family: 'Fira Code', monospace;
-      font-size: .72rem;
-      color: var(--accent2);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .project-category-line {
-      flex: 1; height: 1px;
-      background: var(--border);
+    .project-tab:hover, .project-tab.active {
+      color: var(--cream);
+      border-bottom-color: var(--gold);
     }
 
-    @media (max-width: 960px) {
-      .category-cards { grid-template-columns: 1fr 1fr; }
-      .filter-tabs-wrap { margin: 0 -28px 36px; padding: 0 28px; }
-      .filter-tab { padding: 16px 16px; font-size: .68rem; }
-    }
-    @media (max-width: 540px) {
-      .category-cards { grid-template-columns: 1fr; }
-    }
+    /* Project shelf — wood grain + height variation */
+    .project-panel { display: none; }
+    .project-panel.active { display: block; animation: panelIn .28s ease both; }
 
-    .project-row {
-      display: grid;
-      grid-template-columns: 260px 1fr auto;
-      gap: 48px;
-      align-items: center;
-      padding: 40px 0;
-      border-bottom: 1px solid var(--border);
-      transition: background .3s, padding .3s, margin .3s;
-    }
-    .project-row:first-child { border-top: 1px solid var(--border); }
-    .project-row:hover {
-      background: var(--panel);
-      margin: 0 -32px;
-      padding: 40px 32px;
-    }
-
-    /* ── PROJECT THUMBNAIL ── */
-    .project-thumb {
-      width: 260px;
-      height: 160px;
-      overflow: hidden;
-      flex-shrink: 0;
+    .shelf {
       position: relative;
-      background: var(--panel);
-      border: 1px solid var(--border);
+      padding: 32px 18px 34px;
+      border: 1px solid rgba(255,198,95,.14);
+      border-radius: var(--radius);
+      background:
+        /* horizontal wood grain */
+        repeating-linear-gradient(0deg, rgba(255,198,95,.018) 0 1px, transparent 1px 6px),
+        repeating-linear-gradient(90deg, rgba(0,0,0,.18) 0 1px, transparent 1px 80px),
+        linear-gradient(180deg, #2a190d, #1a0e07);
+      box-shadow: inset 0 14px 40px rgba(0,0,0,.36), inset 0 -3px 0 rgba(255,198,95,.06);
+    }
+    /* Shelf plank edge */
+    .shelf::after {
+      content: "";
+      position: absolute;
+      bottom: 12px; left: 18px; right: 18px;
+      height: 6px;
+      background: linear-gradient(180deg, #6b431f, #2a1709);
+      border-radius: 2px;
+      box-shadow: 0 6px 14px rgba(0,0,0,.45);
+    }
+    .shelf-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: clamp(14px, 2vw, 22px);
+      align-items: end;
+    }
+    .game-card {
+      appearance: none; border: 0; background: transparent; padding: 0;
+      color: inherit; text-align: left; cursor: pointer;
+      position: relative;
+      transition: transform .25s, filter .25s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Vary heights ±10px so the shelf reads as books, not tiles */
+    .game-card:nth-child(4n+1) { transform: translateY(0); }
+    .game-card:nth-child(4n+2) { transform: translateY(-8px); }
+    .game-card:nth-child(4n+3) { transform: translateY(4px); }
+    .game-card:nth-child(4n+4) { transform: translateY(-4px); }
+
+    .game-card:hover, .game-card.selected {
+      transform: translateY(-14px);
+      filter: brightness(1.05) saturate(1.08);
     }
 
-    .project-thumb img {
+    .game-cover {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      border: 1px solid rgba(255,198,95,.30);
+      border-radius: 6px 4px 4px 6px;
+      background: #120b07;
+      box-shadow:
+        0 24px 36px rgba(0,0,0,.52),
+        inset 0 2px 0 rgba(255, 231, 170, .10),
+        inset -8px 0 18px rgba(0,0,0,.4);
+      transition: box-shadow .25s, border-color .25s;
+    }
+    .game-cover img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(.92) saturate(.92);
+      transition: filter .3s, transform .4s;
+      background: linear-gradient(135deg, #2a190d 0%, #4a2c17 50%, #2a190d 100%);
+    }
+    .feature-cover img, .side-card img {
+      background: linear-gradient(135deg, #2a190d 0%, #4a2c17 50%, #2a190d 100%);
+    }
+    .game-cover::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 38%, rgba(0,0,0,.20) 68%, rgba(0,0,0,.78));
+      z-index: 1;
+      pointer-events: none;
+    }
+    /* Book spine on left edge */
+    .game-cover::after {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 6px;
+      background: linear-gradient(180deg, #4a2c17, #1a0e07);
+      box-shadow: 1px 0 0 rgba(0,0,0,.5), inset -1px 0 0 rgba(255,198,95,.12);
+      z-index: 2;
+    }
+    .game-card:hover .game-cover, .game-card.selected .game-cover {
+      border-color: rgba(255, 214, 122, .78);
+      box-shadow:
+        0 30px 48px rgba(0,0,0,.56),
+        0 0 0 2px rgba(255,198,95,.16),
+        0 0 28px rgba(255,198,95,.18),
+        inset 0 2px 0 rgba(255, 231, 170, .16);
+    }
+    .game-card:hover .game-cover img, .game-card.selected .game-cover img {
+      filter: brightness(1.04) saturate(1.1);
+      transform: scale(1.04);
+    }
+    .game-card-title {
+      position: absolute;
+      left: 14px; right: 14px; bottom: 10px;
+      color: var(--gold);
+      font-family: "Pixelify Sans", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1;
+      text-shadow: 0 4px 14px rgba(0,0,0,.85);
+      z-index: 3;
+    }
+    .platform-row {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 6px;
+      margin-top: 10px;
+    }
+    .platform-icon {
+      min-width: 30px; height: 24px;
+      display: inline-grid; place-items: center;
+      padding: 0 9px;
+      color: #f8dfaa;
+      border-radius: 999px;
+      background: rgba(255,198,95,.08);
+      border: 1px solid rgba(255,198,95,.22);
+      font-size: .62rem;
+      font-weight: 700;
+    }
+
+    /* Project detail panel */
+    .project-detail { display: none; }
+    .project-detail.active {
+      display: grid;
+      margin-top: 22px;
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(255,198,95,.04), transparent), rgba(14, 8, 5, .86);
+      border: 1px solid rgba(255,198,95,.24);
+      border-radius: var(--radius);
+      animation: panelIn .28s ease both;
+    }
+    .project-detail-inner {
+      display: grid;
+      grid-template-columns: minmax(220px, 360px) 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+    .project-detail img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      border-radius: 7px;
+      border: 1px solid rgba(255,198,95,.18);
+    }
+    .detail-eyebrow {
+      color: var(--green);
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .project-detail h3 {
+      margin-bottom: 10px;
+      color: var(--cream);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      line-height: .98;
+      letter-spacing: -0.015em;
+    }
+    .project-detail p {
+      color: #d9bc87;
+      margin-bottom: 16px;
+    }
+    .detail-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    /* ── Expanded case-study panel ───────────────────────── */
+    .case-study {
+      display: none;
+      margin-top: 18px;
+      border-top: 1px solid rgba(255,198,95,.14);
+      padding-top: 22px;
+      animation: panelIn .32s ease both;
+    }
+    .case-study.active { display: block; }
+    .case-study-empty { color: #aa8555; font-size: .9rem; }
+
+    .gameplay-preview {
+      max-width: 560px;
+      margin: 0 0 18px;
+      padding: 14px;
+      background: rgba(255,241,207,.025);
+      border: 1px solid rgba(255,198,95,.14);
+      border-radius: 8px;
+    }
+    .gameplay-preview-head {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+      margin-bottom: 10px;
+    }
+    .gameplay-preview h4 {
+      margin: 0;
+      color: var(--gold);
+      font-family: "Pixelify Sans", sans-serif;
+      font-size: .84rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .gameplay-preview small {
+      color: #aa8555;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .gameplay-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .gameplay-item {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+    .gameplay-frame {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      max-height: 220px;
+      border: 1px solid rgba(255,198,95,.18);
+      border-radius: 7px;
+      background: #120b07;
+      box-shadow: 0 12px 22px rgba(0,0,0,.30);
+    }
+    .gameplay-frame img,
+    .gameplay-frame video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
-      transition: transform .5s, filter .5s;
-      filter: brightness(.85) saturate(.8);
+      transition: transform .35s ease, filter .25s ease;
     }
-    .project-row:hover .project-thumb img {
-      transform: scale(1.06);
-      filter: brightness(1) saturate(1);
+    .gameplay-item:hover .gameplay-frame img,
+    .gameplay-item:hover .gameplay-frame video {
+      transform: scale(1.035);
+      filter: brightness(1.06) saturate(1.08);
     }
-
-    /* Placeholder shown when no image is provided */
-    .project-thumb-placeholder {
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #181818, #111);
-      font-family: 'Fira Code', monospace;
-      font-size: .7rem;
-      color: var(--muted2);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .project-thumb-placeholder span {
-      font-size: 2rem;
-      opacity: .3;
+    .gameplay-caption {
+      margin: 8px 2px 0;
+      color: #d9bc87;
+      font-size: .78rem;
+      font-weight: 600;
+      line-height: 1.35;
     }
 
-    /* Accent bar on left edge of thumb */
-    .project-thumb::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px; height: 100%;
-      background: var(--accent);
-      opacity: 0;
-      transition: opacity .3s;
+    .cs-chips {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 24px;
     }
-    .project-row:hover .project-thumb::after { opacity: 1; }
+    .cs-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 14px;
+      background: rgba(255,198,95,.07);
+      border: 1px solid rgba(255,198,95,.22);
+      border-radius: 999px;
+      font-size: .76rem; font-weight: 700;
+      color: #e4c88f;
+    }
+    .cs-chip b { color: var(--gold); font-weight: 800; }
 
-    .project-tags { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-    .project-tag {
-      font-family: 'Fira Code', monospace;
-      font-size: .65rem;
-      color: var(--accent2);
-      border: 1px solid var(--muted2);
-      padding: 3px 10px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .project-name {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-
-    .project-desc {
-      color: var(--muted);
-      font-size: .95rem;
-      font-weight: 300;
-      max-width: 480px;
-      line-height: 1.6;
-    }
-
-    .project-links {
-      display: flex; flex-direction: column; gap: 10px;
-      align-items: flex-end;
-      min-width: 80px;
-    }
-    .project-link {
-      font-family: 'Fira Code', monospace;
-      font-size: .75rem;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 1px;
-      white-space: nowrap;
-      transition: color .3s;
-    }
-    .project-link:hover { color: var(--accent); }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      position: relative; z-index: 1;
-    }
-
-    .contact-layout {
+    .cs-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      gap: 18px;
+      margin-bottom: 22px;
     }
-
-    .contact-blurb {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.4;
-      margin-bottom: 40px;
+    .cs-block {
+      background: rgba(255,241,207,.025);
+      border: 1px solid rgba(255,198,95,.12);
+      border-radius: 8px;
+      padding: 18px 20px;
     }
-    .contact-blurb span { color: var(--accent); font-style: italic; }
-
-    .contact-items { display: flex; flex-direction: column; gap: 24px; }
-    .contact-item { display: flex; flex-direction: column; gap: 4px; }
-    .contact-item-label {
-      font-family: 'Fira Code', monospace;
+    .cs-block-title {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 14px;
+      color: var(--gold);
+      font-family: "Pixelify Sans", sans-serif;
+      font-size: .8rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+    }
+    .cs-block-title::before {
+      content: "";
+      width: 3px; height: 14px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+    .cs-list {
+      margin: 0; padding: 0;
+      list-style: none;
+      display: grid; gap: 9px;
+    }
+    .cs-list li {
+      display: flex; gap: 10px;
+      color: #d8ba86;
+      font-size: .86rem;
+      line-height: 1.45;
+    }
+    .cs-list li::before {
+      content: "▸";
+      color: var(--gold);
+      flex-shrink: 0;
       font-size: .7rem;
-      color: var(--muted2);
-      letter-spacing: 2px;
+      margin-top: 3px;
+    }
+
+    .cs-wins {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .cs-win {
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(255,198,95,.06), rgba(0,0,0,.18));
+      border: 1px solid rgba(255,198,95,.20);
+      border-radius: 8px;
+      text-align: center;
+    }
+    .cs-win strong {
+      display: block;
+      font-family: "Sora", system-ui, sans-serif;
+      font-size: clamp(1.65rem, 2.5vw, 2.3rem);
+      font-weight: 800;
+      letter-spacing: .01em;
+      background: linear-gradient(180deg, #ffe293 0%, #ffc65f 50%, #f7a43d 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .cs-win span {
+      color: #c7a373;
+      font-size: .72rem; font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .cs-tech {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .cs-tech-tag {
+      padding: 5px 12px;
+      color: #e4c88f;
+      background: rgba(255,198,95,.06);
+      border: 1px solid rgba(255,198,95,.18);
+      border-radius: 5px;
+      font-size: .74rem; font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    @media (max-width: 780px) {
+      .cs-grid { grid-template-columns: 1fr; }
+      .cs-wins { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .cs-wins { grid-template-columns: 1fr; }
+    }
+
+    /* ── Skills ──────────────────────────────────────────── */
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 10px;
+    }
+    .tool {
+      min-height: 86px;
+      display: grid; place-items: center; gap: 6px;
+      padding: 12px 6px;
+      text-align: center;
+      background: #170d07;
+      border: 1px solid rgba(255,198,95,.16);
+      border-radius: 7px;
+      transition: transform .2s, border-color .2s, background .2s;
+    }
+    .tool:hover { transform: translateY(-3px); border-color: rgba(255,198,95,.42); background: rgba(255,198,95,.055); }
+    .tool-icon {
+      width: 30px; height: 30px;
+      display: grid; place-items: center;
+      color: var(--gold);
+      border: 1px solid rgba(255,198,95,.24);
+      border-radius: 5px;
+      background: rgba(255,198,95,.06);
+      font-family: "Pixelify Sans", sans-serif;
+      font-weight: 700;
+      font-size: .82rem;
+    }
+    .tool span {
+      color: #d6bd8c;
+      font-size: .72rem;
+      font-weight: 600;
+    }
+
+    /* ── About ───────────────────────────────────────────── */
+    .work-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 18px;
+    }
+    .story, .list-panel, .quote-card, .contact-card {
+      background: #170d07;
+      border: 1px solid rgba(255,198,95,.16);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+    .story p {
+      color: #d8ba86;
+      margin-bottom: 14px;
+      font-size: .96rem;
+    }
+    .story strong { color: var(--cream); }
+    .list-panel {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .skill {
+      padding: 14px;
+      background: rgba(255,241,207,.035);
+      border: 1px solid rgba(255,198,95,.12);
+      border-radius: 6px;
+    }
+    .skill small {
+      color: var(--green);
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .12em;
       text-transform: uppercase;
     }
-    .contact-item a {
+    .skill h3 {
+      margin: 6px 0 6px;
+      color: var(--cream);
       font-size: 1rem;
-      color: var(--text);
-      text-decoration: none;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 2px;
-      display: inline-block;
-      transition: color .3s, border-color .3s;
+      font-weight: 700;
     }
-    .contact-item a:hover { color: var(--accent); border-color: var(--accent); }
+    .skill p { margin: 0; color: #aa8555; font-size: .82rem; }
 
-    .contact-form { display: flex; flex-direction: column; gap: 20px; }
-    .form-group { display: flex; flex-direction: column; gap: 8px; }
-    .form-group label {
-      font-family: 'Fira Code', monospace;
-      font-size: .72rem;
-      color: var(--muted);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    .form-group input,
-    .form-group textarea {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'Nunito', sans-serif;
-      font-size: .95rem;
-      padding: 14px 16px;
-      outline: none;
-      resize: vertical;
-      transition: border-color .3s;
-    }
-    .form-group input:focus,
-    .form-group textarea:focus { border-color: var(--accent2); }
-    .form-group textarea { min-height: 130px; }
+    /* ── Quotes ─────────────────────────────────────────── */
+    .quote-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .quote-card p { margin-bottom: 16px; color: #d7b987; font-size: .94rem; }
+    .quote-card strong { display: block; color: var(--cream); }
+    .quote-card span { color: var(--green); font-size: .78rem; font-weight: 700; }
 
-    /* ── FOOTER ── */
+    /* ── Contact ────────────────────────────────────────── */
+    .contact-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 22px;
+    }
+    .contact-card h2 {
+      margin-bottom: 8px;
+      color: var(--cream);
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: .98;
+    }
+    .contact-card p { margin: 0; max-width: 660px; color: #d2b483; }
+    .contact-actions {
+      display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px;
+    }
+
     footer {
-      position: relative; z-index: 1;
-      max-width: 1200px; margin: 0 auto;
-      padding: 40px 64px;
-      display: flex; justify-content: space-between; align-items: center;
-      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between;
+      gap: 16px;
+      padding: 22px clamp(22px, 6vw, 96px);
+      color: #81603d;
+      font-size: .8rem;
+      font-weight: 600;
+      border-top: 1px solid rgba(255,198,95,.12);
+      background: rgba(10,6,4,.62);
     }
-    .footer-text {
-      font-family: 'Fira Code', monospace;
-      font-size: .72rem;
-      color: var(--muted2);
-      letter-spacing: 1px;
-    }
-    .footer-links { display: flex; gap: 28px; }
-    .footer-links a {
-      font-family: 'Fira Code', monospace;
-      font-size: .72rem;
-      color: var(--muted2);
-      text-decoration: none;
-      letter-spacing: 1px;
-      transition: color .3s;
-    }
-    .footer-links a:hover { color: var(--text); }
+    footer a { color: #b9915f; text-decoration: none; }
+    footer a:hover { color: var(--gold); }
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .reveal {
-      opacity: 1;
-      transform: none;
-    }
-    .reveal.visible { opacity: 1; transform: none; }
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .55s, transform .55s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 960px) {
-      nav { padding: 20px 28px; }
-      #hero { padding: 120px 28px 60px; min-height: auto; }
-      .hero-scroll { display: none; }
-      .section-inner { padding: 80px 28px; }
-      .stats-row { grid-template-columns: 1fr 1fr; }
-      .stat-item { padding: 32px 28px; }
-      .about-layout, .contact-layout { grid-template-columns: 1fr; gap: 48px; }
-      .project-row { grid-template-columns: 1fr; gap: 20px; }
-      .project-row:hover { margin: 0; padding: 40px 0; }
-      .project-thumb { width: 100%; height: 200px; }
-      .project-links { flex-direction: row; align-items: flex-start; }
-      footer { flex-direction: column; gap: 16px; text-align: center; }
+    .back-to-top {
+      position: fixed;
+      right: 22px; bottom: 22px;
+      width: 42px; height: 42px;
+      display: grid; place-items: center;
+      color: var(--gold);
+      background: rgba(17, 10, 6, .88);
+      border: 1px solid rgba(255,198,95,.28);
+      border-radius: 7px;
+      cursor: pointer;
+      opacity: 0; pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity .2s, transform .2s, border-color .2s;
+      z-index: 90;
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .back-to-top:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+    /* lamp glow only — kept the metaphor's heartbeat */
+    .lamp-glow {
+      position: absolute;
+      left: 56%; top: 6%;
+      width: 32vw; max-width: 540px;
+      aspect-ratio: 1;
+      background: radial-gradient(circle, rgba(255, 184, 80, .26), rgba(255, 184, 80, .10) 35%, transparent 68%);
+      filter: blur(6px);
+      mix-blend-mode: screen;
+      animation: lampBreath 4.4s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Cozy ambient layer */
+    .ambient { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+    .window-flicker {
+      position: absolute; right: 8%; top: 18%;
+      width: 28vw; max-width: 460px; aspect-ratio: 1.2;
+      background: radial-gradient(circle, rgba(255,120,60,.22), rgba(255,160,80,.10) 38%, transparent 70%);
+      filter: blur(5px); mix-blend-mode: screen;
+      animation: windowFlicker 6.5s ease-in-out infinite;
+    }
+    .firefly {
+      position: absolute; width: 4px; height: 4px; border-radius: 50%;
+      background: #ffd77c;
+      box-shadow: 0 0 8px rgba(255,198,95,.9), 0 0 16px rgba(255,198,95,.5);
+      opacity: 0;
+      animation: fireflyDrift 14s ease-in-out infinite, fireflyBlink 3s ease-in-out infinite;
+    }
+    .firefly.f1 { left: 30%; top: 70%; }
+    .firefly.f2 { left: 48%; top: 82%; animation-delay: -3s, -1s; --dx: 80px; --dy: -160px; }
+    .firefly.f3 { left: 62%; top: 60%; animation-delay: -6s, -2s; --dx: -60px; --dy: -100px; }
+    .firefly.f4 { left: 72%; top: 78%; animation-delay: -9s, -.5s; --dx: 40px; --dy: -180px; }
+    .firefly.f5 { left: 22%; top: 86%; animation-delay: -2s, -1.5s; --dx: 120px; --dy: -200px; }
+    .firefly.f6 { left: 84%; top: 70%; animation-delay: -7s, -2.5s; --dx: -100px; --dy: -140px; }
+    .firefly.f7 { left: 40%; top: 90%; animation-delay: -4s, -1.8s; --dx: 60px; --dy: -240px; }
+    .smoke {
+      position: absolute; bottom: -40px; left: 18%;
+      width: 80px; height: 80px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,210,140,.16), transparent 60%);
+      filter: blur(14px); opacity: 0;
+      animation: smokeRise 11s ease-in infinite;
+    }
+    .smoke.s2 { left: 70%; animation-delay: -5s; }
+    .leaf {
+      position: absolute; top: -20px;
+      width: 10px; height: 12px;
+      background: #c98c4f; border-radius: 50% 0 50% 0;
+      opacity: .7;
+      animation: leafFall 12s linear infinite;
+    }
+    .leaf.l1 { left: 78%; background: #d77a4a; }
+    .leaf.l2 { left: 84%; animation-delay: -4s; background: #b56a30; }
+    .leaf.l3 { left: 89%; animation-delay: -8s; background: #c98c4f; }
+    .leaf.l4 { left: 92%; animation-delay: -2s; background: #8a4f22; }
+    .hero[data-parallax] { background-position: calc(50% + var(--px, 0) * 8px) calc(50% + var(--py, 0) * 6px); }
+    .trust-logo { animation: trustFloat 5s ease-in-out infinite; transition: transform .25s, color .25s, border-color .25s; }
+    .trust-logo:nth-child(2) { animation-delay: -1s; }
+    .trust-logo:nth-child(3) { animation-delay: -2s; }
+    .trust-logo:nth-child(4) { animation-delay: -3s; }
+    .trust-logo:hover { color: var(--gold); border-color: rgba(255,198,95,.42); transform: translateY(-3px) scale(1.04); }
+    .btn.primary { position: relative; overflow: hidden; }
+    .btn.primary::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.4) 50%, transparent 70%);
+      transform: translateX(-100%);
+      animation: btnShimmer 3.8s ease-in-out infinite;
+    }
+    .tool-icon { transition: transform .3s, background .3s, color .3s; }
+    .tool:hover .tool-icon { transform: rotate(-6deg) scale(1.12); background: var(--gold); color: #1d1107; }
+    .mini-stat strong {
+      background: linear-gradient(180deg, #ffe293 0%, #ffc65f 50%, #f7a43d 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: statGlow 4s ease-in-out infinite;
+    }
+    .kicker { position: relative; }
+    .kicker::after { content: "_"; margin-left: 2px; animation: caretBlink 1.1s steps(2) infinite; }
+
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+    @keyframes panelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes roomGlow { 0%, 100% { opacity: .82; } 50% { opacity: 1; } }
+    @keyframes lampBreath {
+      0%, 100% { opacity: .55; transform: scale(.96); }
+      50% { opacity: .92; transform: scale(1.08); }
+    }
+    @keyframes windowFlicker {
+      0%, 100% { opacity: .55; }
+      40% { opacity: .85; } 45% { opacity: .55; }
+      50% { opacity: .92; } 60% { opacity: .7; }
+    }
+    @keyframes fireflyDrift {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(var(--dx, 60px), calc(var(--dy, -120px) * .6)) scale(.9); }
+      100% { transform: translate(0, calc(var(--dy, -120px) * 1.2)) scale(1); }
+    }
+    @keyframes fireflyBlink {
+      0%, 100% { opacity: 0; }
+      20% { opacity: .9; } 50% { opacity: .4; } 80% { opacity: 1; }
+    }
+    @keyframes smokeRise {
+      0% { transform: translate(0, 0) scale(.6); opacity: 0; }
+      20% { opacity: .8; }
+      100% { transform: translate(40px, -340px) scale(1.6); opacity: 0; }
+    }
+    @keyframes leafFall {
+      0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+      10% { opacity: .7; }
+      50% { transform: translate(-30px, 50vh) rotate(220deg); opacity: .8; }
+      100% { transform: translate(20px, 100vh) rotate(540deg); opacity: 0; }
+    }
+    @keyframes caretBlink { 50% { opacity: 0; } }
+    @keyframes statGlow {
+      0%, 100% { filter: drop-shadow(0 0 0 rgba(255,198,95,0)); }
+      50% { filter: drop-shadow(0 0 8px rgba(255,198,95,.4)); }
+    }
+    @keyframes trustFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    @keyframes btnShimmer {
+      0%, 60% { transform: translateX(-100%); }
+      80%, 100% { transform: translateX(100%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+        background:
+          linear-gradient(180deg, rgba(8,5,3,.78), rgba(8,5,3,.94)),
+          url("cozy-cabin-hero-bg.png") center top / cover no-repeat;
+      }
+      .feature-row { grid-template-columns: 1fr; }
+      .shelf-grid { grid-template-columns: repeat(2, 1fr); }
+      .game-card { transform: none !important; }
+      .tools { grid-template-columns: repeat(4, 1fr); }
+      .work-grid, .contact-card, .quote-grid { grid-template-columns: 1fr; }
+      .project-detail-inner { grid-template-columns: 1fr; }
+      .contact-actions { justify-content: flex-start; }
+    }
+    @media (max-width: 680px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .nav { flex-wrap: wrap; }
+      .hero-copy { padding: 36px 20px 20px; }
+      .mini-grid, .list-panel, .tools { grid-template-columns: repeat(2, 1fr); }
+      .shelf-grid { grid-template-columns: 1fr; }
+      .side-card { grid-template-columns: 1fr; }
+      .side-card img { width: 100%; height: auto; aspect-ratio: 16 / 9; }
+      footer { flex-direction: column; }
     }
   </style>
 </head>
 <body>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="site-frame">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="Home">
+          <span class="brand-mark pixel">AMK</span>
+          <span>Abdul Mateen Khan</span>
+        </a>
+        <ul class="nav">
+          <li><a class="active" href="#top">Home</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a class="nav-cta" href="#contact">Let's Connect</a>
+      </header>
 
-  <!-- PARTICLE CANVAS -->
-  <canvas id="particles"></canvas>
+      <main>
+        <!-- ────────────────────────────── Hero ────────────────────────────── -->
+        <section class="hero" id="top" data-parallax>
+          <span class="lamp-glow" aria-hidden="true"></span>
+          <div class="ambient" aria-hidden="true">
+            <span class="window-flicker"></span>
+            <span class="firefly f1"></span><span class="firefly f2"></span><span class="firefly f3"></span><span class="firefly f4"></span><span class="firefly f5"></span><span class="firefly f6"></span><span class="firefly f7"></span>
+            <span class="smoke"></span><span class="smoke s2"></span>
+            <span class="leaf l1"></span><span class="leaf l2"></span><span class="leaf l3"></span><span class="leaf l4"></span>
+          </div>
 
-  <!-- NAV -->
-  <nav id="navbar">
-    <div class="nav-logo"><span>Abdul Mateen Khan</span></div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+          <div class="hero-copy reveal">
+            <div class="eyebrow">UNITY TECH LEAD • CROSS-PLATFORM</div>
+            <h1>
+              <span class="greet">Hi I'm</span>
+              <span class="accent">Abdul Mateen Khan</span>
+            </h1>
+            <p class="hero-tagline">Senior Unity Developer shipping high-performance games across console, mobile, WebGL, and VR.</p>
+            <p class="hero-supporting">7 years of experience building gameplay systems, multiplayer features, optimization pipelines, and certification-ready Unity titles for Nintendo Switch, PlayStation, Xbox, iOS, Android, and Meta Quest.</p>
+            <div class="hero-actions">
+              <a class="btn primary" href="#contact">Book a Call</a>
+              <a class="btn" href="#projects">View Projects →</a>
+            </div>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-inner">
-      <div class="hero-eyebrow">Lead Unity Developer</div>
-      <h1 class="hero-name"><em>Abdul Mateen Khan</em></h1>
-      <p class="hero-role">
-        Lead Unity Developer with 7 years of experience in gameplay architecture, systems design, cross-platform optimisation, and multiplayer integration — shipped across console, mobile, PC, and VR.
-      </p>
-      <div class="hero-actions">
-        <a href="#projects" class="btn-primary">View My Work</a>
-        <a href="resume.pdf" class="btn-ghost" download>Download CV →</a>
-      </div>
-      <div class="available-badge">
-        <span class="available-dot"></span>
-        Currently available for remote work
-      </div>
-    </div>
-    <div class="hero-scroll">Scroll to explore</div>
-  </section>
+          </div>
 
-  <!-- STATS -->
-  <div class="stats-row">
-    <div class="stat-item">
-      <div class="stat-num">7</div>
-      <div class="stat-label">Years Experience</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">15<span>+</span></div>
-      <div class="stat-label">Projects Shipped</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">7<span>+</span></div>
-      <div class="stat-label">Platforms</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">Console</div>
-      <div class="stat-label">Certified</div>
+          <div class="hero-panel reveal">
+            <div class="quiet-card">
+              <div class="qc-label"><span>Impact at a glance</span><span>2026</span></div>
+              <div class="mini-grid">
+                <div class="mini-stat"><strong>7+</strong><span>Years building and shipping Unity games</span></div>
+                <div class="mini-stat"><strong>15+</strong><span>Games delivered across console, mobile, PC &amp; VR</span></div>
+                <div class="mini-stat"><strong>+30%</strong><span>Performance gains on low-end and console hardware</span></div>
+                <div class="mini-stat"><strong>3</strong><span>Console platforms certified (PlayStation • Xbox • Switch)</span></div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ────────────────────────────── Projects (lifted up) ────────────────────────────── -->
+        <section class="section" id="projects">
+          <div class="section-head reveal">
+            <div>
+              <span class="kicker">&gt; Selected work</span>
+              <h2>Project Library</h2>
+            </div>
+            <a href="#contact">Need a specific build? →</a>
+          </div>
+
+          <div class="project-tabs reveal" role="tablist" aria-label="Project categories">
+            <button class="project-tab active" type="button" role="tab" aria-selected="true" aria-controls="panel-aa" data-panel="panel-aa">AA Titles <span>04</span></button>
+            <button class="project-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-indie" data-panel="panel-indie">Indie Titles <span>03</span></button>
+            <button class="project-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-vr" data-panel="panel-vr">VR / WebGL <span>02</span></button>
+            <button class="project-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-other" data-panel="panel-other">Metaverse / Web3 <span>02</span></button>
+            <button class="project-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-client" data-panel="panel-client">Other Client Work <span>01</span></button>
+          </div>
+
+          <div class="project-panel active" id="panel-aa" role="tabpanel">
+            <div class="shelf">
+              <div class="shelf-grid">
+                <button class="game-card reveal" type="button" data-title="Life in Willowdale" data-category="AA Title / Console Port" data-image="project-1.png" data-link="https://www.lifeinwillowdale.com/" data-summary="A family-friendly farm sim and action-adventure set in the charming village of Willowdale. Players restore a neglected town by farming, raising livestock, rebuilding community spaces, and forging friendships with colorful locals. Beyond the farm, four wilderness zones with dungeons and boss fights await, playable solo or with a friend in local co-op. Released on Nintendo Switch, PS4, PS5, and Steam.">
+                  <div class="game-cover"><img src="project-1.png" alt="Life in Willowdale project artwork" /><span class="game-card-title">Willowdale</span></div>
+                  <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">PS</span><span class="platform-icon">Switch</span></div>
+                </button>
+                <button class="game-card reveal" type="button" data-title="FoodFight: Culinary Combat" data-category="AA Title / Multiplayer / Nintendo Switch · Steam" data-image="project-2.png" data-link="https://store.steampowered.com/app/2243580/Food_Fight_Culinary_Combat/" data-summary="A fast-paced multiplayer culinary combat game where up to 8 players compete in chaotic food-themed battles. Released on Nintendo Switch and Steam.">
+                  <div class="game-cover"><img src="project-2.png" alt="FoodFight Culinary Combat project artwork" /><span class="game-card-title">FoodFight</span></div>
+                  <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">Switch</span><span class="platform-icon">MP</span></div>
+                </button>
+                <button class="game-card reveal" type="button" data-title="Goons: Legends &amp; Mayhem" data-category="AA Title / Console Multiplayer" data-image="project-3.png" data-link="https://store.steampowered.com/app/1484180/Goons_Legends__Mayhem/" data-summary="A chaotic multiplayer brawler featuring cross-platform play across console, PC, and handheld. Released on PS4, PS5, Xbox One, Xbox Series X/S, Nintendo Switch, and PC.">
+                  <div class="game-cover"><img src="project-3.png" alt="Goons Legends and Mayhem project artwork" /><span class="game-card-title">Goons</span></div>
+                  <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">Xbox</span><span class="platform-icon">PS</span></div>
+                </button>
+                <button class="game-card reveal" type="button" data-title="WrestleQuest" data-category="AA Title / Console Port" data-image="project-4.png" data-link="https://store.steampowered.com/app/1867510/WrestleQuest/" data-summary="A pixel art RPG where professional wrestling and turn-based combat collide. Players take a hero's journey through wild realms, drawing inspiration from legendary wrestlers like &quot;Macho Man&quot; Randy Savage, battling exotic monsters and iconic rivals on the way to the top. Released on Nintendo Switch, PS4, and PS5.">
+                  <div class="game-cover"><img src="project-4.png" alt="WrestleQuest project artwork" /><span class="game-card-title">WrestleQuest</span></div>
+                  <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">PS</span><span class="platform-icon">Switch</span></div>
+                </button>
+              </div>
+            </div>
+            <div class="project-detail" aria-live="polite"></div>
+          </div>
+
+          <div class="project-panel" id="panel-indie" role="tabpanel">
+            <div class="shelf">
+              <div class="shelf-grid">
+                <button class="game-card" type="button" data-title="Mythya" data-category="Indie Title / RTS" data-image="project-5.png" data-link="https://playmythya.com/" data-summary="A mythology-driven 4X build and battle RTS where players assume the roles of powerful gods, commanding divine armies, constructing celestial realms, and competing in a player-driven economy. Available on Android and PC.">
+                  <div class="game-cover"><img src="project-5.png" alt="Mythya project artwork" /><span class="game-card-title">Mythya</span></div>
+                  <div class="platform-row"><span class="platform-icon">PC</span><span class="platform-icon">Android</span></div>
+                </button>
+                <button class="game-card" type="button" data-key="sacred-tails-indie" data-title="Sacred Tails" data-category="Indie Title / RPG" data-image="project-6.png" data-link="https://www.sacredtails.com/" data-summary="A Pokemon-inspired multiplayer RPG set in a mystical world where ancient spirits and modern technology coexist. Players collect, battle, and breed creatures called Shinsei, climb PVP ranks, and engage with an NFT-based marketplace. Available on PC, iOS, and Android.">
+                  <div class="game-cover"><img src="project-6.png" alt="Sacred Tails project artwork" /><span class="game-card-title">Sacred Tails</span></div>
+                  <div class="platform-row"><span class="platform-icon">PC</span><span class="platform-icon">iOS</span><span class="platform-icon">Android</span></div>
+                </button>
+                <button class="game-card" type="button" data-title="Inferni: Hope &amp; Fear" data-category="Indie Title / Steam" data-image="project-7.png" data-link="https://store.steampowered.com/app/2731170/Inferni_Hope__Fear/" data-summary="A chaotic realtime card game where up to 8 players battle in duos, slinging spells, building decks mid-match, and fighting to be the last team standing. Coming to Steam.">
+                  <div class="game-cover"><img src="project-7.png" alt="Inferni Hope and Fear project artwork" /><span class="game-card-title">Inferni</span></div>
+                  <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">PC</span></div>
+                </button>
+              </div>
+            </div>
+            <div class="project-detail" aria-live="polite"></div>
+          </div>
+
+          <div class="project-panel" id="panel-vr" role="tabpanel">
+            <div class="shelf">
+              <div class="shelf-grid">
+                <button class="game-card" type="button" data-title="GOSI Verse" data-category="VR / AR / WebGL" data-image="project-8.png" data-link="https://plandigital.me/case-studies/gosi-gosiverse-at-leap/" data-summary="Saudi Arabia's first government-backed financial literacy platform, built for the GOSI &quot;Make Your 60s Great&quot; initiative. Users explore financial concepts across browser, desktop, and standalone VR in a single connected multiplayer experience. Deployed across WebGL, PC, and Meta Quest 3.">
+                  <div class="game-cover"><img src="project-8.png" alt="GOSI Verse project artwork" /><span class="game-card-title">GOSI Verse</span></div>
+                  <div class="platform-row"><span class="platform-icon">WebGL</span><span class="platform-icon">Quest</span><span class="platform-icon">PC</span></div>
+                </button>
+                <button class="game-card" type="button" data-title="VR MG Simulation" data-category="VR Medical Training" data-image="project-9.png" data-link="mailto:ab.mateen.kh@gmail.com" data-summary="A standalone VR medical training simulation built for Meta Quest 3, designed to educate medical professionals about Myasthenia Gravis through immersive first-person scenarios and gesture-based interaction.">
+                  <div class="game-cover"><img src="project-9.png" alt="VR MG Simulation project artwork" /><span class="game-card-title">VR MG Sim</span></div>
+                  <div class="platform-row"><span class="platform-icon">VR</span><span class="platform-icon">Quest 3</span></div>
+                </button>
+              </div>
+            </div>
+            <div class="project-detail" aria-live="polite"></div>
+          </div>
+
+          <div class="project-panel" id="panel-other" role="tabpanel">
+            <div class="shelf">
+              <div class="shelf-grid">
+                <button class="game-card" type="button" data-title="Decentraland" data-category="Metaverse / Web3" data-image="project-10.png" data-link="https://decentraland.org/" data-summary="Decentraland is a decentralized virtual world where users own land, build experiences, and trade NFT-based assets on the Ethereum blockchain. Experiences are browser-based and fully user-governed.">
+                  <div class="game-cover"><img src="project-10.png" alt="Decentraland project artwork" /><span class="game-card-title">Decentraland</span></div>
+                  <div class="platform-row"><span class="platform-icon">Web3</span><span class="platform-icon">Meta</span></div>
+                </button>
+                <button class="game-card" type="button" data-title="The Sandbox" data-category="Metaverse / Web3 / Sandbox Engine" data-image="project-11.png" data-link="https://www.sandbox.game/en/" data-summary="The Meloverse is NBA star LaMelo Ball's official metaverse experience inside The Sandbox, a futuristic world built inside a lunar crater featuring mini-games, quests, and NFT-based rewards for LaMelo Ball Avatar holders.">
+                  <div class="game-cover"><img src="project-11.png" alt="The Sandbox project artwork" /><span class="game-card-title">The Sandbox</span></div>
+                  <div class="platform-row"><span class="platform-icon">Web3</span><span class="platform-icon">Sandbox</span></div>
+                </button>
+              </div>
+            </div>
+            <div class="project-detail" aria-live="polite"></div>
+          </div>
+
+          <div class="project-panel" id="panel-client" role="tabpanel">
+            <div class="shelf">
+              <div class="shelf-grid">
+                <button class="game-card" type="button" data-key="voice-verdict" data-title="Voice &amp; Verdict" data-category="Indie Title / Turn-Based RPG" data-image="project-12.png" data-summary="A 2.5D turn-based conversation RPG where players resolve real interpersonal situations through strategic dialogue choices. Designed and built as a client MVP prototype - taking the project from blank slate to a playable WebGL experience across three milestones.">
+                  <div class="game-cover"><img src="project-12.png" alt="Voice and Verdict project artwork" /><span class="game-card-title">Voice &amp; Verdict</span></div>
+                  <div class="platform-row"><span class="platform-icon">WebGL</span><span class="platform-icon">MVP</span><span class="platform-icon">Client</span></div>
+                </button>
+              </div>
+            </div>
+            <div class="project-detail" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <!-- ────────────────────────────── About ────────────────────────────── -->
+        <section class="section" id="about">
+          <div class="section-head reveal">
+            <div>
+              <span class="kicker">&gt; About</span>
+              <h2>Production Experience</h2>
+            </div>
+          </div>
+          <div class="work-grid">
+            <article class="story reveal">
+              <p>I’m a Lead Unity Developer with 7 years of experience building and shipping games across console, mobile, PC, WebGL, and XR platforms.</p>
+              <p>From prototypes to certification-ready releases, I focus on scalable gameplay systems, stable production pipelines, multiplayer architecture, and performance-conscious development.</p>
+              <p>Working on console ports, inherited codebases, optimization-heavy projects, and live multiplayer systems shaped the way I approach engineering — solve constraints early, keep systems maintainable, and build for long-term production stability.</p>
+              <a class="btn" href="resume.pdf" download>Download Resume</a>
+            </article>
+            <div class="list-panel reveal">
+              <div class="skill"><small>Expertise</small><h3>Gameplay Architecture</h3><p>Scalable gameplay systems, tools, and maintainable Unity codebases.</p></div>
+              <div class="skill"><small>Expertise</small><h3>Console Porting</h3><p>Switch, PlayStation, Xbox, certification workflows, and platform optimization.</p></div>
+              <div class="skill"><small>Expertise</small><h3>Performance Engineering</h3><p>Profiling, rendering optimization, memory management, and frame stability.</p></div>
+              <div class="skill"><small>Expertise</small><h3>Multiplayer &amp; Backend</h3><p>Photon, EOS, PlayFab, session systems, and live-service infrastructure.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ────────────────────────────── Skills ────────────────────────────── -->
+        <section class="section" id="skills">
+          <div class="section-head reveal">
+            <div>
+              <span class="kicker">&gt; Stack</span>
+              <h2>Technologies &amp; Tools</h2>
+            </div>
+          </div>
+          <div class="tools">
+            <div class="tool reveal"><div class="tool-icon">U</div><span>Unity</span></div>
+            <div class="tool reveal"><div class="tool-icon">C#</div><span>C#</span></div>
+            <div class="tool reveal"><div class="tool-icon">PF</div><span>Photon Fusion</span></div>
+            <div class="tool reveal"><div class="tool-icon">PQ</div><span>Photon Quantum</span></div>
+            <div class="tool reveal"><div class="tool-icon">PB</div><span>PlayFab</span></div>
+            <div class="tool reveal"><div class="tool-icon">EOS</div><span>Epic Online Services</span></div>
+            <div class="tool reveal"><div class="tool-icon">XR</div><span>OpenXR</span></div>
+            <div class="tool reveal"><div class="tool-icon">MX</div><span>Meta XR</span></div>
+            <div class="tool reveal"><div class="tool-icon">A</div><span>Addressables</span></div>
+            <div class="tool reveal"><div class="tool-icon">Z</div><span>Zenject</span></div>
+            <div class="tool reveal"><div class="tool-icon">P4</div><span>Perforce</span></div>
+            <div class="tool reveal"><div class="tool-icon">CI</div><span>CI/CD</span></div>
+            <div class="tool reveal"><div class="tool-icon">URP</div><span>URP/HDRP</span></div>
+            <div class="tool reveal"><div class="tool-icon">OPT</div><span>Optimization</span></div>
+            <div class="tool reveal"><div class="tool-icon">SDK</div><span>Console SDKs</span></div>
+            <div class="tool reveal"><div class="tool-icon">WEB</div><span>WebGL</span></div>
+          </div>
+        </section>
+
+        <!-- ────────────────────────────── Quotes ────────────────────────────── -->
+        <section class="section" id="proof">
+          <div class="section-head reveal">
+            <div>
+              <span class="kicker">&gt; Client notes</span>
+              <h2>What teams say</h2>
+            </div>
+          </div>
+          <div class="quote-grid">
+            <article class="quote-card reveal">
+              <p>Mateen impressed me with his Unity and C# skills during his contract work. I saw exceptional problem-solving, debugging abilities, and a strong grasp of technical concepts.</p>
+              <strong>Cyril Barrow</strong>
+              <span>Head of Games / Client</span>
+            </article>
+            <article class="quote-card reveal">
+              <p>I had managed Mateen for quite some projects. Works hard, is a team player and has good knowledge about Unity and porting projects. I would love to work with him again.</p>
+              <strong>Abdul Qadir</strong>
+              <span>Lead Unity Engineer / Manager</span>
+            </article>
+          </div>
+        </section>
+
+        <!-- ────────────────────────────── Contact ────────────────────────────── -->
+        <section class="section" id="contact">
+          <div class="contact-card reveal">
+            <div>
+              <span class="kicker">&gt; Let's talk</span>
+              <h2>Let’s build something worth shipping.</h2>
+              <p>Open to remote full-time and contract Unity opportunities worldwide. From prototype to certification — gameplay systems, multiplayer, optimization, and cross-platform delivery.</p>
+            </div>
+            <div class="contact-actions">
+              <a class="btn primary" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=ab.mateen.kh@gmail.com&amp;su=Unity%20Opportunity" target="_blank" rel="noreferrer">Email Me</a>
+              <a class="btn" href="https://www.linkedin.com/in/amateen-khan/" target="_blank" rel="noreferrer">LinkedIn</a>
+              <a class="btn" href="https://www.upwork.com/freelancers/~016922cc03dd841127?mp_source=share" target="_blank" rel="noreferrer">Upwork</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <span>&copy; 2026 Abdul Mateen Khan / Lead Unity Developer</span>
+        <span><a href="resume.pdf" download>Download resume</a> / <a href="mailto:ab.mateen.kh@gmail.com">ab.mateen.kh@gmail.com</a> / <a href="https://www.upwork.com/freelancers/~016922cc03dd841127?mp_source=share" target="_blank" rel="noreferrer">Upwork</a></span>
+      </footer>
     </div>
   </div>
+  <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
 
+  <script>
+    const navLinks = document.querySelectorAll(".nav a[href^='#']");
+    const backToTop = document.querySelector(".back-to-top");
+    const projectTabs = document.querySelectorAll(".project-tab");
+    const projectPanels = document.querySelectorAll(".project-panel");
+    const gameCards = document.querySelectorAll(".game-card");
+    const pageSections = [...navLinks]
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
 
-  <!-- ACHIEVEMENT BANNER -->
-  <div class="achievement-banner">
-    <span class="achievement-icon">🏆</span>
-    <span class="achievement-text">First engineer in Pakistan to officially port and ship a Nintendo Switch title</span>
-  </div>
+    function updatePageChrome() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+      document.documentElement.style.setProperty("--scroll", scrollPercent.toFixed(2));
+      document.body.classList.toggle("is-scrolled", window.scrollY > 24);
+      backToTop?.classList.toggle("visible", window.scrollY > 520);
+      let activeId = "top";
+      pageSections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 140) activeId = section.id;
+      });
+      navLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === `#${activeId}`);
+      });
+    }
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="section-header reveal">
-        <span class="section-num">01</span>
-        <h2 class="section-title">About Me</h2>
-      </div>
-      <div class="about-layout">
-        <div class="about-text reveal">
-          <p>
-            I'm a Lead Unity Developer who has spent 7 years doing one thing consistently — <strong>shipping</strong>. Across console, mobile, PC, VR, WebGL, and metaverse platforms, I've taken projects from prototype to players on nearly every major platform in the industry.
-          </p>
-          <p>
-            Console certification — Nintendo Lotcheck, Sony TRC, Microsoft XR — is where most projects hit a wall. The requirements are exacting, the feedback cycles are slow, and there's no shortcut through it. Having navigated all three taught me a discipline that carries into everything I build: understand the constraints completely, design for them early, and never leave compliance as an afterthought.
-          </p>
-          <p>
-            I've joined projects mid-crisis and stabilised them. I've built core systems from scratch. I've optimised titles that were missing frame budgets on low-end mobile and brought them back. Every platform I've shipped on has added a new layer to how I think — and that diversity is exactly what makes me effective when something genuinely new comes up.
-          </p>
-          <div style="margin-top: 40px;">
-            <a href="resume.pdf" class="btn-primary" download>Download Resume</a>
-          </div>
-        </div>
-        <div class="skills-list reveal">
-          <div class="skill-row"><span class="skill-name">Gameplay & Systems Architecture</span><span class="skill-level expert">Expert</span></div>
-          <div class="skill-row"><span class="skill-name">Unity3D / C#</span><span class="skill-level expert">Expert</span></div>
-          <div class="skill-row"><span class="skill-name">Console Porting (Switch, PS4/5, Xbox)</span><span class="skill-level expert">Expert</span></div>
-          <div class="skill-row"><span class="skill-name">VR / AR / XR (Meta Quest)</span><span class="skill-level expert">Expert</span></div>
-          <div class="skill-row"><span class="skill-name">Multiplayer (Photon Fusion, Netcode)</span><span class="skill-level proficient">Proficient</span></div>
-          <div class="skill-row"><span class="skill-name">Backend (Azure PlayFab)</span><span class="skill-level proficient">Proficient</span></div>
-          <div class="skill-row"><span class="skill-name">Performance Optimisation</span><span class="skill-level expert">Expert</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="section-inner">
-      <div class="section-header reveal">
-        <span class="section-num">02</span>
-        <h2 class="section-title">Selected Work</h2>
-      </div>
-
-      <!-- CATEGORY OVERVIEW CARDS -->
-      <div class="category-cards">
-        <a class="category-card" href="#cat-aa">
-          <div class="category-card-icon">🎮</div>
-          <div class="category-card-title">AA Titles</div>
-          <div class="category-card-count">4 Projects</div>
-          <div class="category-card-platforms">Switch · PS4/5 · Xbox · Steam</div>
-        </a>
-        <a class="category-card" href="#cat-indie">
-          <div class="category-card-icon">⚔️</div>
-          <div class="category-card-title">Indie Titles</div>
-          <div class="category-card-count">3 Projects</div>
-          <div class="category-card-platforms">PC · iOS · Android · Steam</div>
-        </a>
-        <a class="category-card" href="#cat-vr">
-          <div class="category-card-icon">🥽</div>
-          <div class="category-card-title">VR / AR / WebGL</div>
-          <div class="category-card-count">2 Projects</div>
-          <div class="category-card-platforms">Meta Quest 3 · WebGL · PC</div>
-        </a>
-        <a class="category-card" href="#cat-other">
-          <div class="category-card-icon">🌍</div>
-          <div class="category-card-title">Other Platforms</div>
-          <div class="category-card-count">2 Projects</div>
-          <div class="category-card-platforms">Web3 · NFT · Metaverse · Sandbox</div>
-        </a>
-      </div>
-
-      <!-- STICKY FILTER TABS -->
-      <div class="filter-tabs-wrap">
-        <div class="filter-tabs">
-          <a href="#cat-aa"     class="filter-tab active" data-cat="cat-aa">AA Titles</a>
-          <a href="#cat-indie"  class="filter-tab"        data-cat="cat-indie">Indie Titles</a>
-          <a href="#cat-vr"     class="filter-tab"        data-cat="cat-vr">VR / AR / WebGL</a>
-          <a href="#cat-other"  class="filter-tab"        data-cat="cat-other">Other Platforms</a>
-        </div>
-      </div>
-
-      <div class="projects-list">
-
-        <!-- ── AA TITLES ── -->
-        <div class="project-category" id="cat-aa">
-          <span class="project-category-label">AA Titles</span>
-          <div class="project-category-line"></div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-1.jpg" alt="Life in Willowdale: Farm Adventures"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">Switch</span>
-              <span class="project-tag">PS4/5</span>
-              <span class="project-tag">Steam</span>
-            </div>
-            <div class="project-name">Life in Willowdale: Farm Adventures</div>
-            <p class="project-desc">AA farm adventure RPG shipped across Nintendo Switch, PS4/5, and Steam. Architected core gameplay systems from scratch — inventory, combat, farming mechanics, and boss fights — then led the Nintendo Switch port, improving FPS by 25% through shader optimisation and memory profiling. One of my longest engagements at 3 years, owning the full gameplay stack from prototype to platform cert.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://www.lifeinwillowdale.com/" class="project-link" target="_blank">View ↗</a>
-          </div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-2.jpg" alt="FoodFight: Culinary Combat"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">Nintendo Switch</span>
-              <span class="project-tag">Multiplayer</span>
-            </div>
-            <div class="project-name">FoodFight: Culinary Combat</div>
-            <p class="project-desc">AA multiplayer brawler shipped on Nintendo Switch. Took over an unstable Photon Bolt networking implementation and stabilised real-time combat synchronisation for online play. Led platform-specific performance tuning and successfully navigated Nintendo Lotcheck certification — one of the most rigorous cert processes in console publishing.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://store.steampowered.com/app/2243580/Food_Fight_Culinary_Combat/" class="project-link" target="_blank">Steam ↗</a>
-          </div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-3.jpg" alt="Goons: Legends & Mayhem"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">PS4/5</span>
-              <span class="project-tag">Xbox</span>
-              <span class="project-tag">Switch</span>
-              <span class="project-tag">Multiplayer</span>
-            </div>
-            <div class="project-name">Goons: Legends & Mayhem</div>
-            <p class="project-desc">AA multiplayer brawler shipped across PS4/5, Xbox, and Steam. Specifically implemented EOS lobby and session management for cross-platform matchmaking, and built PS4/PS5 friend request integration for console multiplayer — a platform-certification requirement that needed precise Sony TRC compliance. Led performance optimisation across all platforms, cutting load times by ~15% and improving runtime stability by ~30%.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://store.steampowered.com/app/1484180/Goons_Legends__Mayhem/" class="project-link" target="_blank">Steam ↗</a>
-          </div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-4.jpg" alt="WrestleQuest"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">Nintendo Switch</span>
-              <span class="project-tag">PS4/5</span>
-            </div>
-            <div class="project-name">WrestleQuest</div>
-            <p class="project-desc">AA wrestling RPG shipped on Nintendo Switch and PS4/5. Owned the full Switch port — platform-specific optimisation, memory management, and Sony TRC plus Nintendo Lotcheck certification. Improved runtime stability by 15% and mentored two junior engineers through the porting process, establishing reusable console delivery workflows for the team.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://store.steampowered.com/app/1867510/WrestleQuest/" class="project-link" target="_blank">Steam ↗</a>
-          </div>
-        </div>
-
-        <!-- ── INDIE TITLES ── -->
-        <div class="project-category" id="cat-indie">
-          <span class="project-category-label">Indie Titles</span>
-          <div class="project-category-line"></div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-5.jpg" alt="Mythya"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">Android</span>
-              <span class="project-tag">PC</span>
-              <span class="project-tag">RTS</span>
-            </div>
-            <div class="project-name">Mythya</div>
-            <p class="project-desc">RTS game shipped on Android and PC. Inherited a complex Zenject-based dependency injection codebase mid-development and stabilised it without breaking existing systems — delivering core RTS mechanics including AI behaviour, economy management, and army control. Led the team through modular refactoring that meaningfully improved long-term maintainability and runtime performance.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://playmythya.com/" class="project-link" target="_blank">View ↗</a>
-          </div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-6.jpg" alt="Sacred Tails"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">PC</span>
-              <span class="project-tag">iOS</span>
-              <span class="project-tag">Android</span>
-              <span class="project-tag">RPG</span>
-            </div>
-            <div class="project-name">Sacred Tails</div>
-            <p class="project-desc">Pokémon-inspired RPG shipped on PC, iOS, and Android. Inherited an unstable codebase and restructured it to deliver tactical combat, NFT-based creature mechanics, and modular progression integrated with Azure PlayFab. Improved FPS by ~30% on low-end mobile devices through memory optimisation and rendering optimisation — making the game accessible to a significantly wider audience.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://www.sacredtails.com/" class="project-link" target="_blank">View ↗</a>
-          </div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-7.jpg" alt="Inferni: Hope & Fear"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">PC</span>
-              <span class="project-tag">Steam</span>
-            </div>
-            <div class="project-name">Inferni: Hope & Fear</div>
-            <p class="project-desc">Dark fantasy card-combat game shipped on Steam. Joined mid-production to fix a struggling title — optimised asset pipelines, shaders, and memory management to boost overall performance by 50% and cut load times by 30%. Refined combat feel through VFX tuning, animation polish, and custom post-processing, transforming a sluggish build into a responsive, visually polished shipped product.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://store.steampowered.com/app/2731170/Inferni_Hope__Fear/" class="project-link" target="_blank">Steam ↗</a>
-          </div>
-        </div>
-
-        <!-- ── VR / AR / WEBGL ── -->
-        <div class="project-category" id="cat-vr">
-          <span class="project-category-label">VR / AR / WebGL</span>
-          <div class="project-category-line"></div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-8.jpg" alt="GOSI Verse"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">WebGL</span>
-              <span class="project-tag">Meta Quest 3</span>
-              <span class="project-tag">Multiplayer</span>
-            </div>
-            <div class="project-name">GOSI Verse</div>
-            <p class="project-desc">Saudi Arabia's first government-backed multiplayer financial literacy platform, built as a public awareness campaign deployed across WebGL, PC, and Meta Quest 3. Led end-to-end development using Photon Fusion, architecting cross-platform multiplayer systems that let users explore financial concepts interactively across browser, desktop, and standalone VR. A rare project combining government scale, public reach, and multi-platform XR delivery in a single build.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://plandigital.me/case-studies/gosi-gosiverse-at-leap/" class="project-link" target="_blank">Case Study ↗</a>
-          </div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-9.jpg" alt="VR MG Simulation"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">VR</span>
-              <span class="project-tag">Meta Quest 3</span>
-              <span class="project-tag">Medical</span>
-            </div>
-            <div class="project-name">VR MG Simulation</div>
-            <p class="project-desc">Standalone VR medical training simulation built for Meta Quest 3, designed to educate medical professionals about Myasthenia Gravis through immersive first-person scenarios. Led full architecture and delivery using Unity and the Meta SDK — implementing hand tracking, gesture-based interaction, and spatial UI. Maintained 72fps+ on standalone Quest hardware throughout and successfully delivered to the medical client from concept through to deployment.</p>
-          </div>
-          <div class="project-links">
-            <a href="mailto:ab.mateen.kh@gmail.com" class="project-link">Request Info ↗</a>
-          </div>
-        </div>
-
-        <!-- ── OTHER ENGINES / PLATFORMS ── -->
-        <div class="project-category" id="cat-other">
-          <span class="project-category-label">Other Engines & Platforms</span>
-          <div class="project-category-line"></div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-10.jpg" alt="Decentraland"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">Web3</span>
-              <span class="project-tag">NFT</span>
-              <span class="project-tag">Metaverse</span>
-            </div>
-            <div class="project-name">Decentraland</div>
-            <p class="project-desc">Interactive metaverse experience built within the Decentraland engine, integrating NFT asset ownership via OpenSea APIs and smart contract workflows. Combined blockchain infrastructure with genuine gameplay mechanics — players could own, use, and trade in-game assets tied to real digital ownership. Delivered both technical implementation and environment scripting within Decentraland's custom ecosystem.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://decentraland.org/" class="project-link" target="_blank">View ↗</a>
-          </div>
-        </div>
-
-        <div class="project-row reveal">
-          <div class="project-thumb">
-            <img src="project-11.jpg" alt="The Sandbox"/>
-          </div>
-          <div class="project-content">
-            <div class="project-tags">
-              <span class="project-tag">Sandbox Engine</span>
-              <span class="project-tag">Metaverse</span>
-              <span class="project-tag">Web3</span>
-            </div>
-            <div class="project-name">The Sandbox</div>
-            <p class="project-desc">Interactive experience built inside The Sandbox Game Maker engine — a Web3 metaverse platform with its own proprietary toolset separate from Unity. Handled full experience delivery including gameplay scripting, environment design, and asset integration. Coordinated cross-discipline tasks to streamline production and hit delivery milestones within Sandbox's ecosystem constraints.</p>
-          </div>
-          <div class="project-links">
-            <a href="https://www.sandbox.game/en/" class="project-link" target="_blank">View ↗</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section id="testimonials">
-    <div class="section-inner">
-      <div class="section-header reveal">
-        <span class="section-num">03</span>
-        <h2 class="section-title">What People Say</h2>
-      </div>
-      <div class="testimonials-grid">
-
-        <div class="testimonial-card">
-          <div class="testimonial-quote">"</div>
-          <p class="testimonial-text">Mateen impressed me with his Unity and C# skills during his contract work. As his technical lead, I saw his exceptional problem-solving, debugging abilities, and strong grasp of technical concepts. His adaptability and effective collaboration make him a valuable asset. I highly recommend Mateen for any Senior Unity Developer position.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-info">
-              <div class="testimonial-name">Cyril Barrow</div>
-              <div class="testimonial-role">Head of Games · Client</div>
-            </div>
-            <a href="https://www.linkedin.com/in/amateen-khan/" target="_blank" class="testimonial-linkedin">LinkedIn ↗</a>
-          </div>
-        </div>
-
-        <div class="testimonial-card">
-          <div class="testimonial-quote">"</div>
-          <p class="testimonial-text">I had managed Mateen for quite some projects. Works hard, is a team player and has good knowledge about Unity and porting projects. I would love to work with him again.</p>
-          <div class="testimonial-author">
-            <div class="testimonial-info">
-              <div class="testimonial-name">Abdul Qadir</div>
-              <div class="testimonial-role">Lead Unity Engineer · Manager</div>
-            </div>
-            <a href="https://www.linkedin.com/in/amateen-khan/" target="_blank" class="testimonial-linkedin">LinkedIn ↗</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <div class="section-header reveal">
-        <span class="section-num">04</span>
-        <h2 class="section-title">Get In Touch</h2>
-      </div>
-      <div class="contact-layout">
-        <div class="reveal">
-          <p class="contact-blurb">
-            Open to remote<br/>
-            <span>Unity</span> opportunities<br/>
-            worldwide.
-          </p>
-          <div class="contact-meta">
-            <div class="contact-meta-item">
-              <span class="contact-meta-label">Response time</span>
-              <span class="contact-meta-value">Within 24 hours</span>
-            </div>
-            <div class="contact-meta-item">
-              <span class="contact-meta-label">Timezone</span>
-              <span class="contact-meta-value">PKT — UTC+5</span>
-            </div>
-            <div class="contact-meta-item">
-              <span class="contact-meta-label">Looking for</span>
-              <span class="contact-meta-value">Remote · Full-time or Contract</span>
-            </div>
-          </div>
-          <div class="contact-items">
-            <div class="contact-item">
-              <span class="contact-item-label">Email</span>
-              <a href="mailto:ab.mateen.kh@gmail.com">ab.mateen.kh@gmail.com</a>
-            </div>
-            <div class="contact-item">
-              <span class="contact-item-label">LinkedIn</span>
-              <a href="https://www.linkedin.com/in/amateen-khan/" target="_blank">linkedin.com/in/amateen-khan</a>
-            </div>
-            <div class="contact-item">
-              <span class="contact-item-label">Location</span>
-              <a href="#">Lahore, Pakistan — Open to Remote</a>
-            </div>
-          </div>
-        </div>
-
-        <form class="contact-form reveal" id="contact-form" onsubmit="handleSubmit(event)">
-          <div class="form-group">
-            <label for="fname">Name</label>
-            <input type="text" id="fname" name="name" placeholder="Your name" required/>
-          </div>
-          <div class="form-group">
-            <label for="femail">Email</label>
-            <input type="email" id="femail" name="email" placeholder="your@email.com" required/>
-          </div>
-          <div class="form-group">
-            <label for="fmessage">Message</label>
-            <textarea id="fmessage" name="message" placeholder="Tell me about the opportunity..." required></textarea>
-          </div>
-          <button type="submit" class="btn-primary" style="cursor:pointer; border:none;">Send Message</button>
-        </form>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- BACK TO TOP -->
-  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
-
-  <!-- FOOTER -->
-  <footer>
-    <span class="footer-text">© 2025 Abdul Mateen Khan</span>
-    <div class="footer-links">
-      <a href="https://www.linkedin.com/in/amateen-khan/" target="_blank">LinkedIn</a>
-      <a href="resume.pdf" download>Resume</a>
-    </div>
-  </footer>
-
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    /* ── NAV SCROLL ── */
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 40);
-    });
-
-    /* ── CONTACT FORM ── */
-    async function handleSubmit(e) {
-      e.preventDefault();
-      const form = e.target;
-      const btn = form.querySelector('button');
-      const name = form.name.value;
-      const email = form.email.value;
-      const message = form.message.value;
-      btn.textContent = 'Sending...';
-      btn.disabled = true;
-      try {
-        const res = await fetch('https://formspree.io/f/xpwzgvqk', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ name, email, message, _replyto: email })
+    projectTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const targetPanel = document.getElementById(tab.dataset.panel);
+        projectTabs.forEach((item) => {
+          const isActive = item === tab;
+          item.classList.toggle("active", isActive);
+          item.setAttribute("aria-selected", String(isActive));
         });
-        if (res.ok) {
-          btn.textContent = 'Message Sent ✓';
-          form.reset();
-        } else {
-          throw new Error();
-        }
-      } catch {
-        // Fallback to mailto
-        window.location.href = `mailto:ab.mateen.kh@gmail.com?subject=Portfolio Enquiry from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0A%0AReply to: ${encodeURIComponent(email)}`;
-        btn.textContent = 'Send Message';
-        btn.disabled = false;
-      }
-    }
-
-    /* ── BACK TO TOP VISIBILITY ── */
-    const backToTop = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      backToTop.classList.toggle('visible', window.scrollY > 400);
+        projectPanels.forEach((panel) => {
+          panel.classList.toggle("active", panel === targetPanel);
+          const detail = panel.querySelector(".project-detail");
+          detail?.classList.remove("active");
+          if (detail) detail.innerHTML = "";
+        });
+      });
     });
 
-    /* ── ACTIVE FILTER TAB ON SCROLL ── */
-    const filterTabs = document.querySelectorAll('.filter-tab');
-    const categories = ['cat-aa', 'cat-indie', 'cat-vr', 'cat-other'];
-
-    function updateActiveTab() {
-      const scrollY = window.scrollY;
-      const offset = 200; // account for sticky nav + tab bar height
-
-      let current = categories[0];
-      categories.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && scrollY >= el.getBoundingClientRect().top + scrollY - offset) {
-          current = id;
-        }
-      });
-
-      filterTabs.forEach(t => {
-        t.classList.toggle('active', t.dataset.cat === current);
-      });
-    }
-
-    window.addEventListener('scroll', updateActiveTab, { passive: true });
-    updateActiveTab();
-    const reveals = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.05 });
-    reveals.forEach(r => revealObserver.observe(r));
-
-    /* ── PARTICLES ── */
-    const canvas = document.getElementById('particles');
-    const ctx    = canvas.getContext('2d');
-
-    let W, H, particles;
-
-    const PARTICLE_COUNT  = 80;
-    const STAR_COUNT      = 60;
-    const ACCENT_COLOR    = '232, 213, 176';
-
-    let stars = [];
-
-    function createStars() {
-      stars = Array.from({ length: STAR_COUNT }, () => ({
-        x:     Math.random() * W,
-        y:     Math.random() * H,
-        r:     Math.random() * 1.2 + 0.2,
-        alpha: Math.random() * 0.5 + 0.1,
-        twinkleSpeed: Math.random() * 0.02 + 0.005,
-        twinkleDir: Math.random() > 0.5 ? 1 : -1,
-      }));
-    }
-
-    function resize() {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
-
-    function createParticles() {
-      particles = Array.from({ length: PARTICLE_COUNT }, () => ({
-        x:    Math.random() * W,
-        y:    Math.random() * H,
-        r:    Math.random() * 1.5 + 0.3,
-        vx:   (Math.random() - 0.5) * 0.25,
-        vy:   (Math.random() - 0.5) * 0.25,
-        alpha: Math.random() * 0.35 + 0.05,
-      }));
-    }
-
-    function drawParticles() {
-      ctx.clearRect(0, 0, W, H);
-
-      // Draw twinkling stars first (background layer)
-      stars.forEach(s => {
-        s.alpha += s.twinkleSpeed * s.twinkleDir;
-        if (s.alpha > 0.6 || s.alpha < 0.05) s.twinkleDir *= -1;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
-        ctx.fill();
-      });
-
-      // Draw connection lines between close particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx   = particles[i].x - particles[j].x;
-          const dy   = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(${ACCENT_COLOR}, ${0.06 * (1 - dist / 120)})`;
-            ctx.lineWidth   = 0.6;
-            ctx.stroke();
-          }
-        }
+    // ── Per-project case-study data ────────────────────────
+    const PROJECT_DETAILS = {
+      "Life in Willowdale": {
+        role: "Lead Unity Developer", duration: "8 months", team: "6 engineers",
+        contributions: [
+          "Architected core gameplay systems from scratch, including player controller, farming loop, combat, inventory, and boss fights",
+          "Ported a 4K PC title to Nintendo Switch, delivering stable certification-ready performance on significantly constrained hardware",
+          "Built unified controller mapping across Switch Joy-Con, PlayStation DualSense, and Xbox layouts within a single input layer",
+          "Split the game world into streamed chunks using Addressables, cutting scene load times from 45 seconds to 10 seconds",
+          "Optimised shaders, GPU batching, and memory budgets to meet Nintendo's minimum framerate threshold across all game states",
+          "Delivered and maintained builds across Nintendo Switch (Lotcheck), PS4, PS5, and Steam",
+          "Provided post-launch platform support across all four platforms through certification and live updates"
+        ],
+        wins: [{ val: "25%", label: "FPS gain\non low-end" }, { val: "11s", label: "Load time\n(down from 38s)" }, { val: "3", label: "Platform certs\npassed" }],
+        tech: ["Unity 2022", "C#", "URP", "Addressables", "Shader Graph", "Cinemachine", "NavMesh", "Unity Input System", "Unity Profiler", "Memory Profiler", "Nintendo SDK", "PlayStation SDK", "Steam SDK", "Git"]
+      },
+      "FoodFight: Culinary Combat": {
+        role: "Gameplay Developer", duration: "6 Months", team: "4 Engineers",
+        contributions: [
+          "Stabilised Photon Bolt networking layer, reducing desync rate from 18% to under 2%",
+          "Built rollback-friendly input prediction supporting up to 8 simultaneous players",
+          "Contributed to lobby, matchmaking, and cross-platform session management systems",
+          "Ported and certified the title on Nintendo Switch through Lotcheck",
+          "Profiled and resolved memory leaks causing OOM crashes on Switch hardware",
+          "Navigated platform-specific blockers across Nintendo Switch and Steam to ship clean"
+        ],
+        wins: [{ val: "2%", label: "Desync Rate\n(down from 18%)" }, { val: "8", label: "Simultaneous Players\nStable" }, { val: "0", label: "OOM Crashes\nat Ship" }],
+        tech: ["Unity 2021", "C#", "Photon Bolt", "Nintendo SDK", "Steam SDK", "Unity Profiler", "Memory Profiler", "Git"]
+      },
+      "Goons: Legends & Mayhem": {
+        role: "Gameplay Developer", duration: "6 Months", team: "3 Engineers",
+        contributions: [
+          "Integrated Epic Online Services (EOS) lobby and matchmaking layer on top of an existing Photon Quantum implementation, making cross-platform play functional across all targets",
+          "Implemented cross-platform friend invite system using platform-native overlay APIs on PlayStation, Xbox, and Nintendo Switch",
+          "Ported and certified the build on Nintendo Switch and Xbox",
+          "Integrated Xbox GDK and PlayStation SDK for online features and trophy/achievement systems",
+          "Optimised character physics and animation update loop to meet platform performance requirements"
+        ],
+        wins: [{ val: "5", label: "Platforms shipped\n(PS4, PS5, Xbox, Switch, PC)" }, { val: "EOS + Quantum", label: "Cross-platform lobby\nintegration" }, { val: "0", label: "Cross-play\ncertification blocks" }],
+        tech: ["Unity 2022", "C#", "Photon Quantum", "EOS SDK", "Xbox GDK", "PlayStation SDK", "Nintendo SDK", "Steam SDK", "Git"]
+      },
+      "WrestleQuest": {
+        role: "Console Port Lead", duration: "4 Months", team: "2 Engineers",
+        contributions: [
+          "Led the complete port of WrestleQuest to Nintendo Switch, PS4, and PS5 as Port Lead",
+          "Reduced memory footprint by 340MB through texture atlasing, asset compression, and streaming refactors",
+          "Optimised game performance to hit stable 30fps on Nintendo Switch handheld mode",
+          "Built unified input handling across Switch Joy-Con, PlayStation DualSense, and platform-specific layouts",
+          "Identified and resolved gameplay issues required for smooth platform certification and release"
+        ],
+        wins: [{ val: "340MB", label: "Memory\nReclaimed" }, { val: "30fps", label: "Stable Handheld\nTarget Met" }, { val: "3", label: "Platforms Shipped\n(Switch · PS4 · PS5)" }],
+        tech: ["Unity 2021", "C#", "Nintendo SDK", "PlayStation SDK", "Addressables", "URP", "ASTC Compression", "Git"]
+      },
+      "Mythya": {
+        role: "Technical Lead", duration: "12 Months", team: "3 Engineers",
+        contributions: [
+          "Took ownership of a complex Zenject-based dependency injection architecture, leading stabilisation efforts and setting the technical direction for a team of 3",
+          "Directed delivery of complete AI behaviour trees for unit pathing, combat, and retreat logic, overseeing implementation across the team",
+          "Personally designed and implemented a game economy system balancing 6 resources and 12 production chains, integrated with AI and player control systems",
+          "Led cross-platform optimisation across Android and PC using scene-level GPU rendering optimisation, achieving consistent 60fps on mid-range devices",
+          "Mentored and guided 2 developers through core systems delivery, code reviews, and scalability decisions",
+          "Drove a 20% reduction in build times through AssetBundle restructuring and architecture improvements"
+        ],
+        wins: [{ val: "20%", label: "Build time\nreduced" }, { val: "40%", label: "Memory usage reduced\nacross platforms" }, { val: "60fps", label: "Stable on\nmid-range devices" }],
+        tech: ["Unity 2022", "C#", "Zenject", "DOTween", "Addressables", "Firebase", "Git"]
+      },
+      "sacred-tails-indie": {
+        role: "Technical Lead", duration: "4 Months", team: "4 Engineers",
+        contributions: [
+          "Inherited an unstable codebase from a previous team, restructured it into a stable foundation, and led a team of 3 developers through to ship",
+          "Owned and delivered the core tactical combat system, driving architecture decisions and guiding implementation across the team",
+          "Directed integration of NFT-based creature mechanics and modular progression architecture with Azure PlayFab backend",
+          "Personally handled Android and iOS porting, resolving memory, asset, and shader performance issues across both platforms",
+          "Increased FPS by approximately 30% on low-end devices through hands-on profiling and optimisation",
+          "Oversaw App Store and Play Store certification, resolving platform blockers and shipping clean builds on both stores"
+        ],
+        wins: [{ val: "30%", label: "FPS increase\non low-end devices" }, { val: "2", label: "Store certs passed\n(iOS · Android)" }, { val: "3", label: "Platforms shipped\n(PC · iOS · Android)" }],
+        tech: ["Unity 2021", "C#", "Addressables", "Firebase", "iOS SDK", "Android SDK"]
+      },
+      "Inferni: Hope & Fear": {
+        role: "Optimization Contractor", duration: "3 months", team: "4 engineers",
+        contributions: [
+          "Boosted performance through targeted asset, shader, and memory optimisation, cutting level load times by 30% and raising FPS by 50%",
+          "Implemented game feel enhancements including camera shake, hit impacts, VFX tuning, screen feedback, and animation polish to elevate combat responsiveness",
+          "Refined lighting, post-processing, and shader efficiency to deliver a smoother and more visually cohesive gameplay experience",
+          "Identified and fixed gameplay and Unity Netcode multiplayer bugs to ensure a stable and polished Steam release"
+        ],
+        wins: [{ val: "45s", label: "Shader compile\n(down from 4min)" }, { val: "180MB", label: "VRAM\nsaved" }, { val: "0", label: "Crashes\npost-launch" }],
+        tech: ["Unity 2022", "C#", "Unity Netcode", "URP", "Addressables", "Shader Graph", "Steam SDK", "Git"]
+      },
+      "GOSI Verse": {
+        role: "Technical Lead", duration: "5 Months", team: "4 Engineers",
+        contributions: [
+          "Led end-to-end development of Saudi Arabia's first government-backed multiplayer financial literacy platform across WebGL, PC, and Meta Quest 3",
+          "Architected real-time multiplayer sessions using Photon Fusion, connecting browser, desktop, and standalone VR users in a single shared experience",
+          "Built VR interaction systems and controller-based UX tailored for youth engagement on Meta Quest headsets",
+          "Optimised performance across all three platforms, ensuring stable and comfortable VR sessions and a fast-loading WebGL experience",
+          "Showcased at LEAP Tech Conference, with a live demo running flawlessly across all three platforms simultaneously"
+        ],
+        wins: [{ val: "1st", label: "Government-backed financial literacy VR platform\nin Saudi Arabia" }, { val: "3", label: "Platforms in a single connected build\n(WebGL · PC · Quest 3)" }, { val: "LEAP", label: "Live demo showcased\nat Tech Conference" }],
+        tech: ["Unity 2022", "C#", "Photon Fusion", "OpenXR", "Meta SDK", "WebGL", "Git"]
+      },
+      "VR MG Simulation": {
+        role: "Technical Lead", duration: "4 Months", team: "3 Engineers",
+        contributions: [
+          "Directed full technical architecture and delivery from concept through to client deployment on Meta Quest 3, leading a team of 2 developers",
+          "Oversaw implementation of full hand tracking and gesture-based interaction across all three VR scenarios",
+          "Led delivery of three distinct immersive environments, Driving, Park, and Apartment, each simulating real-world Myasthenia Gravis symptom experiences",
+          "Designed spatial UI panels for procedure guidance and real-time feedback overlays within VR",
+          "Architected a scalable cloud backend using Azure PlayFab for authentication, data telemetry, and secure clinical data handling",
+          "Managed code quality, profiling, optimisation, and cross-team alignment across designers, artists, and QA"
+        ],
+        wins: [{ val: "72fps+", label: "Stable on\nQuest 3 standalone" }, { val: "3", label: "Immersive VR scenarios\n(Driving · Park · Apartment)" }, { val: "Azure", label: "Cloud-based clinical data\narchitecture" }],
+        tech: ["Unity 6", "C#", "Meta XR SDK", "OpenXR", "AR Foundation", "Azure PlayFab", "Hand Tracking API", "Git"]
+      },
+      "Decentraland": {
+        role: "Technical Lead", duration: "2 Months", team: "2 Engineers",
+        contributions: [
+          "Led delivery of a studio qualification experience to meet Decentraland's strict technical and content requirements, resulting in FRAG Games becoming an official Decentraland partner",
+          "Built interactive gameplay experiences within Decentraland's SDK-based scene scripting environment",
+          "Integrated Ethereum-based NFT ownership checks using OpenSea APIs to gate content and enhance asset utility",
+          "Collaborated with an artist to design and publish NFT wearable items on OpenSea, usable as character cosmetics within the Decentraland world",
+          "Optimised scene polygon budgets to meet Decentraland's strict triangle-count limits across all deployed scenes"
+        ],
+        wins: [{ val: "Partner", label: "FRAG Games officially onboarded as\nDecentraland partner post-delivery" }, { val: "<2k", label: "Tris per scene\nbudget met" }, { val: "On-chain", label: "Asset ownership\nverified" }],
+        tech: ["Decentraland SDK", "TypeScript", "Web3.js", "Ethereum", "OpenSea API", "IPFS", "WebGL", "Git"]
+      },
+      "The Sandbox": {
+        role: "Technical Lead", duration: "3 Months", team: "2 Engineers",
+        contributions: [
+          "Led delivery of LaMelo Ball's official Meloverse experience inside The Sandbox, coordinating across a large team of artists and game designers",
+          "Scripted interactive gameplay, mini-games, and 19 unique quest systems using The Sandbox Game Maker SDK",
+          "Collaborated with artists to design, publish, and integrate NFT wearable assets, making them usable as character cosmetics within the experience",
+          "Handled NFT publishing pipeline end-to-end, from asset creation through to on-chain deployment",
+          "Coordinated with The Sandbox content team to meet platform publishing standards and go live successfully"
+        ],
+        wins: [{ val: "19", label: "Unique quests built\nand deployed" }, { val: "NFT", label: "Asset ownership\nintegrated" }, { val: "NBA", label: "Built for LaMelo Ball's official\nSandbox experience" }],
+        tech: ["The Sandbox SDK", "Game Maker", "JavaScript", "Web3", "IPFS", "Polygon", "Git"]
+      },
+      "voice-verdict": {
+        role: "Game Designer & Lead Developer", duration: "2 Months", team: "Solo",
+        contributions: [
+          "Owned the project end-to-end as both game designer and developer - from concept refinement to final delivery",
+          "Designed a turn-based conversation combat system with sequential resolution, repetition penalties, and stat-driven action values",
+          "Built a dual-layer feedback system pairing spoken dialogue with strategic narration, making cause and effect readable in every turn",
+          "Implemented stat-to-battle integration and an action unlock progression where character growth directly strengthens combat",
+          "Architected a data-driven content system using ScriptableObjects so dialogue and balance changes required no code"
+        ],
+        wins: [{ val: "Conversation Combat", label: "Dialogue choices replace\ntraditional combat" }, { val: "Dual-Layer Feedback", label: "Spoken dialogue paired with\nstrategic narration every turn" }, { val: "Stat-Driven Progression", label: "Character growth directly\nstrengthens battle actions" }],
+        tech: ["Unity 6.3", "C#", "ScriptableObjects", "EventBus", "UI Toolkit", "WebGL", "Git"],
+        media: [
+          { type: "image", src: "voice-verdict-gameplay-1.png", alt: "Voice and Verdict gameplay screenshot 1", caption: "Conversation combat encounter" },
+          { type: "image", src: "voice-verdict-gameplay-2.png", alt: "Voice and Verdict gameplay screenshot 2", caption: "Dialogue choice and resolution screen" }
+        ]
+      },
+      "Goons Games": {
+        role: "Senior Unity Developer (Contract)", duration: "6 months", team: "8 engineers",
+        contributions: [
+          "Contracted to build EOS multiplayer infrastructure from scratch",
+          "Delivered full cross-platform matchmaking across Steam, Xbox, and PlayStation",
+          "Built party, invite, and cross-play session systems using platform overlay APIs",
+          "Integrated trophies and achievement systems for Xbox and PlayStation",
+          "Reduced server-side tick lag from 120ms average to under 40ms"
+        ],
+        wins: [{ val: "<40ms", label: "Server tick\nlatency" }, { val: "3", label: "Platforms\ncross-play" }, { val: "100%", label: "Certification\npass rate" }],
+        tech: ["Unity 2022", "EOS SDK", "Xbox GDK", "PlayStation SDK", "C#", "Steam SDK"]
+      },
+      "sacred-tails-client": {
+        role: "Unity Performance Engineer (Contract)", duration: "4 months", team: "6 engineers",
+        contributions: [
+          "Hired to rescue a struggling mobile RPG with severe performance issues",
+          "Profiled and fixed GC allocation spikes — frame spikes dropped from 12/min to 0",
+          "Improved FPS from 18fps to 44fps on target low-end Android devices",
+          "Restructured codebase into clean service-based architecture",
+          "Shipped iOS and Android through both store certification processes on time"
+        ],
+        wins: [{ val: "44fps", label: "Low-end Android\n(up from 18fps)" }, { val: "0", label: "GC frame\nspikes/min" }, { val: "2", label: "Store certs\non time" }],
+        tech: ["Unity 2021", "C#", "Addressables", "Firebase", "iOS SDK", "Android SDK"]
+      },
+      "Absolute Games": {
+        role: "Lead Unity Developer (Contract)", duration: "12 months", team: "10 engineers",
+        contributions: [
+          "Extended contract delivering core systems across multiple AA titles at the studio",
+          "Led gameplay architecture for two simultaneous projects in parallel",
+          "Implemented studio-wide platform optimisation standards adopted across all projects",
+          "Mentored 2 junior developers through code review and pair-programming sessions",
+          "Delivered all contracted milestones on schedule across the full engagement"
+        ],
+        wins: [{ val: "2", label: "AA titles\ndelivered" }, { val: "12mo", label: "Extended\ncontract" }, { val: "2", label: "Devs\nmentored" }],
+        tech: ["Unity 2021–2022", "C#", "Addressables", "Console SDKs", "Perforce", "Git"]
+      },
+      "Play Empire": {
+        role: "Unity Developer (Contract)", duration: "5 months", team: "7 engineers",
+        contributions: [
+          "Contracted across multiple live mobile titles in Play Empire's portfolio",
+          "Built new gameplay systems and features for two titles simultaneously",
+          "Integrated analytics and A/B testing hooks for LiveOps team",
+          "Improved UI rendering performance — reduced overdraw by 30% across targeted screens",
+          "Delivered feature updates across iOS and Android on a weekly sprint cadence"
+        ],
+        wins: [{ val: "2", label: "Titles\nsimultaneously" }, { val: "30%", label: "UI overdraw\nreduced" }, { val: "Weekly", label: "Sprint delivery\ncadence" }],
+        tech: ["Unity 2021", "C#", "Firebase", "Addressables", "iOS SDK", "Android SDK"]
       }
+    };
 
-      // Draw dots
-      particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${ACCENT_COLOR}, ${p.alpha})`;
-        ctx.fill();
+    function buildCaseStudy(projectKey) {
+      const d = PROJECT_DETAILS[projectKey];
+      if (!d) return `<div class="case-study active"><p class="case-study-empty">Detailed case study coming soon.</p></div>`;
+      const mediaGallery = d.media?.length ? `
+          <div class="gameplay-preview">
+            <div class="gameplay-preview-head">
+              <h4>Gameplay Preview</h4>
+              <small>${d.media.length} item${d.media.length === 1 ? "" : "s"}</small>
+            </div>
+            <div class="gameplay-grid">
+              ${d.media.map((item) => {
+                if (item.type === "video") {
+                  return `
+                    <div class="gameplay-item">
+                      <div class="gameplay-frame">
+                        <video src="${item.src}" controls playsinline preload="metadata"></video>
+                      </div>
+                      ${item.caption ? `<p class="gameplay-caption">${item.caption}</p>` : ""}
+                    </div>`;
+                }
+                return `
+                  <a class="gameplay-item" href="${item.src}" target="_blank" rel="noreferrer">
+                    <div class="gameplay-frame">
+                      <img src="${item.src}" alt="${item.alt || "Gameplay preview"}" />
+                    </div>
+                    ${item.caption ? `<p class="gameplay-caption">${item.caption}</p>` : ""}
+                  </a>`;
+              }).join("")}
+            </div>
+          </div>` : "";
+      return `
+        <div class="case-study active">
+          <div class="cs-chips">
+            <span class="cs-chip">Role &nbsp;<b>${d.role}</b></span>
+            <span class="cs-chip">Duration &nbsp;<b>${d.duration}</b></span>
+            <span class="cs-chip">Team &nbsp;<b>${d.team}</b></span>
+          </div>
+          ${mediaGallery}
+          <div class="cs-wins">
+            ${d.wins.map(w => `<div class="cs-win"><strong>${w.val}</strong><span>${w.label.replace(/\n/g, '<br>')}</span></div>`).join('')}
+          </div>
+          <div class="cs-grid">
+            <div class="cs-block">
+              <div class="cs-block-title">What I built</div>
+              <ul class="cs-list">${d.contributions.map(c => `<li>${c}</li>`).join('')}</ul>
+            </div>
+            <div class="cs-block">
+              <div class="cs-block-title">Tech stack</div>
+              <div class="cs-tech">${d.tech.map(t => `<span class="cs-tech-tag">${t}</span>`).join('')}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    gameCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const panel = card.closest(".project-panel");
+        const detail = panel?.querySelector(".project-detail");
+        if (!detail) return;
+        panel.querySelectorAll(".game-card").forEach((item) => {
+          item.classList.toggle("selected", item === card);
+        });
+        const projectLink = card.dataset.link
+          ? `<a class="btn primary" href="${card.dataset.link}" target="_blank" rel="noreferrer">Project Link</a>`
+          : "";
+        detail.innerHTML = `
+          <div class="project-detail-inner">
+            <img src="${card.dataset.image}" alt="${card.dataset.title} detail preview" />
+            <div>
+              <div class="detail-eyebrow">${card.dataset.category}</div>
+              <h3>${card.dataset.title}</h3>
+              <p>${card.dataset.summary}</p>
+              <div class="detail-actions">
+                ${projectLink}
+                <a class="btn" href="#contact">Discuss similar work</a>
+              </div>
+            </div>
+          </div>
+          ${buildCaseStudy(card.dataset.key || card.dataset.title)}
+        `;
+        detail.classList.add("active");
       });
-    }
+    });
 
-    function updateParticles() {
-      particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0)  p.x = W;
-        if (p.x > W)  p.x = 0;
-        if (p.y < 0)  p.y = H;
-        if (p.y > H)  p.y = 0;
+    backToTop?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          revealObserver.unobserve(entry.target);
+        }
       });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach((item) => revealObserver.observe(item));
+
+    updatePageChrome();
+    window.addEventListener("scroll", updatePageChrome, { passive: true });
+    window.addEventListener("resize", updatePageChrome);
+
+    const heroEl = document.querySelector(".hero[data-parallax]");
+    if (heroEl && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      heroEl.addEventListener("pointermove", (e) => {
+        const r = heroEl.getBoundingClientRect();
+        heroEl.style.setProperty("--px", ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+        heroEl.style.setProperty("--py", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+      }, { passive: true });
     }
 
-    function loop() {
-      updateParticles();
-      drawParticles();
-      requestAnimationFrame(loop);
-    }
-
-    window.addEventListener('resize', () => { resize(); createParticles(); createStars(); });
-    resize();
-    createParticles();
-    createStars();
-    loop();
+    const statObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const m = el.textContent.trim().match(/^(\+?)(\d+)(\D*)$/);
+        if (!m) { statObs.unobserve(el); return; }
+        const [, prefix, num, suffix] = m;
+        const target = parseInt(num, 10);
+        const start = performance.now();
+        function tick(t) {
+          const p = Math.min((t - start) / 1100, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = `${prefix}${Math.round(target * eased)}${suffix}`;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        statObs.unobserve(el);
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll(".mini-stat strong").forEach((el) => statObs.observe(el));
   </script>
-
 </body>
 </html>
