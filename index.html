@@ -8,6 +8,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Pixelify+Sans:wght@500;600;700&family=VT323&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    /* ── Contact visibility switch ─────────────────────────────
+       enabled: false → every contact channel (email, LinkedIn,
+       booking links) is hidden from visitors. Flip to true to
+       bring them all back. Contact details live here, in one place. */
+    window.CONTACT = {
+      enabled: false,
+      email: "ab.mateen.kh@gmail.com",
+      linkedin: "https://www.linkedin.com/in/amateen-khan/",
+      upwork: "https://www.upwork.com/freelancers/~016922cc03dd841127?mp_source=share"
+    };
+    document.documentElement.classList.toggle("contact-off", !window.CONTACT.enabled);
+  </script>
   <style>
     :root {
       --page: #090705;
@@ -1091,6 +1104,8 @@
     .contact-actions {
       display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px;
     }
+    /* Contact gate — hides every [data-contact] element while CONTACT.enabled is false */
+    html.contact-off [data-contact] { display: none !important; }
 
     footer {
       display: flex; justify-content: space-between;
@@ -1304,7 +1319,7 @@
           <li><a href="#skills">Skills</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
-        <a class="nav-cta" href="#contact">Let's Connect</a>
+        <a class="nav-cta" href="#contact" data-contact>Let's Connect</a>
       </header>
 
       <main>
@@ -1327,7 +1342,7 @@
             <p class="hero-tagline">Senior Unity Developer shipping high-performance games across console, mobile, WebGL, and VR.</p>
             <p class="hero-supporting">7 years of experience building gameplay systems, multiplayer features, optimization pipelines, and certification-ready Unity titles for Nintendo Switch, PlayStation, Xbox, iOS, Android, and Meta Quest.</p>
             <div class="hero-actions">
-              <a class="btn primary" href="#contact">Book a Call</a>
+              <a class="btn primary" href="#contact" data-contact>Book a Call</a>
               <a class="btn" href="#projects">View Projects →</a>
             </div>
 
@@ -1416,7 +1431,7 @@
                   <div class="game-cover"><img src="project-8.png" alt="GOSI Verse project artwork" /><span class="game-card-title">GOSI Verse</span></div>
                   <div class="platform-row"><span class="platform-icon">WebGL</span><span class="platform-icon">Quest</span><span class="platform-icon">PC</span></div>
                 </button>
-                <button class="game-card" type="button" data-title="VR MG Simulation" data-category="VR Medical Training" data-image="project-9.png" data-link="mailto:ab.mateen.kh@gmail.com" data-summary="A standalone VR medical training simulation built for Meta Quest 3, designed to educate medical professionals about Myasthenia Gravis through immersive first-person scenarios and gesture-based interaction.">
+                <button class="game-card" type="button" data-title="VR MG Simulation" data-category="VR Medical Training" data-image="project-9.png" data-summary="A standalone VR medical training simulation built for Meta Quest 3, designed to educate medical professionals about Myasthenia Gravis through immersive first-person scenarios and gesture-based interaction.">
                   <div class="game-cover"><img src="project-9.png" alt="VR MG Simulation project artwork" /><span class="game-card-title">VR MG Sim</span></div>
                   <div class="platform-row"><span class="platform-icon">VR</span><span class="platform-icon">Quest 3</span></div>
                 </button>
@@ -1467,7 +1482,6 @@
               <p>I’m a Lead Unity Developer with 7 years of experience building and shipping games across console, mobile, PC, WebGL, and XR platforms.</p>
               <p>From prototypes to certification-ready releases, I focus on scalable gameplay systems, stable production pipelines, multiplayer architecture, and performance-conscious development.</p>
               <p>Working on console ports, inherited codebases, optimization-heavy projects, and live multiplayer systems shaped the way I approach engineering — solve constraints early, keep systems maintainable, and build for long-term production stability.</p>
-              <a class="btn" href="resume.pdf" download>Download Resume</a>
             </article>
             <div class="list-panel reveal">
               <div class="skill"><small>Expertise</small><h3>Gameplay Architecture</h3><p>Scalable gameplay systems, tools, and maintainable Unity codebases.</p></div>
@@ -1537,9 +1551,9 @@
               <p>Open to remote full-time and contract Unity opportunities worldwide. From prototype to certification — gameplay systems, multiplayer, optimization, and cross-platform delivery.</p>
             </div>
             <div class="contact-actions">
-              <a class="btn primary" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=ab.mateen.kh@gmail.com&amp;su=Unity%20Opportunity" target="_blank" rel="noreferrer">Email Me</a>
-              <a class="btn" href="https://www.linkedin.com/in/amateen-khan/" target="_blank" rel="noreferrer">LinkedIn</a>
-              <a class="btn" href="https://www.upwork.com/freelancers/~016922cc03dd841127?mp_source=share" target="_blank" rel="noreferrer">Upwork</a>
+              <a class="btn primary" href="#" data-contact data-contact-link="email-compose">Email Me</a>
+              <a class="btn" href="#" data-contact data-contact-link="linkedin">LinkedIn</a>
+              <a class="btn" href="#" data-contact-link="upwork" target="_blank" rel="noreferrer">Upwork</a>
             </div>
           </div>
         </section>
@@ -1547,7 +1561,7 @@
 
       <footer>
         <span>&copy; 2026 Abdul Mateen Khan / Lead Unity Developer</span>
-        <span><a href="resume.pdf" download>Download resume</a> / <a href="mailto:ab.mateen.kh@gmail.com">ab.mateen.kh@gmail.com</a> / <a href="https://www.upwork.com/freelancers/~016922cc03dd841127?mp_source=share" target="_blank" rel="noreferrer">Upwork</a></span>
+        <span><a href="#" data-contact data-contact-link="email" data-contact-text="email"></a> / <a href="#" data-contact-link="upwork" target="_blank" rel="noreferrer">Upwork</a></span>
       </footer>
     </div>
   </div>
@@ -1930,6 +1944,26 @@
       });
     }, { threshold: 0.4 });
     document.querySelectorAll(".mini-stat strong").forEach((el) => statObs.observe(el));
+  </script>
+  <script>
+    /* Contact gate — pulls link URLs and text from window.CONTACT */
+    (function () {
+      var C = window.CONTACT || {};
+      var hrefs = {
+        "email": "mailto:" + C.email,
+        "email-compose": "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(C.email) + "&su=Unity%20Opportunity",
+        "linkedin": C.linkedin,
+        "upwork": C.upwork
+      };
+      document.querySelectorAll("[data-contact-link]").forEach(function (el) {
+        var url = hrefs[el.getAttribute("data-contact-link")];
+        if (url) el.setAttribute("href", url);
+      });
+      document.querySelectorAll("[data-contact-text]").forEach(function (el) {
+        var key = el.getAttribute("data-contact-text");
+        if (C[key]) el.textContent = C[key];
+      });
+    })();
   </script>
 </body>
 </html>

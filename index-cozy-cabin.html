@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abdul Mateen Khan | Lead Unity Developer</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='10' fill='%23120b07'/%3E%3Ctext x='50' y='62' text-anchor='middle' font-size='34' font-family='monospace' fill='%23ffc65f' font-weight='700'%3EAMK%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Pixelify+Sans:wght@500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <script>
+    /* ── Contact visibility switch ─────────────────────────────
+       enabled: false → every contact channel (email, LinkedIn,
+       booking links) is hidden from visitors. Flip to true to
+       bring them all back. Contact details live here, in one place. */
+    window.CONTACT = {
+      enabled: false,
+      email: "ab.mateen.kh@gmail.com",
+      linkedin: "https://www.linkedin.com/in/amateen-khan/",
+      upwork: "https://www.upwork.com/freelancers/~016922cc03dd841127?mp_source=share"
+    };
+    document.documentElement.classList.toggle("contact-off", !window.CONTACT.enabled);
+  </script>
+  <style>
+    :root {
+      --page: #090705;
+      --ink: #f8e8c2;
+      --cream: #fff2cf;
+      --muted: #c49d64;
+      --dim: #85613b;
+      --panel: #160d08;
+      --panel-2: #20130b;
+      --wood: #2b190d;
+      --wood-2: #3a2212;
+      --line: #4a2c17;
+      --line-bright: #7d4c22;
+      --gold: #ffc65f;
+      --gold-2: #f49a2e;
+      --green: #8cc86a;
+      --teal: #55c4b0;
+      --red: #d76a4d;
+      --shadow: rgba(0, 0, 0, .44);
+      --radius: 8px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      background:
+        radial-gradient(circle at 48% 2%, rgba(255, 198, 95, .13), transparent 26rem),
+        radial-gradient(circle at 78% 20%, rgba(85, 196, 176, .06), transparent 30rem),
+        linear-gradient(180deg, #120a06 0%, #070504 78%);
+      overflow-x: hidden;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: calc(var(--scroll, 0) * 1%);
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--gold), var(--teal));
+      z-index: 200;
+      box-shadow: 0 0 18px rgba(255, 198, 95, .45);
+      pointer-events: none;
+    }
+
+    .cursor-light {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 360px;
+      height: 360px;
+      pointer-events: none;
+      transform: translate3d(calc(var(--cursor-x, -500px) - 50%), calc(var(--cursor-y, -500px) - 50%), 0);
+      background: radial-gradient(circle, rgba(255, 198, 95, .10), rgba(85, 196, 176, .035) 34%, transparent 68%);
+      mix-blend-mode: screen;
+      opacity: .85;
+      z-index: 2;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: .18;
+      z-index: 0;
+    }
+
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+    .pixel { font-family: "Pixelify Sans", Inter, sans-serif; letter-spacing: .01em; }
+    .arcade { font-family: "Press Start 2P", "Pixelify Sans", Inter, sans-serif; }
+
+    .wrap {
+      width: 100%;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .site-frame {
+      min-height: 100vh;
+      overflow: hidden;
+      border: 0;
+      border-radius: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 198, 95, .05), transparent 180px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 1px, transparent 1px 40px),
+        var(--panel);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.025);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      min-height: 66px;
+      padding: 14px clamp(22px, 6vw, 96px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: rgba(12, 7, 4, .78);
+      border-bottom: 1px solid rgba(255, 198, 95, .14);
+      backdrop-filter: blur(16px);
+      transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    body.is-scrolled .topbar {
+      background: rgba(12, 7, 4, .92);
+      border-bottom-color: rgba(255, 198, 95, .24);
+      box-shadow: 0 18px 48px rgba(0,0,0,.24);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--cream);
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    .brand-mark {
+      width: 52px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      background:
+        linear-gradient(180deg, rgba(255, 198, 95, .08), rgba(0,0,0,.22)),
+        #211309;
+      border: 2px solid #5a3518;
+      border-radius: 4px;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.28), 0 10px 28px rgba(0,0,0,.3);
+      font-size: 1.28rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav a {
+      display: inline-flex;
+      min-height: 34px;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 4px;
+      color: #d7b77d;
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 900;
+      transition: color .2s ease, background .2s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      color: var(--gold);
+      background: rgba(255, 198, 95, .08);
+    }
+
+    .nav a.active {
+      box-shadow: inset 0 -2px 0 var(--gold);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+      color: var(--gold);
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 900;
+      border: 1px solid rgba(255, 198, 95, .46);
+      border-radius: 5px;
+      background: rgba(255, 198, 95, .055);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 198, 95, .10);
+      border-color: var(--gold);
+    }
+
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 66px);
+      display: grid;
+      grid-template-columns: minmax(460px, .95fr) minmax(360px, .74fr);
+      grid-template-rows: 1fr auto;
+      align-items: stretch;
+      isolation: isolate;
+      background:
+        linear-gradient(90deg, rgba(8,5,3,.94) 0%, rgba(12,7,4,.78) 28%, rgba(13,8,5,.36) 58%, rgba(8,5,3,.18) 100%),
+        linear-gradient(180deg, rgba(8,5,3,.20), rgba(8,5,3,.58)),
+        url("cozy-cabin-hero-bg.png") center center / cover no-repeat,
+        linear-gradient(180deg, #201209, #0d0805);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 42% 14%, rgba(255, 190, 83, .20), transparent 15rem),
+        radial-gradient(circle at 65% 20%, rgba(255, 190, 83, .34), transparent 15rem),
+        radial-gradient(circle at 78% 39%, rgba(245, 92, 52, .22), transparent 16rem),
+        radial-gradient(circle at 83% 76%, rgba(140, 200, 106, .15), transparent 13rem),
+        linear-gradient(180deg, transparent 0 62%, rgba(0,0,0,.52) 100%);
+      z-index: -1;
+      animation: roomGlow 5.2s ease-in-out infinite;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 4px 4px;
+      opacity: .18;
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
+
+    .hero-copy {
+      padding: clamp(42px, 5.4vw, 86px) clamp(24px, 4vw, 70px);
+      align-self: center;
+      max-width: 720px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--gold);
+      font-size: .74rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      background: var(--green);
+      box-shadow: 13px 0 0 var(--gold), 26px 0 0 var(--teal);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 20px;
+      color: var(--cream);
+      font-size: clamp(2.6rem, 4.8vw, 5.45rem);
+      line-height: .88;
+      letter-spacing: 0;
+      text-shadow: 0 4px 0 rgba(0,0,0,.20);
+    }
+
+    h1 span { color: var(--gold); }
+
+    .hero-specialties {
+      display: block;
+      margin-top: 8px;
+      color: var(--gold);
+    }
+
+    .hero-copy p {
+      margin-bottom: 22px;
+      color: #dfc493;
+      font-size: clamp(1rem, 1.18vw, 1.12rem);
+      max-width: 620px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 18px 0 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border: 1px solid rgba(255, 198, 95, .38);
+      border-radius: 4px;
+      color: var(--cream);
+      background: rgba(28, 17, 9, .72);
+      text-decoration: none;
+      font-size: .86rem;
+      font-weight: 900;
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,.18);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .btn.primary {
+      color: #1d1107;
+      background: linear-gradient(180deg, #ffd77c, #f7a43d);
+      border-color: #ffd77c;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .stat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 0 9px;
+      color: #e5c486;
+      background: rgba(18,10,5,.62);
+      border: 1px solid rgba(255,198,95,.18);
+      border-radius: 999px;
+      font-size: .74rem;
+      font-weight: 900;
+    }
+
+    .stat-chip::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--gold-2);
+    }
+
+    .availability {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 32px;
+      padding: 0 12px;
+      color: #c9e9ad;
+      background: rgba(90, 142, 57, .2);
+      border: 1px solid rgba(140, 200, 106, .34);
+      border-radius: 5px;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .availability::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      animation: pulse 1.8s infinite;
+    }
+
+    .hero-panel {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: center;
+      justify-self: end;
+      padding: clamp(32px, 5vw, 74px) clamp(24px, 6vw, 88px) clamp(24px, 4vw, 54px) 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 12px;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .desk-widget {
+      width: min(410px, 92%);
+      padding: 18px;
+      background: rgba(18, 10, 5, .84);
+      border: 1px solid rgba(255, 198, 95, .22);
+      border-radius: var(--radius);
+      box-shadow: 0 26px 70px rgba(0,0,0,.48);
+      backdrop-filter: blur(4px);
+      transform: translate3d(calc(var(--mx, 0) * -8px), calc(var(--my, 0) * -8px), 0);
+      transition: transform .18s ease-out;
+    }
+
+    .live-console {
+      width: min(410px, 92%);
+      padding: 13px 14px;
+      color: #e4c88f;
+      background: rgba(11, 7, 4, .74);
+      border: 1px solid rgba(140, 200, 106, .24);
+      border-radius: var(--radius);
+      box-shadow: 0 16px 44px rgba(0,0,0,.32);
+      backdrop-filter: blur(4px);
+      transform: translate3d(calc(var(--mx, 0) * -5px), calc(var(--my, 0) * -5px), 0);
+      transition: transform .18s ease-out;
+    }
+
+    .console-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: var(--green);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .console-head::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      box-shadow: 0 0 14px rgba(140, 200, 106, .8);
+      animation: pulse 1.6s infinite;
+    }
+
+    .console-lines {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: .78rem;
+      font-weight: 800;
+    }
+
+    .console-lines li {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid rgba(255, 198, 95, .55);
+      animation: typing 3.6s steps(34) both, caret 1s step-end infinite;
+    }
+
+    .console-lines li:nth-child(2) { animation-delay: .25s; }
+    .console-lines li:nth-child(3) { animation-delay: .5s; }
+
+    .console-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .console-date {
+      color: #8f7148;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+
+    .desk-widget h2 {
+      margin-bottom: 10px;
+      color: var(--cream);
+      font-size: clamp(1.25rem, 1.9vw, 1.85rem);
+      line-height: 1.25;
+    }
+
+    .desk-widget p {
+      margin-bottom: 16px;
+      color: #d8ba86;
+      font-size: .94rem;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .mini-stat {
+      min-height: 92px;
+      padding: 14px;
+      background: rgba(255, 241, 207, .045);
+      border: 1px solid rgba(255, 198, 95, .15);
+      border-radius: 5px;
+    }
+
+    .mini-stat strong {
+      display: block;
+      color: var(--gold);
+      font-size: clamp(1.55rem, 2.3vw, 2.1rem);
+      line-height: 1;
+    }
+
+    .mini-stat span {
+      display: block;
+      margin-top: 4px;
+      color: #c7a373;
+      font-size: .68rem;
+      font-weight: 900;
+    }
+
+    .trust-strip {
+      margin-top: 26px;
+    }
+
+    .trust-label,
+    .tools-label {
+      color: #806342;
+      font-size: .68rem;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .trust-logos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(18px, 3vw, 38px);
+      align-items: center;
+      color: rgba(255, 242, 207, .48);
+      font-size: clamp(1rem, 1.4vw, 1.35rem);
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .hero-tools {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      width: min(100% - clamp(44px, 8vw, 140px), 1180px);
+      justify-self: center;
+      margin: 0 0 clamp(24px, 4vw, 54px);
+      padding: 22px clamp(18px, 4vw, 46px);
+      background: rgba(12, 7, 4, .76);
+      border: 1px solid rgba(255, 198, 95, .22);
+      border-radius: var(--radius);
+      box-shadow: 0 24px 58px rgba(0,0,0,.32), inset 0 0 0 1px rgba(255,255,255,.025);
+      backdrop-filter: blur(6px);
+      position: relative;
+      z-index: 3;
+    }
+
+    .hero-tools .tools-label {
+      text-align: center;
+      color: var(--gold);
+    }
+
+    .hero-tool-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .hero-tool {
+      display: grid;
+      place-items: center;
+      gap: 8px;
+      color: #d7c199;
+      font-size: .78rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .hero-tool b {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: var(--cream);
+      border: 1px solid rgba(255,198,95,.24);
+      border-radius: 7px;
+      background: rgba(255,198,95,.07);
+      box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    }
+
+    .hero-depth {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+      perspective: 900px;
+    }
+
+    .lamp-glow {
+      position: absolute;
+      left: 42%;
+      top: 6%;
+      width: 34vw;
+      max-width: 620px;
+      aspect-ratio: 1;
+      transform: translate3d(calc(var(--mx, 0) * 10px), calc(var(--my, 0) * 8px), 0);
+      background: radial-gradient(circle, rgba(255, 184, 80, .32), rgba(255, 184, 80, .12) 35%, transparent 68%);
+      filter: blur(6px);
+      mix-blend-mode: screen;
+      animation: lampBreath 3.8s ease-in-out infinite;
+    }
+
+    .window-aura {
+      position: absolute;
+      right: 9%;
+      top: 12%;
+      width: 32vw;
+      max-width: 620px;
+      aspect-ratio: 1.1;
+      transform: translate3d(calc(var(--mx, 0) * 14px), calc(var(--my, 0) * 10px), 0);
+      background: radial-gradient(circle, rgba(255, 91, 55, .24), rgba(255, 166, 74, .13) 42%, transparent 72%);
+      filter: blur(4px);
+      mix-blend-mode: screen;
+      animation: sunsetPulse 7s ease-in-out infinite;
+    }
+
+    .foreground-shadow {
+      position: absolute;
+      inset: auto 0 0;
+      height: 46%;
+      background:
+        radial-gradient(ellipse at 74% 100%, rgba(255, 190, 83, .12), transparent 28%),
+        linear-gradient(180deg, transparent, rgba(0,0,0,.54));
+      transform: translate3d(calc(var(--mx, 0) * -5px), calc(var(--my, 0) * -4px), 0);
+    }
+
+    .dust {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 210, 126, .8);
+      box-shadow:
+        46px 30px 0 rgba(140,200,106,.65),
+        118px -22px 0 rgba(255,198,95,.5),
+        214px 54px 0 rgba(85,196,176,.55),
+        304px -12px 0 rgba(255,210,126,.42),
+        430px 78px 0 rgba(140,200,106,.45),
+        580px 16px 0 rgba(255,198,95,.45);
+      opacity: .55;
+      animation: dustDrift 9s ease-in-out infinite;
+    }
+
+    .dust.one { right: 36%; top: 27%; }
+    .dust.two { right: 18%; top: 54%; animation-delay: -4s; transform: scale(.8); }
+
+    .section {
+      padding: clamp(30px, 5vw, 72px) clamp(22px, 6vw, 96px);
+      border-top: 1px solid rgba(255,198,95,.14);
+      background: rgba(10,6,4,.35);
+    }
+
+    .section + .section { padding-top: 30px; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(1.35rem, 2.4vw, 2rem);
+      line-height: 1;
+    }
+
+    .section-head h2::before {
+      content: ">";
+      margin-right: 8px;
+      color: #8e683c;
+    }
+
+    .section-head a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .project-tabs {
+      display: flex;
+      gap: clamp(22px, 6vw, 82px);
+      align-items: center;
+      overflow-x: auto;
+      padding: 0 0 2px;
+      margin: 2px 0 18px;
+      border-bottom: 1px solid rgba(255,255,255,.11);
+      scrollbar-width: none;
+    }
+
+    .project-tabs::-webkit-scrollbar { display: none; }
+
+    .project-tab {
+      appearance: none;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: #786550;
+      padding: 0 0 16px;
+      font-family: "Press Start 2P", "Pixelify Sans", Inter, sans-serif;
+      font-size: clamp(.52rem, .85vw, .68rem);
+      line-height: 1;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color .2s ease, border-color .2s ease;
+    }
+
+    .project-tab span {
+      color: var(--gold);
+      letter-spacing: 0;
+      margin-left: 8px;
+      opacity: .8;
+    }
+
+    .project-tab:hover,
+    .project-tab.active {
+      color: var(--cream);
+      border-bottom-color: var(--cream);
+    }
+
+    .project-panel { display: none; }
+    .project-panel.active {
+      display: block;
+      animation: panelIn .28s ease both;
+    }
+
+    .project-card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(160px, 240px));
+      justify-content: center;
+      gap: clamp(16px, 2.4vw, 28px);
+      perspective: 1200px;
+      padding: 24px 16px 20px;
+      border: 1px solid rgba(255,198,95,.12);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255,198,95,.035), rgba(0,0,0,.12)),
+        repeating-linear-gradient(90deg, rgba(255,198,95,.028) 0 1px, transparent 1px 52px),
+        rgba(12, 7, 4, .36);
+      box-shadow: inset 0 14px 40px rgba(0,0,0,.24), inset 0 -3px 0 rgba(255,198,95,.06);
+      position: relative;
+    }
+
+    /* Subtle shelf edge at bottom of grid */
+    .project-card-grid::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 8px;
+      right: 8px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, rgba(255,198,95,.08) 20%, rgba(255,198,95,.12) 50%, rgba(255,198,95,.08) 80%, transparent);
+      border-radius: 2px;
+    }
+
+    .game-card {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform .35s cubic-bezier(.25,.46,.45,.94), filter .35s ease;
+      position: relative;
+      max-width: 240px;
+      width: 100%;
+      justify-self: center;
+      transform: rotateX(calc(var(--card-y, 0) * -7deg)) rotateY(calc(var(--card-x, 0) * 9deg)) translateY(0);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Brief press-down on click before lift */
+    .game-card:active {
+      transform: rotateX(calc(var(--card-y, 0) * -5deg)) rotateY(calc(var(--card-x, 0) * 7deg)) translateY(2px) translateZ(12px) scale(.985);
+      transition-duration: .1s;
+    }
+
+    .game-card::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      bottom: 31px;
+      height: 16px;
+      background: rgba(0,0,0,.45);
+      filter: blur(12px);
+      transform: translateZ(-20px);
+      transition: opacity .35s ease, transform .35s ease, background .35s ease;
+      z-index: -1;
+    }
+
+    /* Warm ambient glow underneath (lamp light spill) */
+    .game-card::after {
+      content: "";
+      position: absolute;
+      left: -8%;
+      right: -8%;
+      bottom: 20px;
+      height: 40px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(255,198,95,.18), rgba(255,166,74,.06) 40%, transparent 70%);
+      filter: blur(14px);
+      transform: translateZ(-30px) scale(.85);
+      opacity: 0;
+      transition: opacity .4s ease, transform .4s ease;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .game-card:hover,
+    .game-card:focus-visible,
+    .game-card.selected {
+      transform: rotateX(calc(var(--card-y, 0) * -9deg + 3deg)) rotateY(calc(var(--card-x, 0) * 11deg)) translateY(-14px) translateZ(24px);
+      filter: saturate(1.12) brightness(1.03);
+      outline: none;
+    }
+
+    .game-card:hover::before,
+    .game-card:focus-visible::before,
+    .game-card.selected::before {
+      opacity: 1;
+      transform: translateY(14px) translateZ(-20px) scale(1.12);
+      background: rgba(0,0,0,.55);
+    }
+
+    .game-card:hover::after,
+    .game-card:focus-visible::after,
+    .game-card.selected::after {
+      opacity: 1;
+      transform: translateZ(-30px) scale(1.05);
+    }
+
+    .game-card.selected .game-cover {
+      border-color: var(--gold);
+      box-shadow:
+        0 30px 58px rgba(0,0,0,.5),
+        0 0 0 2px rgba(255,198,95,.22),
+        0 0 34px rgba(255,198,95,.16);
+    }
+
+    .game-cover {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      border: 1px solid rgba(255,198,95,.30);
+      border-radius: 10px;
+      background:
+        linear-gradient(90deg, #110905 0 10px, transparent 10px),
+        linear-gradient(180deg, #3a2212, #120b07);
+      padding: 8px 8px 38px;
+      box-shadow:
+        0 28px 48px rgba(0,0,0,.46),
+        0 0 0 3px rgba(255,198,95,.045),
+        inset 0 2px 0 rgba(255, 231, 170, .10),
+        inset -10px 0 24px rgba(255,198,95,.08),
+        inset 10px 0 22px rgba(0,0,0,.34);
+      transform-style: preserve-3d;
+      transform: translateZ(18px);
+      transition: box-shadow .35s cubic-bezier(.25,.46,.45,.94), border-color .35s ease, background .35s ease;
+    }
+
+    /* Book spine on right edge */
+    .game-cover .spine {
+      position: absolute;
+      right: 0;
+      top: 6px;
+      bottom: 36px;
+      width: 10px;
+      border-radius: 0 8px 8px 0;
+      background: linear-gradient(180deg, #6b431f, #241308);
+      transform: translateZ(4px) rotateY(52deg);
+      transform-origin: left center;
+      opacity: .55;
+      transition: opacity .35s ease, box-shadow .35s ease;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .game-card:hover .game-cover .spine,
+    .game-card:focus-visible .game-cover .spine,
+    .game-card.selected .game-cover .spine {
+      opacity: .9;
+      box-shadow: 2px 0 12px rgba(255,198,95,.15);
+    }
+
+    .game-cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(115deg, rgba(255,221,156,.16), transparent 24%, transparent 58%, rgba(255,198,95,.10)),
+        radial-gradient(circle at 18% 12%, rgba(255,231,170,.18), transparent 22%);
+      opacity: .7;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 2;
+      transform: translateZ(30px);
+      transition: opacity .35s ease, background .35s ease;
+    }
+
+    /* Cursor-following warm light spot on the cover */
+    .game-cover .warm-light {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0;
+      transition: opacity .4s ease;
+      background: radial-gradient(
+        circle at calc((var(--card-x, 0) + .5) * 100%) calc((var(--card-y, 0) + .5) * 100%),
+        rgba(255,198,95,.14) 0%,
+        rgba(255,166,74,.06) 30%,
+        transparent 60%
+      );
+      mix-blend-mode: screen;
+      transform: translateZ(32px);
+    }
+
+    .game-card:hover .game-cover .warm-light,
+    .game-card:focus-visible .game-cover .warm-light,
+    .game-card.selected .game-cover .warm-light {
+      opacity: 1;
+    }
+
+    .game-cover::after {
+      content: "";
+      position: absolute;
+      inset: 8px 8px 38px;
+      border-radius: 6px;
+      background: linear-gradient(180deg, transparent 38%, rgba(0,0,0,.20) 68%, rgba(0,0,0,.66));
+      z-index: 2;
+      transform: translateZ(28px);
+    }
+
+    .game-card .game-cover .game-card-title,
+    .game-card .game-cover img {
+      transform: translateZ(32px);
+    }
+
+    .game-card:hover .game-cover,
+    .game-card:focus-visible .game-cover,
+    .game-card.selected .game-cover {
+      border-color: rgba(255, 214, 122, .78);
+      box-shadow:
+        calc(var(--card-x, 0) * -18px) calc(30px + var(--card-y, 0) * 10px) 54px rgba(0,0,0,.52),
+        0 0 0 3px rgba(255,198,95,.12),
+        0 0 34px rgba(255,198,95,.16),
+        inset 0 2px 0 rgba(255, 231, 170, .16),
+        inset -14px 0 28px rgba(255,198,95,.10),
+        inset 14px 0 26px rgba(0,0,0,.36);
+    }
+
+    .game-card:hover .game-cover::before,
+    .game-card:focus-visible .game-cover::before,
+    .game-card.selected .game-cover::before {
+      opacity: .95;
+      background:
+        radial-gradient(circle at calc((var(--card-x, 0) + .5) * 100%) calc((var(--card-y, 0) + .5) * 100%), rgba(255,255,255,.32), transparent 22%),
+        linear-gradient(115deg, rgba(255,221,156,.22), transparent 24%, transparent 58%, rgba(255,198,95,.15));
+    }
+
+    /* Dynamic directional glow on the cover edge */
+    .game-card:hover .game-cover,
+    .game-card:focus-visible .game-cover,
+    .game-card.selected .game-cover {
+      border-color: rgba(255, 214, 122, .78);
+      box-shadow:
+        calc(var(--card-x, 0) * -20px) calc(32px + var(--card-y, 0) * 12px) 60px rgba(0,0,0,.52),
+        0 0 0 3px rgba(255,198,95,.12),
+        0 0 0 1px rgba(255,198,95,.06),
+        0 0 40px rgba(255,198,95,.10),
+        0 0 80px rgba(255,198,95,.04),
+        inset 0 2px 0 rgba(255, 231, 170, .18),
+        inset -14px 0 28px rgba(255,198,95,.10),
+        inset 14px 0 26px rgba(0,0,0,.36);
+      background:
+        linear-gradient(90deg, #140b06 0 10px, transparent 10px),
+        linear-gradient(180deg, #3e2514, #140c08);
+    }
+
+    .game-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: translateZ(32px) scale(1.01);
+      transition: transform .5s cubic-bezier(.25,.46,.45,.94), filter .5s ease;
+      border-radius: 6px;
+      border: 1px solid rgba(255,198,95,.14);
+      box-shadow: 0 10px 24px rgba(0,0,0,.28);
+      filter: brightness(.92) saturate(.9);
+    }
+
+    .game-card:hover .game-cover img,
+    .game-card:focus-visible .game-cover img,
+    .game-card.selected .game-cover img {
+      transform: translateZ(36px) scale(1.05);
+      filter: brightness(1.02) saturate(1.08);
+    }
+
+    /* Title text subtle lift on hover */
+    .game-card-title {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 10px;
+      color: var(--gold);
+      font-family: "Pixelify Sans", Inter, sans-serif;
+      font-size: clamp(.92rem, 1.1vw, 1.15rem);
+      font-weight: 700;
+      line-height: 1;
+      text-shadow: 0 4px 14px rgba(0,0,0,.8);
+      z-index: 3;
+      transform: translateZ(38px);
+      transition: text-shadow .35s ease, color .35s ease;
+    }
+
+    .game-card:hover .game-card-title,
+    .game-card:focus-visible .game-card-title,
+    .game-card.selected .game-card-title {
+      color: #ffe0a0;
+      text-shadow: 0 4px 20px rgba(0,0,0,.9), 0 0 24px rgba(255,198,95,.25);
+    }
+
+    .platform-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      min-height: 30px;
+      padding: 7px 8px;
+      border-radius: 999px;
+      background: rgba(18, 10, 5, .58);
+      border: 1px solid rgba(255,198,95,.12);
+      box-shadow: inset 0 0 18px rgba(0,0,0,.22);
+      transform: translateZ(8px);
+      transition: transform .35s cubic-bezier(.25,.46,.45,.94), border-color .35s ease, background .35s ease, box-shadow .35s ease;
+    }
+
+    .game-card:hover .platform-row,
+    .game-card:focus-visible .platform-row,
+    .game-card.selected .platform-row {
+      transform: translateY(4px) translateZ(8px);
+      border-color: rgba(255,198,95,.30);
+      background: rgba(22, 13, 7, .72);
+      box-shadow: inset 0 0 18px rgba(0,0,0,.22), 0 4px 16px rgba(255,198,95,.06);
+    }
+
+    .platform-icon {
+      min-width: 30px;
+      height: 26px;
+      display: inline-grid;
+      place-items: center;
+      padding: 0 8px;
+      color: #f8dfaa;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,198,95,.12), rgba(70,42,20,.18));
+      border: 1px solid rgba(255,198,95,.22);
+      font-size: .62rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+      box-shadow: 0 8px 22px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.08);
+      transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .game-card:hover .platform-icon,
+    .game-card:focus-visible .platform-icon,
+    .game-card.selected .platform-icon {
+      background: linear-gradient(180deg, rgba(255,198,95,.20), rgba(70,42,20,.24));
+      border-color: rgba(255,198,95,.36);
+      box-shadow: 0 8px 22px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.12), 0 0 12px rgba(255,198,95,.08);
+    }
+
+    .platform-icon:hover {
+      transform: translateY(-1px) scale(1.06);
+      background: linear-gradient(180deg, rgba(255,198,95,.28), rgba(70,42,20,.30));
+      border-color: rgba(255,198,95,.50);
+      box-shadow: 0 8px 22px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.16), 0 0 18px rgba(255,198,95,.12);
+    }
+
+    .project-detail {
+      display: none;
+      margin-top: 22px;
+      padding: 22px;
+      background:
+        linear-gradient(180deg, rgba(255,198,95,.04), transparent),
+        rgba(14, 8, 5, .86);
+      border: 1px solid rgba(255,198,95,.24);
+      border-radius: var(--radius);
+      box-shadow: 0 24px 58px rgba(0,0,0,.34), inset 0 0 0 1px rgba(255,255,255,.025);
+      animation: panelIn .28s ease both;
+    }
+
+    .project-detail.active { display: grid; }
+
+    .project-detail-inner {
+      display: grid;
+      grid-template-columns: minmax(220px, 360px) 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .project-detail img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      border-radius: 7px;
+      border: 1px solid rgba(255,198,95,.18);
+    }
+
+    .detail-eyebrow {
+      color: var(--green);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .project-detail h3 {
+      margin-bottom: 10px;
+      color: var(--cream);
+      font-size: clamp(1.6rem, 3vw, 2.7rem);
+      line-height: .95;
+    }
+
+    .project-detail p {
+      color: #d9bc87;
+      margin-bottom: 16px;
+    }
+
+    .detail-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .project-card {
+      color: var(--ink);
+      text-decoration: none;
+      background: linear-gradient(180deg, rgba(255,241,207,.035), rgba(0,0,0,.12)), #1b1009;
+      border: 1px solid rgba(255,198,95,.18);
+      border-radius: 7px;
+      padding: 8px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.24);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::after,
+    .shelf-card::after,
+    .tool::after,
+    .skill::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(120deg, transparent 10%, rgba(255, 255, 255, .09), transparent 42%);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,198,95,.56);
+      box-shadow: 0 18px 36px rgba(0,0,0,.3);
+    }
+
+    .project-card:hover::after,
+    .shelf-card:hover::after,
+    .tool:hover::after,
+    .skill:hover::after {
+      transform: translateX(120%);
+    }
+
+    .project-card img {
+      width: 100%;
+      aspect-ratio: 1.22 / 1;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid rgba(255,198,95,.14);
+      filter: saturate(.95) brightness(.86);
+    }
+
+    .project-card h3 {
+      margin: 9px 0 6px;
+      color: var(--cream);
+      font-size: .92rem;
+      line-height: 1.08;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tag {
+      padding: 3px 6px;
+      color: #ddb56c;
+      background: rgba(255,198,95,.08);
+      border: 1px solid rgba(255,198,95,.14);
+      border-radius: 4px;
+      font-size: .62rem;
+      font-weight: 900;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+    }
+
+    .tool {
+      min-height: 76px;
+      display: grid;
+      place-items: center;
+      gap: 4px;
+      padding: 10px 6px;
+      text-align: center;
+      background: #170d07;
+      border: 1px solid rgba(255,198,95,.16);
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+
+    .tool:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,198,95,.42);
+      background: rgba(255,198,95,.055);
+    }
+
+    .tool-icon {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      border: 1px solid rgba(255,198,95,.22);
+      border-radius: 5px;
+      background: rgba(255,198,95,.055);
+      font-weight: 900;
+    }
+
+    .tool span {
+      color: #d6bd8c;
+      font-size: .68rem;
+      font-weight: 900;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 16px;
+    }
+
+    .story,
+    .list-panel,
+    .quote-card,
+    .contact-card {
+      background: #170d07;
+      border: 1px solid rgba(255,198,95,.16);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .story p {
+      color: #d8ba86;
+      margin-bottom: 14px;
+      font-size: .95rem;
+    }
+
+    .story strong { color: var(--cream); }
+
+    .list-panel {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .skill {
+      padding: 12px;
+      background: rgba(255,241,207,.035);
+      border: 1px solid rgba(255,198,95,.12);
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill small {
+      color: var(--green);
+      font-size: .67rem;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .skill h3 {
+      margin: 5px 0 5px;
+      color: var(--cream);
+      font-size: .95rem;
+    }
+
+    .skill p {
+      margin: 0;
+      color: #aa8555;
+      font-size: .78rem;
+    }
+
+    .shelf-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .shelf-card {
+      display: grid;
+      grid-template-columns: 148px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 8px;
+      color: var(--ink);
+      text-decoration: none;
+      background: #170d07;
+      border: 1px solid rgba(255,198,95,.14);
+      border-radius: 6px;
+      transition: transform .2s ease, border-color .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shelf-card:hover {
+      transform: translateX(4px);
+      border-color: rgba(255,198,95,.46);
+    }
+
+    .shelf-card img {
+      width: 148px;
+      height: 84px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .shelf-card h3 {
+      margin: 0 0 4px;
+      color: var(--cream);
+      font-size: 1rem;
+    }
+
+    .shelf-card p {
+      margin: 0;
+      color: #b9915f;
+      font-size: .82rem;
+    }
+
+    .arrow {
+      color: var(--gold);
+      font-weight: 900;
+      padding-right: 6px;
+    }
+
+    .quote-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .quote-card p {
+      margin-bottom: 16px;
+      color: #d7b987;
+      font-size: .92rem;
+    }
+
+    .quote-card strong {
+      display: block;
+      color: var(--cream);
+    }
+
+    .quote-card span {
+      color: var(--green);
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .contact-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .contact-card h2 {
+      margin-bottom: 8px;
+      color: var(--cream);
+      font-size: clamp(1.6rem, 3.5vw, 3rem);
+      line-height: .95;
+    }
+
+    .contact-card p {
+      margin: 0;
+      max-width: 660px;
+      color: #d2b483;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Contact gate — hides every [data-contact] element while CONTACT.enabled is false */
+    html.contact-off [data-contact] { display: none !important; }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 24px;
+      color: #81603d;
+      font-size: .78rem;
+      font-weight: 800;
+      border-top: 1px solid rgba(255,198,95,.12);
+      background: rgba(10,6,4,.62);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Game cards settle onto shelf with a gentle bounce */
+    .game-card.reveal {
+      opacity: 0;
+      transform: translateY(18px) translateZ(12px) scale(.97);
+      transition: none;
+    }
+    .game-card.reveal.visible {
+      opacity: 1;
+      animation: shelfSettle .6s cubic-bezier(.22,.68,0,1.1) both;
+    }
+    .game-card.reveal.visible:nth-child(1) { animation-delay: .0s; }
+    .game-card.reveal.visible:nth-child(2) { animation-delay: .08s; }
+    .game-card.reveal.visible:nth-child(3) { animation-delay: .16s; }
+    .game-card.reveal.visible:nth-child(4) { animation-delay: .24s; }
+
+    .back-to-top {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      background: rgba(17, 10, 6, .84);
+      border: 1px solid rgba(255,198,95,.28);
+      border-radius: 7px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity .2s ease, transform .2s ease, border-color .2s ease;
+      z-index: 90;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .35; }
+    }
+
+    @keyframes shelfSettle {
+      0% { transform: translateY(18px) translateZ(12px) scale(.97); opacity: 0; }
+      60% { transform: translateY(-2px) translateZ(18px) scale(1.01); opacity: 1; }
+      100% { transform: translateY(0) translateZ(18px) scale(1); opacity: 1; }
+    }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes caret {
+      50% { border-color: transparent; }
+    }
+
+    @keyframes roomGlow {
+      0%, 100% { opacity: .82; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes lampBreath {
+      0%, 100% { opacity: .55; transform: translate3d(calc(var(--mx, 0) * 10px), calc(var(--my, 0) * 8px), 0) scale(.96); }
+      50% { opacity: .9; transform: translate3d(calc(var(--mx, 0) * 10px), calc(var(--my, 0) * 8px), 0) scale(1.08); }
+    }
+
+    @keyframes sunsetPulse {
+      0%, 100% { opacity: .58; }
+      50% { opacity: .88; }
+    }
+
+    @keyframes dustDrift {
+      0%, 100% { translate: 0 0; opacity: .28; }
+      35% { translate: -18px -20px; opacity: .75; }
+      70% { translate: 16px -36px; opacity: .42; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        background:
+          linear-gradient(180deg, rgba(12,7,4,.72), rgba(12,7,4,.92)),
+          url("cozy-cabin-hero-bg.png") center top / cover no-repeat;
+      }
+      .hero-copy {
+        max-width: 620px;
+      }
+      .hero-panel {
+        grid-column: 1;
+        grid-row: 2;
+        padding: 0 24px 32px;
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+      .desk-widget { width: 100%; }
+      .live-console { width: 100%; }
+      .hero-tools {
+        grid-column: 1;
+        grid-row: 3;
+        width: calc(100% - 48px);
+      }
+      .hero-tool-grid { grid-template-columns: repeat(4, 1fr); }
+      .project-grid { grid-template-columns: repeat(2, 1fr); }
+      .project-card-grid { grid-template-columns: repeat(2, minmax(150px, 230px)); }
+      .project-detail-inner { grid-template-columns: 1fr; }
+      .tools { grid-template-columns: repeat(4, 1fr); }
+      .work-grid,
+      .contact-card {
+        grid-template-columns: 1fr;
+      }
+      .contact-actions { justify-content: flex-start; }
+    }
+
+    @media (max-width: 680px) {
+      .wrap {
+        width: min(100% - 16px, var(--max));
+        margin-top: 8px;
+      }
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .nav { flex-wrap: wrap; }
+      .hero-copy { padding: 30px 18px 18px; }
+      h1 { font-size: clamp(1.75rem, 8.5vw, 3rem); }
+      .mini-grid,
+      .project-grid,
+      .project-card-grid,
+      .list-panel,
+      .quote-grid {
+        grid-template-columns: 1fr;
+      }
+      .tools { grid-template-columns: repeat(2, 1fr); }
+      .hero-tools { width: calc(100% - 28px); }
+      .hero-tool-grid { grid-template-columns: repeat(2, 1fr); }
+      .shelf-card { grid-template-columns: 1fr; }
+      .shelf-card img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+      }
+      .arrow { display: none; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="cursor-light" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="site-frame">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="Home">
+          <span class="brand-mark pixel">AMK</span>
+          <span>Abdul Mateen Khan</span>
+        </a>
+        <ul class="nav">
+          <li><a class="active" href="#top">Home</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a class="nav-cta" href="#" data-contact data-contact-link="email">Let's Connect</a>
+      </header>
+
+      <main>
+        <section class="hero" id="top">
+          <div class="hero-depth" aria-hidden="true">
+            <span class="lamp-glow"></span>
+            <span class="window-aura"></span>
+            <span class="foreground-shadow"></span>
+            <span class="dust one"></span>
+            <span class="dust two"></span>
+          </div>
+          <div class="hero-copy reveal">
+            <div class="eyebrow">Lead Unity Developer</div>
+            <h1 class="pixel">Hi, I'm <span>Abdul Mateen Khan</span><span class="hero-specialties">Multiplayer. Optimization. Console Shipping.</span></h1>
+            <p>
+              I help studios ship high-performance Unity games across console, mobile, PC, WebGL, and VR, from prototype to certification.
+            </p>
+            <div class="hero-actions">
+              <a class="btn primary" href="#" data-contact data-contact-link="email">Book a Call</a>
+              <a class="btn" href="#projects">View Projects</a>
+            </div>
+            <div class="trust-strip">
+              <div class="trust-label">Trusted by / worked with</div>
+              <div class="trust-logos">
+                <span>Goons Games</span>
+                <span>Sacred Tails</span>
+                <span>Absolute Games</span>
+                <span>Play Empire</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-panel reveal">
+            <div class="desk-widget">
+              <div class="console-head">Impact at a glance</div>
+              <div class="mini-grid">
+                <div class="mini-stat"><strong>7+</strong><span>Years Experience in Unity Development</span></div>
+                <div class="mini-stat"><strong>15+</strong><span>Games Shipped Across Platforms</span></div>
+                <div class="mini-stat"><strong>+30%</strong><span>Avg. Performance Gain on Low-end Devices</span></div>
+                <div class="mini-stat"><strong>Cert</strong><span>Console Certified PS / Xbox / Switch</span></div>
+              </div>
+            </div>
+            <div class="live-console" aria-label="Live build notes">
+              <div class="console-head">Live Build Notes</div>
+              <ul class="console-lines">
+                <li><span class="console-row"><span>Console cert ready.</span><span class="console-date">May 12, 2026</span></span></li>
+                <li><span class="console-row"><span>Performance budgets watched.</span><span class="console-date">May 10, 2026</span></span></li>
+                <li><span class="console-row"><span>Prototype to release mindset.</span><span class="console-date">May 8, 2026</span></span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="hero-tools reveal">
+            <div class="tools-label">I work with</div>
+            <div class="hero-tool-grid">
+              <div class="hero-tool"><b>U</b><span>Unity</span></div>
+              <div class="hero-tool"><b>C#</b><span>C#</span></div>
+              <div class="hero-tool"><b>D</b><span>DOTS</span></div>
+              <div class="hero-tool"><b>URP</b><span>URP / HDRP</span></div>
+              <div class="hero-tool"><b>N</b><span>Netcode</span></div>
+              <div class="hero-tool"><b>FM</b><span>FMOD</span></div>
+              <div class="hero-tool"><b>A</b><span>Addressables</span></div>
+              <div class="hero-tool"><b>G</b><span>Git / Perforce</span></div>
+            </div>
+          </div>
+
+        </section>
+
+        <section class="section" id="projects">
+          <div class="section-head reveal">
+            <h2 class="pixel">Project Library</h2>
+            <a href="#contact">Need a specific build? -></a>
+          </div>
+          <div class="project-tabs reveal" role="tablist" aria-label="Project categories">
+            <button class="project-tab active" type="button" role="tab" aria-selected="true" aria-controls="panel-aa" data-panel="panel-aa">AA Titles <span>04</span></button>
+            <button class="project-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-indie" data-panel="panel-indie">Indie Titles <span>03</span></button>
+            <button class="project-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-vr" data-panel="panel-vr">VR / AR / WebGL <span>02</span></button>
+            <button class="project-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-other" data-panel="panel-other">Other Platforms <span>02</span></button>
+          </div>
+
+          <div class="project-panel active" id="panel-aa" role="tabpanel">
+            <div class="project-card-grid">
+               <button class="game-card reveal" type="button" data-title="Life in Willowdale" data-category="AA Title / Console Port" data-image="project-1.jpg" data-link="https://www.lifeinwillowdale.com/" data-summary="Core gameplay systems and Switch port, with a 25% FPS improvement through shader and memory optimization." style="--tilt:-5deg">
+                 <div class="game-cover"><img src="project-1.jpg" alt="Life in Willowdale cover" /><span class="game-card-title">Life in Willowdale</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">PS</span><span class="platform-icon">Switch</span></div>
+               </button>
+               <button class="game-card reveal" type="button" data-title="FoodFight: Culinary Combat" data-category="AA Title / Multiplayer" data-image="project-2.jpg" data-link="https://store.steampowered.com/app/2243580/Food_Fight_Culinary_Combat/" data-summary="Stabilized Photon Bolt networking and navigated Nintendo Lotcheck certification." style="--tilt:4deg">
+                 <div class="game-cover"><img src="project-2.jpg" alt="FoodFight: Culinary Combat cover" /><span class="game-card-title">FoodFight</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">Switch</span><span class="platform-icon">MP</span></div>
+               </button>
+               <button class="game-card reveal" type="button" data-title="Goons: Legends & Mayhem" data-category="AA Title / Console Multiplayer" data-image="project-3.jpg" data-link="https://store.steampowered.com/app/1484180/Goons_Legends__Mayhem/" data-summary="Built EOS matchmaking and platform multiplayer integrations across console targets." style="--tilt:-3deg">
+                 <div class="game-cover"><img src="project-3.jpg" alt="Goons: Legends & Mayhem cover" /><span class="game-card-title">Goons</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">Xbox</span><span class="platform-icon">PS</span></div>
+               </button>
+               <button class="game-card reveal" type="button" data-title="WrestleQuest" data-category="AA Title / Console Port" data-image="project-4.jpg" data-link="https://store.steampowered.com/app/1867510/WrestleQuest/" data-summary="Owned the Switch port, memory work, and certification flow for a shipped wrestling RPG." style="--tilt:5deg">
+                 <div class="game-cover"><img src="project-4.jpg" alt="WrestleQuest cover" /><span class="game-card-title">WrestleQuest</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">PS</span><span class="platform-icon">Switch</span></div>
+               </button>
+            </div>
+            <div class="project-detail" aria-live="polite"></div>
+          </div>
+
+          <div class="project-panel" id="panel-indie" role="tabpanel">
+            <div class="project-card-grid">
+               <button class="game-card" type="button" data-title="Mythya" data-category="Indie Title / RTS" data-image="project-5.jpg" data-link="https://playmythya.com/" data-summary="Stabilized a complex Zenject-based RTS codebase and delivered AI, economy, and army control systems." style="--tilt:-4deg">
+                 <div class="game-cover"><img src="project-5.jpg" alt="Mythya cover" /><span class="game-card-title">Mythya</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">PC</span><span class="platform-icon">Android</span></div>
+               </button>
+               <button class="game-card" type="button" data-title="Sacred Tails" data-category="Indie Title / RPG" data-image="project-6.jpg" data-link="https://www.sacredtails.com/" data-summary="Restructured an unstable RPG codebase and improved FPS on low-end mobile devices." style="--tilt:3deg">
+                 <div class="game-cover"><img src="project-6.jpg" alt="Sacred Tails cover" /><span class="game-card-title">Sacred Tails</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">PC</span><span class="platform-icon">iOS</span><span class="platform-icon">Android</span></div>
+               </button>
+               <button class="game-card" type="button" data-title="Inferni: Hope & Fear" data-category="Indie Title / Steam" data-image="project-7.jpg" data-link="https://store.steampowered.com/app/2731170/Inferni_Hope__Fear/" data-summary="Optimized asset pipelines, shaders, and memory to boost performance and reduce load times." style="--tilt:-2deg">
+                 <div class="game-cover"><img src="project-7.jpg" alt="Inferni: Hope & Fear cover" /><span class="game-card-title">Inferni</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">Steam</span><span class="platform-icon">PC</span></div>
+               </button>
+            </div>
+            <div class="project-detail" aria-live="polite"></div>
+          </div>
+
+          <div class="project-panel" id="panel-vr" role="tabpanel">
+            <div class="project-card-grid">
+               <button class="game-card" type="button" data-title="GOSI Verse" data-category="VR / AR / WebGL" data-image="project-8.jpg" data-link="https://plandigital.me/case-studies/gosi-gosiverse-at-leap/" data-summary="Cross-platform multiplayer financial literacy platform across WebGL, PC, and Meta Quest 3." style="--tilt:-4deg">
+                 <div class="game-cover"><img src="project-8.jpg" alt="GOSI Verse cover" /><span class="game-card-title">GOSI Verse</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">WebGL</span><span class="platform-icon">Quest</span><span class="platform-icon">PC</span></div>
+               </button>
+               <button class="game-card" type="button" data-title="VR MG Simulation" data-category="VR Medical Training" data-image="project-9.jpg" data-summary="Standalone Quest 3 medical training simulation with hand tracking and spatial UI." style="--tilt:4deg">
+                 <div class="game-cover"><img src="project-9.jpg" alt="VR MG Simulation cover" /><span class="game-card-title">VR MG Simulation</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">VR</span><span class="platform-icon">Quest 3</span></div>
+               </button>
+            </div>
+            <div class="project-detail" aria-live="polite"></div>
+          </div>
+
+          <div class="project-panel" id="panel-other" role="tabpanel">
+            <div class="project-card-grid">
+               <button class="game-card" type="button" data-title="Decentraland" data-category="Other Platforms / Web3" data-image="project-10.jpg" data-link="https://decentraland.org/" data-summary="Interactive metaverse gameplay with asset ownership and platform-specific scripting." style="--tilt:-3deg">
+                 <div class="game-cover"><img src="project-10.jpg" alt="Decentraland cover" /><span class="game-card-title">Decentraland</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">Web3</span><span class="platform-icon">Meta</span></div>
+               </button>
+               <button class="game-card" type="button" data-title="The Sandbox" data-category="Other Platforms / Sandbox Engine" data-image="project-11.jpg" data-link="https://www.sandbox.game/en/" data-summary="Gameplay scripting, environment design, and asset integration inside The Sandbox ecosystem." style="--tilt:4deg">
+                 <div class="game-cover"><img src="project-11.jpg" alt="The Sandbox cover" /><span class="game-card-title">The Sandbox</span><span class="spine"></span><span class="warm-light"></span></div>
+                 <div class="platform-row"><span class="platform-icon">Web3</span><span class="platform-icon">Sandbox</span></div>
+               </button>
+            </div>
+            <div class="project-detail" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="section" id="skills">
+          <div class="section-head reveal">
+            <h2 class="pixel">Technologies & Tools</h2>
+          </div>
+          <div class="tools">
+            <div class="tool reveal"><div class="tool-icon">U</div><span>Unity</span></div>
+            <div class="tool reveal"><div class="tool-icon">C#</div><span>C#</span></div>
+            <div class="tool reveal"><div class="tool-icon">P</div><span>Photon Fusion</span></div>
+            <div class="tool reveal"><div class="tool-icon">PF</div><span>PlayFab</span></div>
+            <div class="tool reveal"><div class="tool-icon">G</div><span>Git</span></div>
+            <div class="tool reveal"><div class="tool-icon">FPS</div><span>Performance</span></div>
+            <div class="tool reveal"><div class="tool-icon">A</div><span>Addressables</span></div>
+            <div class="tool reveal"><div class="tool-icon">VR</div><span>XR</span></div>
+          </div>
+        </section>
+
+        <section class="section" id="about">
+          <div class="section-head reveal">
+            <h2 class="pixel">About & Craft</h2>
+          </div>
+          <div class="work-grid">
+            <article class="story reveal">
+              <p>
+                I'm a Lead Unity Developer who has spent 7 years doing one thing consistently: <strong>shipping</strong>. Across console, mobile, PC, VR, WebGL, and metaverse platforms, I've taken projects from prototype to players on nearly every major platform in the industry.
+              </p>
+              <p>
+                Console certification, inherited codebases, multiplayer stability, and performance budgets shaped the way I work: understand the constraints early, build clean systems, and keep the game stable when production gets loud.
+              </p>
+            </article>
+            <div class="list-panel reveal">
+              <div class="skill"><small>Expert</small><h3>Gameplay Architecture</h3><p>Systems, loops, tools, and maintainable Unity codebases.</p></div>
+              <div class="skill"><small>Expert</small><h3>Console Porting</h3><p>Switch, PlayStation, Xbox, compliance, memory, and platform APIs.</p></div>
+              <div class="skill"><small>Expert</small><h3>Performance Optimization</h3><p>Profiling, rendering, load times, mobile FPS, and stability.</p></div>
+              <div class="skill"><small>Proficient</small><h3>Multiplayer / Backend</h3><p>Photon, EOS sessions, Azure PlayFab, and live platform features.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="proof">
+          <div class="section-head reveal">
+            <h2 class="pixel">Client Notes</h2>
+          </div>
+          <div class="quote-grid">
+            <article class="quote-card reveal">
+              <p>Mateen impressed me with his Unity and C# skills during his contract work. I saw exceptional problem-solving, debugging abilities, and a strong grasp of technical concepts.</p>
+              <strong>Cyril Barrow</strong>
+              <span>Head of Games / Client</span>
+            </article>
+            <article class="quote-card reveal">
+              <p>I had managed Mateen for quite some projects. Works hard, is a team player and has good knowledge about Unity and porting projects. I would love to work with him again.</p>
+              <strong>Abdul Qadir</strong>
+              <span>Lead Unity Engineer / Manager</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="contact">
+          <div class="contact-card reveal">
+            <div>
+              <h2 class="pixel">Let's build something playable.</h2>
+              <p>Open to remote full-time and contract Unity opportunities worldwide, especially shipped games, console ports, VR builds, multiplayer systems, and performance rescue work.</p>
+            </div>
+            <div class="contact-actions">
+              <a class="btn primary" href="#" data-contact data-contact-link="email">Email Me</a>
+              <a class="btn" href="#" data-contact data-contact-link="linkedin">LinkedIn</a>
+              <a class="btn" href="#" data-contact-link="upwork" target="_blank" rel="noreferrer">Upwork</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <span>© 2026 Abdul Mateen Khan</span>
+        <span>Lead Unity Developer / Cozy Indie Cabin draft</span>
+      </footer>
+    </div>
+  </div>
+  <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+
+  <script>
+    const hero = document.querySelector(".hero");
+    const navLinks = document.querySelectorAll(".nav a[href^='#']");
+    const backToTop = document.querySelector(".back-to-top");
+    const projectTabs = document.querySelectorAll(".project-tab");
+    const projectPanels = document.querySelectorAll(".project-panel");
+    const gameCards = document.querySelectorAll(".game-card");
+    const pageSections = [...navLinks]
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    function updatePageChrome() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+      document.documentElement.style.setProperty("--scroll", scrollPercent.toFixed(2));
+      document.body.classList.toggle("is-scrolled", window.scrollY > 24);
+      backToTop?.classList.toggle("visible", window.scrollY > 520);
+
+      let activeId = "top";
+      pageSections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 140) activeId = section.id;
+      });
+
+      navLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === `#${activeId}`);
+      });
+    }
+
+    projectTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const targetPanel = document.getElementById(tab.dataset.panel);
+
+        projectTabs.forEach((item) => {
+          const isActive = item === tab;
+          item.classList.toggle("active", isActive);
+          item.setAttribute("aria-selected", String(isActive));
+        });
+
+        projectPanels.forEach((panel) => {
+          panel.classList.toggle("active", panel === targetPanel);
+          const detail = panel.querySelector(".project-detail");
+          detail?.classList.remove("active");
+          if (detail) detail.innerHTML = "";
+        });
+      });
+
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const tabs = [...projectTabs];
+        const index = tabs.indexOf(tab);
+        const nextIndex = event.key === "Home"
+          ? 0
+          : event.key === "End"
+            ? tabs.length - 1
+            : event.key === "ArrowRight"
+              ? (index + 1) % tabs.length
+              : (index - 1 + tabs.length) % tabs.length;
+        tabs[nextIndex].focus();
+        tabs[nextIndex].click();
+      });
+    });
+
+    gameCards.forEach((card) => {
+      card.addEventListener("pointermove", (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5).toFixed(3);
+        const y = ((event.clientY - rect.top) / rect.height - 0.5).toFixed(3);
+        card.style.setProperty("--card-x", x);
+        card.style.setProperty("--card-y", y);
+      });
+
+      card.addEventListener("pointerleave", () => {
+        card.style.setProperty("--card-x", "0");
+        card.style.setProperty("--card-y", "0");
+      });
+
+      card.addEventListener("click", () => {
+        const panel = card.closest(".project-panel");
+        const detail = panel?.querySelector(".project-detail");
+        if (!detail) return;
+
+        panel.querySelectorAll(".game-card").forEach((item) => {
+          item.classList.toggle("selected", item === card);
+        });
+
+        detail.innerHTML = `
+          <div class="project-detail-inner">
+            <img src="${card.dataset.image}" alt="${card.dataset.title} detail preview" />
+            <div>
+              <div class="detail-eyebrow">${card.dataset.category}</div>
+              <h3 class="pixel">${card.dataset.title}</h3>
+              <p>${card.dataset.summary}</p>
+              <p>This area is ready for your deeper case-study notes: role, technical challenge, architecture, optimization wins, team size, platforms, and certification details.</p>
+              <div class="detail-actions">
+                <a class="btn primary" href="${card.dataset.link}" target="_blank" rel="noreferrer">Open Project</a>
+                <a class="btn" href="#contact">Discuss Similar Work</a>
+              </div>
+            </div>
+          </div>
+        `;
+        detail.classList.add("active");
+        detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+    });
+
+    if (hero && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      window.addEventListener("pointermove", (event) => {
+        document.documentElement.style.setProperty("--cursor-x", `${event.clientX}px`);
+        document.documentElement.style.setProperty("--cursor-y", `${event.clientY}px`);
+      }, { passive: true });
+
+      hero.addEventListener("pointermove", (event) => {
+        const rect = hero.getBoundingClientRect();
+        const mx = ((event.clientX - rect.left) / rect.width - 0.5).toFixed(3);
+        const my = ((event.clientY - rect.top) / rect.height - 0.5).toFixed(3);
+        hero.style.setProperty("--mx", mx);
+        hero.style.setProperty("--my", my);
+      });
+
+      hero.addEventListener("pointerleave", () => {
+        hero.style.setProperty("--mx", "0");
+        hero.style.setProperty("--my", "0");
+      });
+    }
+
+    backToTop?.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach((item) => revealObserver.observe(item));
+    updatePageChrome();
+    window.addEventListener("scroll", updatePageChrome, { passive: true });
+    window.addEventListener("resize", updatePageChrome);
+  </script>
+  <script>
+    /* Contact gate — pulls link URLs and text from window.CONTACT */
+    (function () {
+      var C = window.CONTACT || {};
+      var hrefs = {
+        "email": "mailto:" + C.email,
+        "email-compose": "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(C.email) + "&su=Unity%20Opportunity",
+        "linkedin": C.linkedin,
+        "upwork": C.upwork
+      };
+      document.querySelectorAll("[data-contact-link]").forEach(function (el) {
+        var url = hrefs[el.getAttribute("data-contact-link")];
+        if (url) el.setAttribute("href", url);
+      });
+      document.querySelectorAll("[data-contact-text]").forEach(function (el) {
+        var key = el.getAttribute("data-contact-text");
+        if (C[key]) el.textContent = C[key];
+      });
+    })();
+  </script>
+</body>
+</html>
